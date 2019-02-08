@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import UserAuth from './UserAuth/UserAuth';
+import {Route} from "react-router";
+import Chats from "./Chats/Chats";
+import AddGroup from "./Chats/AddGroup";
 
-class App extends Component {
-  render() {
-    return (
+const App = () => {
+
+  return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Route exact path="/" component={UserAuth}/>
+        <Route exact path="/chats" component={Chats}/>
+        <Route exact path="/chats/add_group" component={AddGroup}/>
       </div>
-    );
-  }
-}
+  );
+};
+
 
 export default App;
