@@ -4,9 +4,10 @@ import {
     Badge,
     Button,
     Collapse,
+    Form,
+    FormGroup,
     Input,
-    InputGroup,
-    InputGroupAddon,
+    Label,
     ListGroup,
     ListGroupItem,
     Modal,
@@ -30,12 +31,14 @@ export default class Chats extends Component {
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.state = {
             collapsed: true,
-            modal: false,
+            modalGroup: false,
+            modalContact: false,
             chats: [],
             isLoading: true,
             errors: null
         };
-        this.toggle = this.toggle.bind(this);
+        this.toggleGroup = this.toggleGroup.bind(this);
+        this.toggleContact = this.toggleContact.bind(this);
     }
 
     toggleNavbar() {
@@ -44,9 +47,15 @@ export default class Chats extends Component {
         });
     }
 
-    toggle() {
+    toggleGroup() {
         this.setState(prevState => ({
-            modal: !prevState.modal
+            modalGroup: !prevState.modalGroup
+        }));
+    }
+
+    toggleContact() {
+        this.setState(prevState => ({
+            modalContact: !prevState.modalContact
         }));
     }
 
@@ -68,19 +77,6 @@ export default class Chats extends Component {
             .catch(error => this.setState({error, isLoading: false}));
     }
 
-    //
-    //
-    //
-    // renderChats() {
-    //     return this.state.chats.map((chat) => {
-    //         return (
-    //             <ListGroupItem className="justify-content-between" tag="button"
-    //                            action key={chat}>{chat.chat_name}<Badge
-    //                 pill>0</Badge></ListGroupItem>
-    //         );
-    //     })
-    // }
-    //
     render() {
         return (
             <div>
@@ -90,34 +86,30 @@ export default class Chats extends Component {
                     <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav navbar>
                             <NavItem>
-                                <Button color="link" onClick={this.toggle}>New group</Button>
-                                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                                    <ModalHeader toggle={this.toggle}>New Group</ModalHeader>
+                                <Button color="link" onClick={this.toggleGroup}>New group</Button>
+                                <Modal isOpen={this.state.modalGroup} toggle={this.toggleGroup}
+                                       className={this.props.className}>
+                                    <ModalHeader toggle={this.toggleGroup}>Create New Group</ModalHeader>
                                     <ModalBody>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum.
-                                        <InputGroup>
-                                            <Input/>
-                                            <InputGroupAddon addonType="append">
-                                                <Button color="secondary">To the Right!</Button>
-                                            </InputGroupAddon>
-                                        </InputGroup>
-                                        <br/>
+                                        <Form>
+                                            <FormGroup>
+                                                <Label for="new-chat-group">Group name</Label>
+                                                <Input type="text" name="chat-group" id="new-chat-group"
+                                                       placeholder="Enter group name..."/>
+                                            </FormGroup>
+                                        </Form>
                                     </ModalBody>
                                     <ModalFooter>
-                                        <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-                                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                                        <Button color="primary" onClick={this.toggleGroup}>Do Something</Button>{' '}
+                                        <Button color="secondary" onClick={this.toggleGroup}>Cancel</Button>
                                     </ModalFooter>
                                 </Modal>
                             </NavItem>
                             <NavItem>
-                                <Button color="link" onClick={this.toggle}>New contact</Button>
-                                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                                    <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+                                <Button color="link" onClick={this.toggleContact}>New contact</Button>
+                                <Modal isOpen={this.state.modalContact} toggle={this.toggleContact}
+                                       className={this.props.className}>
+                                    <ModalHeader toggle={this.toggleContact}>Modal title</ModalHeader>
                                     <ModalBody>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
@@ -127,8 +119,8 @@ export default class Chats extends Component {
                                         culpa qui officia deserunt mollit anim id est laborum.
                                     </ModalBody>
                                     <ModalFooter>
-                                        <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-                                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                                        <Button color="primary" onClick={this.toggleContact}>Do Something</Button>{' '}
+                                        <Button color="secondary" onClick={this.toggleContact}>Cancel</Button>
                                     </ModalFooter>
                                 </Modal>
                             </NavItem>
