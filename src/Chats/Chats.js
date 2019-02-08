@@ -4,6 +4,9 @@ import {
     Badge,
     Button,
     Collapse,
+    Input,
+    InputGroup,
+    InputGroupAddon,
     ListGroup,
     ListGroupItem,
     Modal,
@@ -17,6 +20,7 @@ import {
     NavItem
 } from "reactstrap";
 import axios from "axios";
+import API_URL from '../index'
 
 export default class Chats extends Component {
 
@@ -48,7 +52,7 @@ export default class Chats extends Component {
 
     componentDidMount() {
         axios
-            .get("http://localhost:5000/api/chats")
+            .get(API_URL + "/chats")
             .then(response =>
                 response.data.results.map(chat => ({
                     name: `${chat.chat_name}`,
@@ -88,7 +92,7 @@ export default class Chats extends Component {
                             <NavItem>
                                 <Button color="link" onClick={this.toggle}>New group</Button>
                                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                                    <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+                                    <ModalHeader toggle={this.toggle}>New Group</ModalHeader>
                                     <ModalBody>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
@@ -96,6 +100,13 @@ export default class Chats extends Component {
                                         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                                         fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
                                         culpa qui officia deserunt mollit anim id est laborum.
+                                        <InputGroup>
+                                            <Input/>
+                                            <InputGroupAddon addonType="append">
+                                                <Button color="secondary">To the Right!</Button>
+                                            </InputGroupAddon>
+                                        </InputGroup>
+                                        <br/>
                                     </ModalBody>
                                     <ModalFooter>
                                         <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}

@@ -5,7 +5,7 @@ import axios from 'axios';
 import classnames from 'classnames';
 import dog from '../img/dog.svg';
 
-const API_URL = "http://localhost:5000";
+import API_URL from '../index'
 
 export default class UserAuth extends Component {
 
@@ -49,7 +49,7 @@ export default class UserAuth extends Component {
         data.append('password', this.state.password);
 
         // Contacting API to validate user password
-        axios.post(API_URL + `/api/login`, data, {
+        axios.post(API_URL + `/login`, data, {
             headers: {'Content-Type': 'application/json',}
         })
             .then(res => {
@@ -72,7 +72,7 @@ export default class UserAuth extends Component {
         data.append('password', this.state.password);
 
         // Contacting api to add new user
-        axios.post(API_URL + `/api/register`, data, {
+        axios.post(API_URL + `/register`, data, {
             headers: {'Content-Type': 'application/json',}
         })
             .then(res => {
