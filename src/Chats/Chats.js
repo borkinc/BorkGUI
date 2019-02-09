@@ -3,6 +3,7 @@ import './Chats.css'
 import {
     Badge,
     Button,
+    Col,
     Collapse,
     Form,
     FormGroup,
@@ -22,6 +23,8 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import API_URL from '../index'
+import Container from "reactstrap/es/Container";
+import Row from "reactstrap/es/Row";
 
 export default class Chats extends Component {
 
@@ -35,46 +38,72 @@ export default class Chats extends Component {
             modalContact: false,
             chats: [],
             isLoading: true,
-            errors: null
+            errors: null,
+            chatName: ''
         };
         this.toggleGroup = this.toggleGroup.bind(this);
+        this.toggleGroupSubmit = this.toggleGroupSubmit.bind(this);
         this.toggleContact = this.toggleContact.bind(this);
+        this.toggleContactSubmit = this.toggleContactSubmit.bind(this);
     }
 
     toggleNavbar() {
+        // Hides/displays navbar
         this.setState({
             collapsed: !this.state.collapsed
         });
     }
 
     toggleGroup() {
+        // Hides/displays "New Group" modal
         this.setState(prevState => ({
             modalGroup: !prevState.modalGroup
         }));
     }
 
     toggleContact() {
+        // Hides/display "New Contact" modal
         this.setState(prevState => ({
             modalContact: !prevState.modalContact
         }));
     }
 
     componentDidMount() {
-        axios
-            .get(API_URL + "/chats")
-            .then(response =>
-                response.data.results.map(chat => ({
-                    name: `${chat.chat_name}`,
-                    id: `${chat.id}`,
-                }))
-            )
-            .then(chats => {
-                this.setState({
-                    chats,
-                    isLoading: false
-                });
-            })
-            .catch(error => this.setState({error, isLoading: false}));
+        // Fetches all chat groups from API to be rendered
+        axios.get(API_URL + "/chats").then(response =>
+            // Maps response data to array
+            response.data.results.map(chat => ({
+                name: `${chat.chat_name}`,
+                id: `${chat.id}`,
+            }))
+        ).then(chats => {
+            this.setState({
+                chats,
+                isLoading: false
+            });
+        }).catch(error => this.setState({error, isLoading: false}));
+    }
+
+    handleChatNameChange = event => {
+        this.setState({chatName: event.target.value})
+    };
+
+    toggleGroupSubmit() {
+        // Dummy post to API to simulate adding a new group chat
+        axios.post(API_URL + "/chats").then(response => {
+            console.log(response.data);
+            this.toggleGroup();
+            this.setState({chats: [...this.state.chats, response.data.chat]})
+        });
+    }
+
+    toggleContactSubmit() {
+        // Dummy post to API to simulate adding a new contact
+        axios.post(API_URL + "/chats").then(response => {
+            console.log(response.data);
+            this.toggleContact();
+            this.setState({chats: [...this.state.chats, response.data.chat]})
+        });
     }
 
     render() {
@@ -95,12 +124,14 @@ export default class Chats extends Component {
                                             <FormGroup>
                                                 <Label for="new-chat-group">Group name</Label>
                                                 <Input type="text" name="chat-group" id="new-chat-group"
-                                                       placeholder="Enter group name..."/>
+                                                       placeholder="Enter group name..."
+                                                       onChange={this.handleChatNameChange}/>
                                             </FormGroup>
                                         </Form>
                                     </ModalBody>
                                     <ModalFooter>
-                                        <Button color="primary" onClick={this.toggleGroup}>Do Something</Button>{' '}
+                                        <Button color="primary" onClick={this.toggleGroupSubmit}>Create
+                                            Group</Button>{' '}
                                         <Button color="secondary" onClick={this.toggleGroup}>Cancel</Button>
                                     </ModalFooter>
                                 </Modal>
@@ -109,17 +140,20 @@ export default class Chats extends Component {
                                 <Button color="link" onClick={this.toggleContact}>New contact</Button>
                                 <Modal isOpen={this.state.modalContact} toggle={this.toggleContact}
                                        className={this.props.className}>
-                                    <ModalHeader toggle={this.toggleContact}>Modal title</ModalHeader>
+                                    <ModalHeader toggle={this.toggleContact}>Create new contact</ModalHeader>
                                     <ModalBody>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum.
+                                        <Form>
+                                            <FormGroup>
+                                                <Label for="new-chat-group">Contact name</Label>
+                                                <Input type="text" name="chat-contact" id="new-chat-contact"
+                                                       placeholder="Enter contact name..."
+                                                       onChange={this.handleChatNameChange}/>
+                                            </FormGroup>
+                                        </Form>
                                     </ModalBody>
                                     <ModalFooter>
-                                        <Button color="primary" onClick={this.toggleContact}>Do Something</Button>{' '}
+                                        <Button color="primary" onClick={this.toggleContactSubmit}>Create
+                                            Contact</Button>{' '}
                                         <Button color="secondary" onClick={this.toggleContact}>Cancel</Button>
                                     </ModalFooter>
                                 </Modal>
@@ -127,35 +161,34 @@ export default class Chats extends Component {
                         </Nav>
                     </Collapse>
                 </Navbar>
-                <ListGroup>
-                    {!this.state.isLoading ? (
-                        this.state.chats.map(chat => {
-                            return (<ListGroupItem className="justify-content-between" tag="button"
-                                                   action key={chat.id}>{chat.name}<Badge
-                                pill>0</Badge></ListGroupItem>);
-                        })
-                    ) : (<p>Loading......</p>)}
-                    {/*{this.renderChats()}*/}
-                    {/*{this.state.chats.map((item) => (*/}
-                    {/*<ListGroupItem className="justify-content-between" active tag="button"*/}
-                    {/*action>{item.chat_name}<Badge*/}
-                    {/*pill>0</Badge></ListGroupItem>))}*/}
-                    {/*{this.state.chats.map((item) => ({*/}
-                    {/*const {chat_name} = chat;*/}
-                    {/*return (*/}
-
-                    {/*)*/}
-                    {/*}))}*/}
-                    {/*<ListGroupItem className="justify-content-between" active tag="button" action>Cras justo odio <Badge*/}
-                    {/*pill>14</Badge></ListGroupItem>*/}
-                    {/*<ListGroupItem className="justify-content-between" tag="button" action>Dapibus ac facilisis*/}
-                    {/*in <Badge*/}
-                    {/*pill>2</Badge></ListGroupItem>*/}
-                    {/*<ListGroupItem className="justify-content-between" tag="button" action>Morbi leo risus <Badge*/}
-                    {/*pill>1</Badge></ListGroupItem>*/}
-                </ListGroup>
+                <Container fluid="true">
+                    <Row>
+                        <Col xs="6" sm="4">
+                            <ListGroup>
+                                {!this.state.isLoading ? (
+                                    this.state.chats.map(chat => {
+                                        return (<ListGroupItem className="justify-content-between" tag="button"
+                                                               action key={chat.id}>{chat.name}<Badge
+                                            pill>0</Badge></ListGroupItem>);
+                                    })
+                                ) : (<p>Loading......</p>)}
+                            </ListGroup>
+                        </Col>
+                        {/*Edit this part for chat messages*/}
+                        <Col>
+                            <ListGroup>
+                                {!this.state.isLoading ? (
+                                    this.state.chats.map(chat => {
+                                        return (<ListGroupItem className="justify-content-between" tag="button"
+                                                               action key={chat.id}>{chat.name}<Badge
+                                            pill>0</Badge></ListGroupItem>);
+                                    })
+                                ) : (<p>Loading......</p>)}
+                            </ListGroup>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         );
     }
-
 }
