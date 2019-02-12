@@ -28,6 +28,9 @@
 
 span.search-icon {
     background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
 
 .chat-heading {
@@ -44,4 +47,8 @@ input.chat-searchbar {
     width: 80%;
     padding: 2px 0 4px 6px;
     background: none;
+}
+
+input.chat-searchbar:focus {
+    border-bottom-color: #c4c4c4;
 }
