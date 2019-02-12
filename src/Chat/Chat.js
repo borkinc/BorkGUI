@@ -171,7 +171,7 @@ export default class Chat extends Component {
     render() {
         return (
             <React.Fragment>
-                <h2>Chatting with {this.props.name}</h2>
+                <h2 className={"text-center"}>Chatting with {this.props.name}</h2>
                 <ul className="Messages-list">
                     {this.state.messages.map(m => this.renderMessage(m))}
                 </ul>

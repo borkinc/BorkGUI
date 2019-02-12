@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import './Chats.css'
-import {Badge, Col, ListGroup, ListGroupItem} from "reactstrap";
+import {Badge, Col, Input, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem} from "reactstrap";
 import axios from "axios";
 import API_URL from '../index'
 import Container from "reactstrap/es/Container";
 import Row from "reactstrap/es/Row";
 import dog from "../img/dog.svg";
 import Chat from "../Chat/Chat";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 export default class Chats extends Component {
 
@@ -48,10 +49,18 @@ export default class Chats extends Component {
     render() {
         return (
             <React.Fragment>
-                <Container fluid={true}>
-                    <Row>
+                <Container className={"chats"}>
+                    <div className={"chat-box"}><Row>
                         <Col xs="6" sm="4">
-                            <ListGroup>
+                            <InputGroup className={"chat-header"}>
+                                <h4 className={"chat-heading"}>Recent</h4>
+                                <Input className={"chat-searchbar"}/>
+                                <InputGroupAddon addonType="append">
+                                    <InputGroupText className={"search-icon"}><FontAwesomeIcon
+                                        icon="search"/></InputGroupText>
+                                </InputGroupAddon>
+                            </InputGroup>
+                            <ListGroup className={"chat-groups"}>
                                 {!this.state.isLoading ? (
                                     this.state.chats.map(chat => {
                                         return (
@@ -69,9 +78,10 @@ export default class Chats extends Component {
                             {this.state.isChatting ? (<Chat name={this.state.chatName}/>) : (
                                 <img src={dog} className="UserAuth-logo" alt=""/>)}
                         </Col>
-                    </Row>
+                    </Row></div>
                 </Container>
             </React.Fragment>
-        );
+        )
+            ;
     }
 }
