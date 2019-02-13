@@ -8,15 +8,24 @@
 }
 
 .chat-box {
+    padding: 0 0 50px 0;
+}
+
+.chat-box > .row {
     border: 1px solid #c4c4c4;
     clear: both;
     overflow: hidden;
 }
 
+div.chat-inbox {
+    background: #f8f8f8 none repeat scroll 0 0;
+    padding: inherit;
+}
+
 .chat-groups.list-group {
-    overflow: hidden;
     border-right: 1px solid #c4c4c4;
-    height: 100%;
+    height: 550px;
+    overflow-y: scroll;
 }
 
 .chat-header {
@@ -51,4 +60,42 @@ input.chat-searchbar {
 
 input.chat-searchbar:focus {
     border-bottom-color: #c4c4c4;
+    background: none;
+}
+
+button.chat-active {
+    background: #ebebeb;
+}
+
+div.chat-group {
+    overflow: hidden;
+    clear: both;
+}
+
+div.chat-img {
+    float: left;
+    width: 11%;
+}
+
+.chat-ib {
+    float: left;
+    padding: 0 0 0 15px;
+    width: 88%;
+}
+
+.chat-ib h5 {
+    font-size: 15px;
+    color: #464646;
+    margin: 0 0 8px 0;
+}
+
+.chat-ib p {
+    font-size: 14px;
+    color: #989898;
+    margin: auto;
+}
+
+.chat-date {
+    font-size: 13px;
+    float: right;
 }
