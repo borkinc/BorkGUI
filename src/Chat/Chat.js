@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Chat.css';
 import {Button, Input, InputGroup, InputGroupAddon} from "reactstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function randomName() {
     const adjectives = ["autumn", "hidden", "bitter", "misty", "silent", "empty", "dry", "dark", "summer", "icy", "delicate", "quiet", "white", "cool", "spring", "winter", "patient", "twilight", "dawn", "crimson", "wispy", "weathered", "blue", "billowing", "broken", "cold", "damp", "falling", "frosty", "green", "long", "late", "lingering", "bold", "little", "morning", "muddy", "old", "red", "rough", "still", "small", "sparkling", "throbbing", "shy", "wandering", "withered", "wild", "black", "young", "holy", "solitary", "fragrant", "aged", "snowy", "proud", "floral", "restless", "divine", "polished", "ancient", "purple", "lively", "nameless"];
@@ -150,38 +151,53 @@ export default class Chat extends Component {
         // const {currentMember} = this.props;
         // const messageFromMe = member.id === currentMember.id;
         const messageFromMe = member.id === 2;
-        const className = messageFromMe ?
-            "Messages-message currentMember" : "Messages-message";
+        let msgContentDate = <span className={"msg-content-date"}> 11:01 AM    |    June 9</span>;
         return (
-            <li className={className}>
-      <span
-          className="avatar"
-          style={{backgroundColor: member.color}}
-      />
-                <div className="Message-content">
-                    <div className="username">
-                        {member.username}
-                    </div>
-                    <div className="text">{text}</div>
-                </div>
-            </li>
-        );
+            <React.Fragment>
+                {!messageFromMe ? (
+                    <div className={"incoming-msg"}>
+                        <div className={"incoming-msg-img"}>
+                            <FontAwesomeIcon icon="user-circle"/>
+                        </div>
+                        <div className={"received-msg"}>
+                            <div className={"msg-content"}>
+                                <p>{text}</p>
+                                {msgContentDate}
+                            </div>
+                        </div>
+                    </div>) : (
+                    <div className={"outgoing-msg"}>
+                        <div className={"sent-msg"}>
+                            <p>{text}</p>
+                            {msgContentDate}
+                        </div>
+                    </div>)}
+            </React.Fragment>
+        )
+            ;
     };
 
     render() {
         return (
             <React.Fragment>
-                <h2 className={"text-center"}>Chatting with {this.props.name}</h2>
-                <ul className="Messages-list">
-                    {this.state.messages.map(m => this.renderMessage(m))}
-                </ul>
-                <InputGroup>
-                    <Input/>
-                    <InputGroupAddon addonType="append">
-                        <Button color="secondary">To the Right!</Button>
-                    </InputGroupAddon>
-                </InputGroup>
-                <br/>
+                {/*<h2 className={"text-center"}>Chatting with {this.props.name}</h2>*/}
+                <div className={"chat-messages"}>
+                    <div className={"chat-history"}>
+                        <div className={"incoming-msg"}>
+                            {this.state.messages.map(m => this.renderMessage(m))}
+                            <div className={"msg-input"}>
+                                <InputGroup>
+                                    <Input/>
+                                    <InputGroupAddon addonType="append">
+                                        <Button color="secondary">To the Right!</Button>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </React.Fragment>
         )
     }

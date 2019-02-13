@@ -1,99 +1,164 @@
 /*.Chat {*/
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: space-between;*/
-    /*height: 100vh;*/
+/*display: flex;*/
+/*flex-direction: column;*/
+/*justify-content: space-between;*/
+/*height: 100vh;*/
 /*}*/
 
 /*.Chat-header {*/
-    /*background-color: #262626;*/
-    /*overflow: visible;*/
-    /*width: 100%;*/
-    /*text-align: center;*/
-    /*color: white;*/
+/*background-color: #262626;*/
+/*overflow: visible;*/
+/*width: 100%;*/
+/*text-align: center;*/
+/*color: white;*/
 /*}*/
 
 /*.Messages-list {*/
-    /*padding: 20px 0;*/
-    /*max-width: 900px;*/
-    /*width: 100%;*/
-    /*margin: 0 auto;*/
-    /*list-style: none;*/
-    /*flex-grow: 1;*/
-    /*height: 70vh;*/
-    /*overflow-y: scroll;*/
+/*padding: 20px 0;*/
+/*max-width: 900px;*/
+/*width: 100%;*/
+/*margin: 0 auto;*/
+/*list-style: none;*/
+/*flex-grow: 1;*/
+/*height: 70vh;*/
+/*overflow-y: scroll;*/
 /*}*/
 
 /*.Messages-message {*/
-    /*display: flex;*/
-    /*margin-top: 10px;*/
+/*display: flex;*/
+/*margin-top: 10px;*/
 /*}*/
 
 /*.Messages-message.currentMember {*/
-    /*!*justify-content: flex-end;*!*/
-    /*flex-direction: row-reverse;*/
-    /*text-align: right;*/
+/*!*justify-content: flex-end;*!*/
+/*flex-direction: row-reverse;*/
+/*text-align: right;*/
 /*}*/
 
 /*.Message-content {*/
-    /*display: inline-block;*/
+/*display: inline-block;*/
 /*}*/
 
 /*.currentMember > .Message-content {*/
-    /*align-items: flex-end;*/
+/*align-items: flex-end;*/
 /*}*/
 
 /*.Messages-message > .avatar {*/
-    /*height: 35px;*/
-    /*width: 35px;*/
-    /*border-radius: 50%;*/
-    /*display: inline-block;*/
-    /*margin: 0 10px -10px;*/
+/*height: 35px;*/
+/*width: 35px;*/
+/*border-radius: 50%;*/
+/*display: inline-block;*/
+/*margin: 0 10px -10px;*/
 /*}*/
 
 /*.Message-content > .username {*/
-    /*display: block;*/
-    /*color: gray;*/
-    /*font-size: 14px;*/
-    /*padding-bottom: 4px;*/
+/*display: block;*/
+/*color: gray;*/
+/*font-size: 14px;*/
+/*padding-bottom: 4px;*/
 /*}*/
 
 /*.Message-content > .text {*/
-    /*padding: 10px;*/
-    /*max-width: 400px;*/
-    /*margin: 0;*/
-    /*border-radius: 12px;*/
-    /*background-color: cornflowerblue;*/
-    /*color: white;*/
-    /*display: inline-block;*/
+/*padding: 10px;*/
+/*max-width: 400px;*/
+/*margin: 0;*/
+/*border-radius: 12px;*/
+/*background-color: cornflowerblue;*/
+/*color: white;*/
+/*display: inline-block;*/
 /*}*/
 
 /*.currentMember > .Message-content .text {*/
-    /*background-color: orangered;*/
+/*background-color: orangered;*/
 /*}*/
 
 /*form {*/
-    /*display: flex;*/
-    /*width: 100%;*/
-    /*justify-content: space-between;*/
-    /*max-width: 900px;*/
-    /*margin: 0 auto 40px;*/
+/*display: flex;*/
+/*width: 100%;*/
+/*justify-content: space-between;*/
+/*max-width: 900px;*/
+/*margin: 0 auto 40px;*/
 /*}*/
 
 /*input {*/
-    /*padding: 5px;*/
-    /*font-size: 16px;*/
-    /*border-radius: 8px;*/
-    /*border: 1px solid orangered;*/
-    /*flex-grow: 1;*/
+/*padding: 5px;*/
+/*font-size: 16px;*/
+/*border-radius: 8px;*/
+/*border: 1px solid orangered;*/
+/*flex-grow: 1;*/
 /*}*/
 
 /*button {*/
-    /*padding: 5px 10px;*/
-    /*font-size: 16px;*/
-    /*background-color: orangered;*/
-    /*color: white;*/
-    /*border: none;*/
-    /*border-radius: 8px;*/
-    /*margin-left: 10px;*/
+/*padding: 5px 10px;*/
+/*font-size: 16px;*/
+/*background-color: orangered;*/
+/*color: white;*/
+/*border: none;*/
+/*border-radius: 8px;*/
+/*margin-left: 10px;*/
 /*}*/
+
+.chat-messages {
+    float: left;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.chat-history {
+    height: 516px;
+    overflow-y: auto;
+}
+
+.incoming-msg-img {
+    display: inline-block;
+    width: 6%;
+}
+
+.received-msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    width: 92%;
+}
+
+.msg-content {
+    width: 57%;
+}
+
+.msg-content p {
+    background: #ebebeb none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #646464;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+}
+
+.msg-content-date {
+    color: #747474;
+    display: block;
+    font-size: 12px;
+    margin: 8px 0 0;
+}
+
+.sent-msg {
+    float: right;
+    width: 46%;
+}
+
+.sent-msg p {
+    background: #05728f none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0;
+    color: #fff;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+    text-align: right;
+}
+
+.msg-input {
+    border-top: 1px solid #c4c4c4;
+    position: relative;
+}
