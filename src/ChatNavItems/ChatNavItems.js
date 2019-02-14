@@ -11,13 +11,13 @@ export default class ChatNavItems extends Component {
             modalGroup: false,
             modalContact: false,
         };
-        this.toggleGroup = this.toggleGroup.bind(this);
+        // this.toggleGroup = this.toggleGroup.bind(this);
         this.toggleContact = this.toggleContact.bind(this);
-        this.toggleGroupSubmit = this.toggleGroupSubmit.bind(this);
+        // this.toggleGroupSubmit = this.toggleGroupSubmit.bind(this);
         this.toggleContactSubmit = this.toggleContactSubmit.bind(this);
     }
 
-    toggleGroup() {
+    toggleGroup = () => {
         // Hides/displays "New Group" modal
         this.setState(prevState => ({
             modalGroup: !prevState.modalGroup
@@ -31,19 +31,17 @@ export default class ChatNavItems extends Component {
         }));
     }
 
-    toggleGroupSubmit() {
+    toggleGroupSubmit = () => {
         // Dummy post to API to simulate adding a new group chat
         axios.post(API_URL + "/chats").then(response => {
-            console.log(response.data);
             this.toggleGroup();
-            this.setState({chats: [...this.state.chats, response.data.chat]})
+            this.props.onNewChat(response.data.chat);
         });
     }
 
     toggleContactSubmit() {
         // Dummy post to API to simulate adding a new contact
         axios.post(API_URL + "/chats").then(response => {
-            console.log(response.data);
             this.toggleContact();
             this.setState({chats: [...this.state.chats, response.data.chat]})
         });

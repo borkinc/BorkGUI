@@ -20,129 +20,7 @@ export default class Chat extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            messages: [
-                {
-                    text: "This is a test message!",
-                    member: {
-                        id: 1,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello test message, this is chat",
-                    member: {
-                        id: 2,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello chat, this is person",
-                    member: {
-                        id: 3,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello person, this is other person",
-                    member: {
-                        id: 4,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                //    Delete these
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                },
-                {
-                    text: "Hello other person, this is patrick",
-                    member: {
-                        id: 5,
-                        username: randomName(),
-                        color: randomColor()
-                    }
-                }
-            ],
+            messages: []
         }
     }
 
@@ -183,7 +61,6 @@ export default class Chat extends Component {
                 {/*<h2 className={"text-center"}>Chatting with {this.props.name}</h2>*/}
                 <div className={"chat-messages"}>
                     <div className={"chat-history"}>
-                        <div className={"incoming-msg"}>
                             {this.state.messages.map(m => this.renderMessage(m))}
                             <div className={"msg-input"}>
                                 <InputGroup>
@@ -196,7 +73,6 @@ export default class Chat extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
 
             </React.Fragment>
         )

@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
 import './Chats.css'
-import {Col, Input, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem} from "reactstrap";
-import axios from "axios";
-import API_URL from '../index'
+import {Col, Input, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem, Spinner} from "reactstrap";
 import Container from "reactstrap/es/Container";
 import Row from "reactstrap/es/Row";
-import dog from "../img/dog.svg";
 import Chat from "../Chat/Chat";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
@@ -14,29 +11,11 @@ export default class Chats extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            chats: [],
-            isLoading: true,
             errors: null,
             chatName: '',
             isChatting: false
         };
         this.toggleChat = this.toggleChat.bind(this);
-    }
-
-    componentDidMount() {
-        // Fetches all chat groups from API to be rendered
-        axios.get(API_URL + "/chats").then(response =>
-            // Maps response data to array
-            response.data.results.map(chat => ({
-                name: `${chat.chat_name}`,
-                id: `${chat.id}`,
-            }))
-        ).then(chats => {
-            this.setState({
-                chats,
-                isLoading: false
-            });
-        }).catch(error => this.setState({error, isLoading: false}));
     }
 
     toggleChat = event => {
@@ -69,18 +48,18 @@ export default class Chats extends Component {
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <ListGroup className={"chat-groups"}>
-                                    {!this.state.isLoading ? (
-                                        this.state.chats.map(chat => {
+                                    {!this.props.isLoading ? (
+                                        this.props.chats.map(chat => {
                                             return (
                                                 <ListGroupItem className="justify-content-between" tag="button"
                                                                action key={chat.id} id={"chat-" + chat.id}
-                                                               onClick={this.toggleChat} value={chat.name}>
+                                                               onClick={this.toggleChat} value={chat.chat_name}>
                                                     <div className={"chat-group"}>
                                                         <div className={"chat-img"}>
                                                             <FontAwesomeIcon icon="user-circle"/>
                                                         </div>
                                                         <div className={"chat-ib"}>
-                                                            <h5>{chat.name}
+                                                            <h5>{chat.chat_name}
                                                                 <span className={"chat-date"}>25 Dec</span>
                                                             </h5>
                                                             <p>This is a test message!</p>
@@ -89,13 +68,13 @@ export default class Chats extends Component {
                                                     {/*<Badge pill>0</Badge>*/}
                                                 </ListGroupItem>);
                                         })
-                                    ) : (<p>Loading......</p>)}
+                                    ) : (<Spinner color="secondary"/>)}
                                 </ListGroup>
                             </Col>
                             {/*Edit this part for chat messages*/}
                             <Col className="chats-container">
-                                {this.state.isChatting ? (<Chat name={this.state.chatName}/>) : (
-                                    <img src={dog} className="UserAuth-logo" alt=""/>)}
+                                {this.state.isChatting ? (<Chat name={this.state.chatName}/>) : (<br/>)
+                                }
                             </Col>
                         </Row></div>
                 </Container>
