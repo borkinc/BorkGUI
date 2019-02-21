@@ -20,8 +20,9 @@ export default class ChatNavBar extends Component {
 
     componentDidMount() {
         // Fetches all chat groups from API to be rendered
-        console.log("Running axios");
-        axios.get(API_URL + '/chats').then(response => {
+        const access_token = eval(localStorage.getItem('access_token'));
+        axios.get(API_URL + '/chats', {headers: {'Authorization': `Bearer ${access_token}`}})
+            .then(response => {
             this.setState({
                 chats: response.data.chats,    // Keys = [id, chat_name]
                 isLoading: false

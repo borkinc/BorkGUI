@@ -53,8 +53,10 @@ export default class UserAuth extends Component {
             headers: {'Content-Type': 'application/json',}
         })
             .then(res => {
-                if (res.data["is_authenticated"]) {
-                    localStorage.setItem('user', JSON.stringify(res.data["user"]));
+                if (res.data['is_authenticated']) {
+                    localStorage.setItem('user_id', JSON.stringify(res.data.user.uid));
+                    localStorage.setItem('access_token', JSON.stringify(res.data.user.access_token));
+                    localStorage.setItem('refresh_token', JSON.stringify(res.data.user.refresh_token));
                     this.props.history.push("/chats")
                 }
                 // console.log(res);

@@ -13,6 +13,7 @@ export default class Chats extends Component {
         this.state = {
             errors: null,
             chatName: '',
+            chatId: '',
             isChatting: false
         };
         this.toggleChat = this.toggleChat.bind(this);
@@ -21,9 +22,9 @@ export default class Chats extends Component {
     toggleChat = event => {
         this.setState({
             isChatting: true,
-            chatName: event.target.value
+            chatName: event.target.value,
+            chatId: event.target.id.match(/\d/g).join()
         });
-        console.log(event.target.id);
         let chatActive = document.getElementsByClassName("chat-active");
         if (chatActive.length > 0) {
             chatActive[0].classList.remove("chat-active");
@@ -73,7 +74,8 @@ export default class Chats extends Component {
                             </Col>
                             {/*Edit this part for chat messages*/}
                             <Col className="chats-container">
-                                {this.state.isChatting ? (<Chat name={this.state.chatName}/>) : (<br/>)
+                                {this.state.isChatting ? (<Chat name={this.state.chatName} id={this.state.chatId}/>) : (
+                                    <br/>)
                                 }
                             </Col>
                         </Row></div>
