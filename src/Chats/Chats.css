@@ -2,7 +2,122 @@
     float: right;
 }
 
-ul.list-group {
-    /*width: 100%;*/
-    /*width: 30%;*/
+.chats.container {
+    max-width: 100vw;
+    margin: auto;
+    padding-right: unset;
+    padding-left: unset;
+}
+
+.chat-box {
+    padding: 0 0 50px 0;
+}
+
+.chat-box > .row {
+    border: 1px solid #c4c4c4;
+    clear: both;
+    overflow: hidden;
+    margin-left: unset;
+    margin-right: unset;
+}
+
+.chat-box, .chat-box > .row {
+    height: 91vh;
+}
+
+div.chat-inbox {
+    background: #f8f8f8 none repeat scroll 0 0;
+    padding: inherit;
+}
+
+.chat-groups.list-group {
+    border-right: 1px solid #c4c4c4;
+    height: 550px;
+    overflow-y: scroll;
+}
+
+.chat-header {
+    padding: 10px 29px 10px 20px;
+    overflow: hidden;
+    border-bottom: 1px solid #c4c4c4;
+    border-right: 1px solid #c4c4c4;
+}
+
+span.search-icon {
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.chat-heading {
+    float: left;
+    width: 30%;
+    color: #05728f;
+    font-size: 21px;
+    margin: auto auto auto 5%;
+}
+
+input.chat-searchbar {
+    border: 0 solid #cdcdcd;
+    border-bottom-width: 1px;
+    width: 80%;
+    padding: 2px 0 4px 6px;
+    background: none;
+}
+
+input.chat-searchbar:focus {
+    border-bottom-color: #c4c4c4;
+    background: none;
+}
+
+button.chat-active {
+    background: #ebebeb;
+}
+
+div.chat-group {
+    overflow: hidden;
+    clear: both;
+}
+
+div.chat-img {
+    float: left;
+    width: 11%;
+}
+
+.chat-ib {
+    float: left;
+    padding: 0 0 0 15px;
+    width: 88%;
+}
+
+.chat-ib h5 {
+    font-size: 15px;
+    color: #464646;
+    margin: 0 0 8px 0;
+}
+
+.chat-ib p {
+    font-size: 14px;
+    color: #989898;
+    margin: auto;
+}
+
+.chat-date {
+    font-size: 13px;
+    float: right;
+}
+
+div.chats-container {
+    background: url("../img/dog-footprints.svg") repeat;
+    background-size: 30%;
+    width: 100vw;
+    padding-left: unset;
+    padding-right: unset;
+}
+
+div.spinner-border {
+    width: 10rem;
+    height: 10rem;
+    margin: auto;
 }
