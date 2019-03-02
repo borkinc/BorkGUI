@@ -1,17 +1,23 @@
 import React, {Component} from 'react';
-import './UserAuth.css';
+import '../../css/UserAuth.css';
 import {Button, Col, Form, FormGroup, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane} from "reactstrap";
 import axios from 'axios';
 import classnames from 'classnames';
-import dog from '../img/dog.svg';
+import dog from '../../img/dog.svg';
+import API_URL from '../../index'
+import {logInUser} from "../actions/user-auth-actions";
+import {connect} from "react-redux";
 
-import API_URL from '../index'
+function mapDispatchToProps(dispatch) {
+    return {
+        logInUser: user => dispatch(logInUser(user))
+    }
+}
 
-export default class UserAuth extends Component {
+class ConnectedUserAuth extends Component {
 
     constructor(props) {
         super(props);
-        this.toggle = this.toggle.bind(this);
         this.state = {
             activeTab: '1',
             username: '',
@@ -20,13 +26,13 @@ export default class UserAuth extends Component {
         };
     }
 
-    toggle(tab) {
+    toggle = tab => {
         if (this.state.activeTab !== tab) {
             this.setState({
                 activeTab: tab
             });
         }
-    }
+    };
 
     handleUsernameChange = event => {
         this.setState({username: event.target.value});
@@ -42,26 +48,8 @@ export default class UserAuth extends Component {
 
     handleLoginSubmit = event => {
         event.preventDefault();
-
-        // Creating form to be sent to API
-        const data = new FormData();
-        data.append('username', this.state.username);
-        data.append('password', this.state.password);
-
-        // Contacting API to validate user password
-        axios.post(API_URL + `/login`, data, {
-            headers: {'Content-Type': 'application/json',}
-        })
-            .then(res => {
-                if (res.data['is_authenticated']) {
-                    localStorage.setItem('user_id', JSON.stringify(res.data.user.uid));
-                    localStorage.setItem('access_token', JSON.stringify(res.data.user.access_token));
-                    localStorage.setItem('refresh_token', JSON.stringify(res.data.user.refresh_token));
-                    this.props.history.push("/chats")
-                }
-                // console.log(res);
-                // console.log(res.data);
-            })
+        const {username, password} = this.state;
+        this.props.logInUser({username, password});
     };
 
     handleSignUpSubmit = event => {
@@ -194,3 +182,6 @@ export default class UserAuth extends Component {
         );
     }
 }
+
+const UserAuth = connect(null, mapDispatchToProps)(ConnectedUserAuth);
+export default UserAuth;

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler} from "reactstrap";
-import ChatNavItems from "../ChatNavItems/ChatNavItems";
+import ChatNavItems from "./ChatNavItems";
 import axios from "axios";
-import API_URL from "../index";
-import Chats from "../Chats/Chats";
+import API_URL from "../..";
+import Chats from "./Chats";
 
 export default class ChatNavBar extends Component {
 

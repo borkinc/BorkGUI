@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, NavItem} from "reactstrap";
 import axios from "axios";
-import API_URL from "../index";
+import API_URL from "../..";
 
 export default class ChatNavItems extends Component {
 

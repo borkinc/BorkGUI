@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import './Chat.css';
+import '../../css/Chat.css';
 import {Button, Input, InputGroup, InputGroupAddon} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import API_URL from "../index";
+import API_URL from "../../index";
 import axios from "axios";
 
 // function randomName() {

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import './Chats.css'
+import '../../css/Chats.css'
 import {Col, Input, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem, Spinner} from "reactstrap";
 import Container from "reactstrap/es/Container";
 import Row from "reactstrap/es/Row";
-import Chat from "../Chat/Chat";
+import Chat from "./Chat";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 export default class Chats extends Component {
