@@ -55,7 +55,7 @@ export default class UserAuth extends Component {
             .then(res => {
                 if (res.data["is_authenticated"]) {
                     localStorage.setItem('user', JSON.stringify(res.data["user"]));
-                    this.props.history.push("/chats")
+                    this.props.history.push("/whisk")
                 }
                 // console.log(res);
                 // console.log(res.data);

@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "http://localhost:5000/";
 export default API_URL;
 
 ReactDOM.render(
