@@ -1,16 +1,23 @@
 import React, {Component} from 'react';
 import '../../css/UserAuth.css';
 import {Button, Col, Form, FormGroup, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane} from "reactstrap";
-import axios from 'axios';
 import classnames from 'classnames';
 import dog from '../../img/dog.svg';
-import API_URL from '../../index'
-import {logInUser} from "../actions/user-auth-actions";
+import {logInUser, registerUser, toggleUserAuthTab} from "../actions/user-auth-actions";
 import {connect} from "react-redux";
 
 function mapDispatchToProps(dispatch) {
     return {
-        logInUser: user => dispatch(logInUser(user))
+        logInUser: user => dispatch(logInUser(user)),
+        toggleUserAuthTab: tab => dispatch(toggleUserAuthTab(tab)),
+        registerUser: user => dispatch(registerUser(user))
+    }
+}
+
+function mapStateToProps(state) {
+    const {userState} = state;
+    return {
+        activeTab: userState.activeTab
     }
 }
 
@@ -19,7 +26,6 @@ class ConnectedUserAuth extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeTab: '1',
             username: '',
             email: '',
             password: ''
@@ -27,11 +33,7 @@ class ConnectedUserAuth extends Component {
     }
 
     toggle = tab => {
-        if (this.state.activeTab !== tab) {
-            this.setState({
-                activeTab: tab
-            });
-        }
+        this.props.toggleUserAuthTab(tab);
     };
 
     handleUsernameChange = event => {
@@ -54,33 +56,21 @@ class ConnectedUserAuth extends Component {
 
     handleSignUpSubmit = event => {
         event.preventDefault();
-
-        // Creating form to be sent to API
-        const data = new FormData();
-        data.append('username', this.state.username);
-        data.append('email', this.state.email);
-        data.append('password', this.state.password);
-
-        // Contacting api to add new user
-        axios.post(API_URL + `/register`, data, {
-            headers: {'Content-Type': 'application/json',}
-        })
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            })
+        const {username, email, password} = this.state;
+        this.props.registerUser({username, email, password});
     };
 
 
     render() {
         return (
             <div className="UserAuth-logo">
+                {this.props.activeTab}
                 <img src={dog} className="UserAuth-logo" alt=""/>
                 <div className="UserAuth-tabs">
                     <Nav tabs>
                         <NavItem>
                             <NavLink
-                                className={classnames({active: this.state.activeTab === '1'})}
+                                className={classnames({active: this.props.activeTab === '1'})}
                                 onClick={() => {
                                     this.toggle('1');
                                 }}
@@ -90,7 +80,7 @@ class ConnectedUserAuth extends Component {
                         </NavItem>
                         <NavItem>
                             <NavLink
-                                className={classnames({active: this.state.activeTab === '2'})}
+                                className={classnames({active: this.props.activeTab === '2'})}
                                 onClick={() => {
                                     this.toggle('2');
                                 }}
@@ -99,7 +89,7 @@ class ConnectedUserAuth extends Component {
                             </NavLink>
                         </NavItem>
                     </Nav>
-                    <TabContent activeTab={this.state.activeTab}>
+                    <TabContent activeTab={this.props.activeTab}>
                         <TabPane tabId="1">
                             <Row>
                                 <Col sm="12">
@@ -183,5 +173,5 @@ class ConnectedUserAuth extends Component {
     }
 }
 
-const UserAuth = connect(null, mapDispatchToProps)(ConnectedUserAuth);
+const UserAuth = connect(mapStateToProps, mapDispatchToProps)(ConnectedUserAuth);
 export default UserAuth;

@@ -1,1 +1,3 @@
 export const LOG_IN_USER = 'LOG_IN_USER';
+export const TOGGLE_USER_AUTH_TAB = 'TOGGLE_USER_AUTH_TAB';
+export const REGISTER_USER = 'REGISTER_USER';
