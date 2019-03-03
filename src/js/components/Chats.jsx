@@ -34,15 +34,15 @@ class ConnectedChats extends Component {
         this.props.getChats()
     }
 
-    toggleChat = event => {
-        this.props.toggleChat(event.target);
+    toggleChat(chatID, chatName) {
+        this.props.toggleChat({chatID, chatName});
 
         // Using javascript to change background color of selected chat
         let chatActive = document.getElementsByClassName("chat-active");
         if (chatActive.length > 0) {
             chatActive[0].classList.remove("chat-active");
         }
-        document.getElementById(event.target.id).classList.add("chat-active");
+        document.getElementById("chat-" + chatID).classList.add("chat-active");
     };
 
     render() {
@@ -67,7 +67,8 @@ class ConnectedChats extends Component {
                                             return (
                                                 <ListGroupItem className="justify-content-between" tag="button"
                                                                action key={chat.cid} id={"chat-" + chat.cid}
-                                                               onClick={this.toggleChat} value={chat.name}>
+                                                               onClick={() => this.toggleChat(chat.cid, chat.name)}
+                                                               value={chat.name}>
                                                     <div className={"chat-group"}>
                                                         <div className={"chat-img"}>
                                                             <FontAwesomeIcon icon="user-circle"/>
@@ -87,7 +88,7 @@ class ConnectedChats extends Component {
                             </Col>
                             {/*Edit this part for chat messages*/}
                             <Col className="chats-container">
-                                {this.props.isChatting ? (<Chat name={this.props.chatName} id={this.props.chatId}/>) : (
+                                {this.props.isChatting ? (<Chat/>) : (
                                     <br/>)
                                 }
                             </Col>

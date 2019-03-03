@@ -30,8 +30,8 @@ export default function ChatReducer(state = initialState, action) {
         case TOGGLE_CHAT: {
             return Object.assign({}, state, {
                 isChatting: true,
-                chatName: action.payload.value,
-                chatID: action.payload.id.match(/\d/g).join()
+                chatName: action.payload.chatName,
+                chatID: action.payload.chatID
             })
         }
         case TOGGLE_GROUP_MODAL: {
