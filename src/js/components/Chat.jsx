@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 import '../../css/Chat.css';
-import {Button, Input, InputGroup, InputGroupAddon} from "reactstrap";
+import {Badge, Button, Card, CardBody, CardText, Input, InputGroup, InputGroupAddon} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getChatMessages} from "../actions/chat-actions";
+import {dislikeMessage, getChatMessages, likeMessage} from "../actions/chat-actions";
 import {connect} from "react-redux";
+import Moment from "react-moment";
 
 function mapDispatchToProps(dispatch) {
     return {
-        getChatMessages: chatID => dispatch(getChatMessages(chatID))
+        getChatMessages: chatID => dispatch(getChatMessages(chatID)),
+        likeMessage: userMessageID => dispatch(likeMessage(userMessageID)),
+        dislikeMessage: userMessageID => dispatch(dislikeMessage(userMessageID))
     }
 }
 
@@ -28,33 +31,78 @@ class ConnectedChat extends Component {
         this.props.getChatMessages(this.props.chatID)
     }
 
-    renderMessage = message => {
+    toggleLike = (userID, messageID) => {
+        this.props.likeMessage({userID, messageID});
+    };
+
+    toggleDisLike = (userID, messageID) => {
+        this.props.dislikeMessage({userID, messageID})
+    };
+
+    renderMessage = m => {
+        const {message_id, created_on, message, user_id, likes, dislikes, img} = m;
+        // console.log(img);
+        let date = new Date(created_on);
         const currentUser = localStorage.getItem('user_id');
-        const messageFromMe = message.user_id === currentUser;
-        let msgContentDate = <span className={"msg-content-date"}> 11:01 AM    |    June 9</span>;
+        const messageFromMe = user_id === currentUser;
+        let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         return (
-            <React.Fragment key={message.message_id}>
+            <React.Fragment key={message_id}>
                 {!messageFromMe ? (
                     <div className={"incoming-msg"}>
                         <div className={"incoming-msg-img"}>
                             <FontAwesomeIcon icon="user-circle"/>
                         </div>
                         <div className={"received-msg"}>
-                            <div className={"msg-content"}>
-                                <p>{message.message}</p>
-                                {msgContentDate}
-                            </div>
+                            {/*<div className={"msg-content"}>*/}
+                            {/*<p>{message.message}</p>*/}
+                            {/*{msgContentDate}*/}
+                            {/*</div>*/}
+                            <Card>
+                                {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
+                                <CardBody>
+                                    {/*<CardTitle>Card title</CardTitle>*/}
+                                    {/*<CardSubtitle>Card subtitle</CardSubtitle>*/}
+                                    <CardText>{message}</CardText>
+                                    <Button onClick={() => this.toggleLike(user_id, message_id)}>
+                                        <FontAwesomeIcon icon={"thumbs-up"}/>
+                                        <Badge color="secondary">{likes.length}</Badge>
+                                    </Button>
+                                    <Button onClick={() => this.toggleDisLike(user_id, message_id)}>
+                                        <FontAwesomeIcon icon={"thumbs-down"}/>
+                                        <Badge color="secondary">{dislikes.length}</Badge>
+                                    </Button>
+                                    {msgContentDate}
+                                </CardBody>
+                            </Card>
                         </div>
+
                     </div>) : (
                     <div className={"outgoing-msg"}>
                         <div className={"sent-msg"}>
-                            <p>{message.message}</p>
-                            {msgContentDate}
+                            {/*<p>{message.message}</p>*/}
+                            {/*{msgContentDate}*/}
+                            <Card>
+                                {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
+                                <CardBody>
+                                    {/*<CardTitle>Card title</CardTitle>*/}
+                                    {/*<CardSubtitle>Card subtitle</CardSubtitle>*/}
+                                    <CardText>{message}</CardText>
+                                    <Button onClick={() => this.toggleLike(user_id, message_id)}>
+                                        <FontAwesomeIcon icon={"thumbs-up"}/>
+                                        <Badge color="secondary">{likes.length}</Badge>
+                                    </Button>
+                                    <Button onClick={() => this.toggleDisLike(user_id, message_id)}>
+                                        <FontAwesomeIcon icon={"thumbs-down"}/>
+                                        <Badge color="secondary">{dislikes.length}</Badge>
+                                    </Button>
+                                    {msgContentDate}
+                                </CardBody>
+                            </Card>
                         </div>
                     </div>)}
             </React.Fragment>
-        )
-            ;
+        );
     };
 
     render() {
