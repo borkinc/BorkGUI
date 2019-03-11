@@ -1,35 +1,48 @@
 import React, {Component} from 'react';
-import './Chats.css'
+import '../../css/Chats.css'
 import {Col, Input, InputGroup, InputGroupAddon, InputGroupText, ListGroup, ListGroupItem, Spinner} from "reactstrap";
 import Container from "reactstrap/es/Container";
 import Row from "reactstrap/es/Row";
-import Chat from "../Chat/Chat";
+import Chat from "./Chat.jsx";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {getChats, toggleChat} from "../actions/chat-actions";
+import {connect} from "react-redux";
 
-export default class Chats extends Component {
+function mapDispatchToProps(dispatch) {
+    return {
+        toggleChat: chat => dispatch(toggleChat(chat)),
+        getChats: () => dispatch(getChats())
+    }
+}
+
+function mapStateToProps(state) {
+    const {chatState} = state;
+    return {
+        isChatting: chatState.isChatting,
+        chats: chatState.chats,    // keys = [cid, name, participants]
+        isLoading: chatState.isLoading
+    }
+}
+
+class ConnectedChats extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            errors: null,
-            chatName: '',
-            chatId: '',
-            isChatting: false
-        };
-        this.toggleChat = this.toggleChat.bind(this);
     }
 
-    toggleChat = event => {
-        this.setState({
-            isChatting: true,
-            chatName: event.target.value,
-            chatId: event.target.id.match(/\d/g).join()
-        });
+    componentDidMount() {
+        this.props.getChats()
+    }
+
+    toggleChat(chatID, chatName) {
+        this.props.toggleChat({chatID, chatName});
+
+        // Using javascript to change background color of selected chat
         let chatActive = document.getElementsByClassName("chat-active");
         if (chatActive.length > 0) {
             chatActive[0].classList.remove("chat-active");
         }
-        document.getElementById(event.target.id).classList.add("chat-active");
+        document.getElementById("chat-" + chatID).classList.add("chat-active");
     };
 
     render() {
@@ -53,14 +66,15 @@ export default class Chats extends Component {
                                         this.props.chats.map(chat => {
                                             return (
                                                 <ListGroupItem className="justify-content-between" tag="button"
-                                                               action key={chat.id} id={"chat-" + chat.id}
-                                                               onClick={this.toggleChat} value={chat.chat_name}>
+                                                               action key={chat.cid} id={"chat-" + chat.cid}
+                                                               onClick={() => this.toggleChat(chat.cid, chat.name)}
+                                                               value={chat.name}>
                                                     <div className={"chat-group"}>
                                                         <div className={"chat-img"}>
                                                             <FontAwesomeIcon icon="user-circle"/>
                                                         </div>
                                                         <div className={"chat-ib"}>
-                                                            <h5>{chat.chat_name}
+                                                            <h5>{chat.name}
                                                                 <span className={"chat-date"}>25 Dec</span>
                                                             </h5>
                                                             <p>This is a test message!</p>
@@ -74,7 +88,7 @@ export default class Chats extends Component {
                             </Col>
                             {/*Edit this part for chat messages*/}
                             <Col className="chats-container">
-                                {this.state.isChatting ? (<Chat name={this.state.chatName} id={this.state.chatId}/>) : (
+                                {this.props.isChatting ? (<Chat/>) : (
                                     <br/>)
                                 }
                             </Col>
@@ -85,3 +99,7 @@ export default class Chats extends Component {
             ;
     }
 }
+
+const Chats = connect(mapStateToProps, mapDispatchToProps)(ConnectedChats);
+export default Chats;
+
