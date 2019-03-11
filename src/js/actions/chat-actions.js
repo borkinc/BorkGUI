@@ -1,7 +1,9 @@
 import {
     ADD_CHAT,
+    DISLIKE_MESSAGE,
     GET_CHAT_MESSAGES,
     GET_CHATS,
+    LIKE_MESSAGE,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
@@ -18,7 +20,7 @@ export function toggleChat(payload) {
     return {type: TOGGLE_CHAT, payload}
 }
 
-export function getChats(payload) {
+export function getChats() {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         axios.get(API_URL + '/chats', {
@@ -59,7 +61,7 @@ export function toggleContactModal(payload) {
     return {type: TOGGLE_CONTACT_MODAL, payload}
 }
 
-export function getChatMessages(payload) {
+export function getChatMessages() {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         axios.get(API_URL + '/chat/1/messages', {
@@ -71,4 +73,12 @@ export function getChatMessages(payload) {
             dispatch({type: GET_CHAT_MESSAGES, payload: response.data});
         })
     }
+}
+
+export function likeMessage(payload) {
+    return {type: LIKE_MESSAGE, payload}
+}
+
+export function dislikeMessage(payload) {
+    return {type: DISLIKE_MESSAGE, payload}
 }

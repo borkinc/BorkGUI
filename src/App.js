@@ -4,9 +4,9 @@ import UserAuth from './js/components/UserAuth.jsx';
 import {Route} from "react-router";
 import ChatNavBar from "./js/components/ChatNavBar.jsx";
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faSearch, faUserCircle} from '@fortawesome/free-solid-svg-icons';
+import {faSearch, faThumbsDown, faThumbsUp, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faSearch, faUserCircle);
+library.add(faSearch, faUserCircle, faThumbsUp, faThumbsDown);
 
 const App = () => {
 

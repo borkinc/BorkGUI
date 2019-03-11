@@ -1,7 +1,9 @@
 import {
     ADD_CHAT,
+    DISLIKE_MESSAGE,
     GET_CHAT_MESSAGES,
     GET_CHATS,
+    LIKE_MESSAGE,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
@@ -59,6 +61,34 @@ export default function ChatReducer(state = initialState, action) {
         case GET_CHAT_MESSAGES: {
             return Object.assign({}, state, {
                 chatMessages: action.payload.messages
+            })
+        }
+        case LIKE_MESSAGE: {
+            let messages = state.chatMessages.slice();
+            let chatIndex = messages.findIndex(message => message.message_id === action.payload.messageID);
+            if (!(messages[chatIndex].likes.indexOf(action.payload.userID) > -1)) {
+                let dislikesIndex = messages[chatIndex].dislikes.indexOf(action.payload.userID);
+                if (dislikesIndex > -1) {
+                    messages[chatIndex].dislikes.splice(dislikesIndex, 1);
+                }
+                messages[chatIndex].likes = [...messages[chatIndex].likes, action.payload.userID];
+            }
+            return Object.assign({}, state, {
+                chatMessages: messages
+            })
+        }
+        case DISLIKE_MESSAGE: {
+            let messages = state.chatMessages.slice();
+            let chatIndex = messages.findIndex(message => message.message_id === action.payload.messageID);
+            if (!(messages[chatIndex].dislikes.indexOf(action.payload.userID) > -1)) {
+                let likesIndex = messages[chatIndex].likes.indexOf(action.payload.userID);
+                if (likesIndex > -1) {
+                    messages[chatIndex].likes.splice(likesIndex, 1);
+                }
+                messages[chatIndex].dislikes = [...messages[chatIndex].dislikes, action.payload.userID]
+            }
+            return Object.assign({}, state, {
+                chatMessages: messages
             })
         }
         default: {

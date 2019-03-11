@@ -2,7 +2,9 @@ import store from "../js/store/index";
 import {logInUser, registerUser, toggleUserAuthTab} from "./actions/user-auth-actions";
 import {
     addChat,
+    dislikeMessage,
     getChats,
+    likeMessage,
     toggleChat,
     toggleContactModal,
     toggleGroupModal,
@@ -19,3 +21,5 @@ window.getChats = getChats;
 window.addChat = addChat;
 window.toggleGroupModal = toggleGroupModal;
 window.toggleContactModal = toggleContactModal;
+window.likeMessage = likeMessage;
+window.dislikeMessage = dislikeMessage;
