@@ -70,7 +70,7 @@ class ConnectedChat extends Component {
                         </div>
                         <div className={"received-msg"}>
                             <Card>
-                                // TODO: Detect if message has image to display in chat.
+                                {/*TODO: Detect if message has image to display in chat.*/}
                                 {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
                                 <CardBody>
                                     <CardText>{message}</CardText>
@@ -91,7 +91,7 @@ class ConnectedChat extends Component {
                     <div className={"outgoing-msg"}>
                         <div className={"sent-msg"}>
                             <Card>
-                                // TODO: Detect if message has image to display in chat.
+                                {/*TODO: Detect if message has image to display in chat.*/}
                                 {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
                                 <CardBody>
                                     <CardText>{message}</CardText>
