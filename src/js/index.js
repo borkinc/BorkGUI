@@ -5,6 +5,7 @@ import {
     dislikeMessage,
     getChats,
     likeMessage,
+    postMessage,
     toggleChat,
     toggleContactModal,
     toggleGroupModal,
@@ -23,3 +24,4 @@ window.toggleGroupModal = toggleGroupModal;
 window.toggleContactModal = toggleContactModal;
 window.likeMessage = likeMessage;
 window.dislikeMessage = dislikeMessage;
+window.postMessage = postMessage;

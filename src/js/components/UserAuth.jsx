@@ -64,7 +64,6 @@ class ConnectedUserAuth extends Component {
     render() {
         return (
             <div className="UserAuth-logo">
-                {this.props.activeTab}
                 <img src={dog} className="UserAuth-logo" alt=""/>
                 <div className="UserAuth-tabs">
                     <Nav tabs>

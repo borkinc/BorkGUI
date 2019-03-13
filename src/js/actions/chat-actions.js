@@ -4,6 +4,7 @@ import {
     GET_CHAT_MESSAGES,
     GET_CHATS,
     LIKE_MESSAGE,
+    POST_MESSAGE,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
@@ -81,4 +82,8 @@ export function likeMessage(payload) {
 
 export function dislikeMessage(payload) {
     return {type: DISLIKE_MESSAGE, payload}
+}
+
+export function postMessage(payload) {
+    return {type: POST_MESSAGE, payload}
 }

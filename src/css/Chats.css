@@ -22,7 +22,9 @@
 }
 
 .chat-box, .chat-box > .row {
-    height: 91vh;
+    height: 93vh;
+    /*height: available;*/
+    /*height: 100%;*/
 }
 
 div.chat-inbox {

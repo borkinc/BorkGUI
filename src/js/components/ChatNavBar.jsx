@@ -24,10 +24,6 @@ class ConnectedChatNavBar extends Component {
         super(props);
     }
 
-    handleChats = (chat) => {
-        this.props.addChat(chat);
-    };
-
     toggleNavBar = () => {
         this.props.toggleNavBar();
     };
@@ -40,7 +36,7 @@ class ConnectedChatNavBar extends Component {
                     <NavbarToggler onClick={this.toggleNavBar} className="mr-2"/>
                     <Collapse isOpen={!this.props.collapsed} navbar>
                         <Nav navbar>
-                            <ChatNavItems onNewChat={this.handleChats}/>
+                            <ChatNavItems/>
                         </Nav>
                     </Collapse>
                 </Navbar>

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import '../../css/Chat.css';
 import {Badge, Button, Card, CardBody, CardText, Input, InputGroup, InputGroupAddon} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {dislikeMessage, getChatMessages, likeMessage} from "../actions/chat-actions";
+import {dislikeMessage, getChatMessages, likeMessage, postMessage} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
 
@@ -10,7 +10,8 @@ function mapDispatchToProps(dispatch) {
     return {
         getChatMessages: chatID => dispatch(getChatMessages(chatID)),
         likeMessage: userMessageID => dispatch(likeMessage(userMessageID)),
-        dislikeMessage: userMessageID => dispatch(dislikeMessage(userMessageID))
+        dislikeMessage: userMessageID => dispatch(dislikeMessage(userMessageID)),
+        postMessage: message => dispatch(postMessage(message))
     }
 }
 
@@ -25,6 +26,9 @@ class ConnectedChat extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            message: ''
+        }
     }
 
     componentDidMount() {
@@ -39,11 +43,22 @@ class ConnectedChat extends Component {
         this.props.dislikeMessage({userID, messageID})
     };
 
+    handleMessage = (event) => {
+        this.setState({message: event.target.value})
+    };
+
+    postMessage = (event) => {
+        event.preventDefault();
+        const message = this.state.message;
+        this.props.postMessage(message);
+        this.setState({message: ''});
+    };
+
     renderMessage = m => {
         const {message_id, created_on, message, user_id, likes, dislikes, img} = m;
-        // console.log(img);
+        console.log(img);
         let date = new Date(created_on);
-        const currentUser = localStorage.getItem('user_id');
+        const currentUser = JSON.parse(localStorage.getItem('user')).uid;
         const messageFromMe = user_id === currentUser;
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         return (
@@ -54,15 +69,10 @@ class ConnectedChat extends Component {
                             <FontAwesomeIcon icon="user-circle"/>
                         </div>
                         <div className={"received-msg"}>
-                            {/*<div className={"msg-content"}>*/}
-                            {/*<p>{message.message}</p>*/}
-                            {/*{msgContentDate}*/}
-                            {/*</div>*/}
                             <Card>
+                                {/*TODO: Detect if message has image to display in chat.*/}
                                 {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
                                 <CardBody>
-                                    {/*<CardTitle>Card title</CardTitle>*/}
-                                    {/*<CardSubtitle>Card subtitle</CardSubtitle>*/}
                                     <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(user_id, message_id)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
@@ -80,13 +90,10 @@ class ConnectedChat extends Component {
                     </div>) : (
                     <div className={"outgoing-msg"}>
                         <div className={"sent-msg"}>
-                            {/*<p>{message.message}</p>*/}
-                            {/*{msgContentDate}*/}
                             <Card>
+                                {/*TODO: Detect if message has image to display in chat.*/}
                                 {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
                                 <CardBody>
-                                    {/*<CardTitle>Card title</CardTitle>*/}
-                                    {/*<CardSubtitle>Card subtitle</CardSubtitle>*/}
                                     <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(user_id, message_id)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
@@ -112,16 +119,16 @@ class ConnectedChat extends Component {
                 <div className={"chat-messages"}>
                     <div className={"chat-history"}>
                         {this.props.chatMessages.map(m => this.renderMessage(m))}
-                        <div className={"msg-input"}>
-                            <InputGroup>
-                                <Input/>
-                                <InputGroupAddon addonType="append">
-                                    <Button color="secondary">To the Right!</Button>
-                                </InputGroupAddon>
-                            </InputGroup>
-                            <br/>
-                        </div>
                     </div>
+                </div>
+                <div className={"msg-input"}>
+                    <InputGroup>
+                        <Input value={this.state.message} onChange={this.handleMessage}/>
+                        <InputGroupAddon addonType="append">
+                            <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon icon={"paper-plane"}/></Button>
+                        </InputGroupAddon>
+                    </InputGroup>
+                    <br/>
                 </div>
 
             </React.Fragment>

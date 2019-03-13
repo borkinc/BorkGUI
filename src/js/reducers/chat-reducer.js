@@ -4,6 +4,7 @@ import {
     GET_CHAT_MESSAGES,
     GET_CHATS,
     LIKE_MESSAGE,
+    POST_MESSAGE,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
@@ -48,7 +49,8 @@ export default function ChatReducer(state = initialState, action) {
         }
         case GET_CHATS: {
             return Object.assign({}, state, {
-                chats: action.payload.chats,
+                // TODO: Show all chats after finishing Phase 2. Dummy placeholder for testing purposes.
+                chats: [action.payload.chats[0]],
                 isLoading: false
             })
         }
@@ -89,6 +91,21 @@ export default function ChatReducer(state = initialState, action) {
             }
             return Object.assign({}, state, {
                 chatMessages: messages
+            })
+        }
+        case POST_MESSAGE: {
+            let date = new Date();
+            let message = {
+                message_id: parseInt(state.chatMessages[state.chatMessages.length - 1].message_id + 1),
+                user_id: JSON.parse(localStorage.getItem('user')).uid,
+                message: action.payload,
+                created_on: date.toISOString(),
+                likes: [],
+                dislikes: [],
+                img: null
+            };
+            return Object.assign({}, state, {
+                chatMessages: [...state.chatMessages, message]
             })
         }
         default: {
