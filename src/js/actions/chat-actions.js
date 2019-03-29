@@ -22,13 +22,14 @@ export function toggleChat(payload) {
 
 export function getChats() {
     return function (dispatch) {
-        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         // TODO: Must get all chats for current user after phase 2.
-        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/7', {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }
+        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/7'
+            // {
+            //         headers: {
+            //             'Authorization': `Bearer ${access_token}`
+            //         }
+            //     }
         )
             .then(response => {
                 dispatch({type: GET_CHATS, payload: response.data});
@@ -38,16 +39,17 @@ export function getChats() {
 
 export function addChat(payload) {
     return function (dispatch) {
-        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         const data = new FormData();
         data.append('chat_name', payload);
 
         // Dummy post to API to simulate adding a new group chat
-        axios.post(`${process.env.REACT_APP_API_URL}` + "/chats", data, {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }
+        axios.post(`${process.env.REACT_APP_API_URL}` + "/chats", data
+            // {
+            //         headers: {
+            //             'Authorization': `Bearer ${access_token}`
+            //         }
+            //     }
         ).then(response => {
             dispatch({type: ADD_CHAT, payload: response.data});
         });
@@ -64,12 +66,13 @@ export function toggleContactModal(payload) {
 
 export function getChatMessages(payload) {
     return function (dispatch) {
-        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/' + payload + '/messages', {
-                headers: {
-                    'Authorization': `Bearer ${access_token}`
-                }
-            }
+        // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/' + payload + '/messages'
+            // {
+            //         headers: {
+            //             'Authorization': `Bearer ${access_token}`
+            //         }
+            //     }
         ).then(response => {
             dispatch({type: GET_CHAT_MESSAGES, payload: response.data});
         })
