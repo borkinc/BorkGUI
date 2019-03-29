@@ -27,8 +27,8 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "REACT_APP_API_ENDPOINT=http://localhost:5000/ react-scripts start",
+    "build": "REACT_APP_API_ENDPOINT=https://borked.herokuapp.com/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -9,7 +9,7 @@ import store from "./js/store";
 import {Router} from "react-router";
 import history from "./js/history"
 
-const API_URL = "http://localhost:5000/";
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 export default API_URL;
 
 ReactDOM.render(
