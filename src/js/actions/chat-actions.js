@@ -24,7 +24,8 @@ export function toggleChat(payload) {
 export function getChats() {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(API_URL + '/chats', {
+        // TODO: Must get all chats for current user after phase 2.
+        axios.get(API_URL + '/chat/7', {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -62,10 +63,10 @@ export function toggleContactModal(payload) {
     return {type: TOGGLE_CONTACT_MODAL, payload}
 }
 
-export function getChatMessages() {
+export function getChatMessages(payload) {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(API_URL + '/chat/1/messages', {
+        axios.get(API_URL + '/chat/' + payload + '/messages', {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -77,10 +78,24 @@ export function getChatMessages() {
 }
 
 export function likeMessage(payload) {
+    // TODO: Revert after Phase 2
+    // const {messageID} = payload;
+    // return function(dispatch){
+    //     axios.get(API_URL + '/messages/' + messageID + '/like')
+    //         .then(response =>
+    //             dispatch({type: LIKE_MESSAGE, payload, data: response.data}))
+    // }
     return {type: LIKE_MESSAGE, payload}
 }
 
 export function dislikeMessage(payload) {
+    // TODO: Revert after Phase 2
+    // const {messageID} = payload;
+    // return function(dispatch){
+    //     axios.get(API_URL + '/messages/' + messageID + '/dislike')
+    //         .then(response =>
+    //             dispatch({type: DISLIKE_MESSAGE, payload, data: response.data}))
+    // }
     return {type: DISLIKE_MESSAGE, payload}
 }
 
