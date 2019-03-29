@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import UserAuth from './UserAuth/UserAuth';
+import UserAuth from './js/components/UserAuth.jsx';
 import {Route} from "react-router";
-import ChatNavBar from "./ChatNavBar/ChatNavBar";
+import ChatNavBar from "./js/components/ChatNavBar.jsx";
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faSearch, faUserCircle} from '@fortawesome/free-solid-svg-icons';
+import {faPaperPlane, faSearch, faThumbsDown, faThumbsUp, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faSearch, faUserCircle);
+library.add(faSearch, faUserCircle, faThumbsUp, faThumbsDown, faPaperPlane);
 
 const App = () => {
 
@@ -17,6 +17,4 @@ const App = () => {
         </div>
     );
 };
-
-
 export default App;

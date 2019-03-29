@@ -1,13 +1,11 @@
 .chat-messages {
     float: left;
-    /*padding: 0 20px;*/
-    /*margin-left: 10%;*/
     width: 100%;
 }
 
 .chat-history {
-    height: 91vh;
-    /*width: 90vw;*/
+    height: 88.4vh;
+    width: inherit;
     overflow-y: auto;
 }
 
@@ -17,10 +15,16 @@
     padding-left: 2.5%;
 }
 
+.incoming-msg > .received-msg > .card > .card-body > .btn.btn-secondary,
+.outgoing-msg > .sent-msg > .card > .card-body > .btn.btn-secondary {
+    margin-right: 0.5em;
+}
+
 .received-msg {
     display: inline-block;
-    padding: 0 0 0 10px;
+    padding: 0 0 1.5em 10px;
     vertical-align: top;
+    max-width: 50%;
 }
 
 .msg-content {
@@ -47,23 +51,23 @@
 .sent-msg {
     float: right;
     padding-right: 1%;
-    /*width: 46%;*/
+    max-width: 50%;
+}
+
+.sent-msg > .card > .card-body {
+    background-color: #434242;
 }
 
 .sent-msg p {
-    background: #05728f none repeat scroll 0 0;
-    border-radius: 3px;
-    font-size: 14px;
-    margin: 0;
     color: #fff;
-    padding: 5px 10px 5px 12px;
     width: 100%;
-    text-align: right;
 }
 
 .msg-input {
+    width: -moz-available; /* For Mozzila */
     border-top: 1px solid #c4c4c4;
-    position: relative;
+    position: fixed;
+    bottom: -3vh;
 }
 
 .outgoing-msg {

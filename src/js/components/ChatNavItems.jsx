@@ -1,51 +1,52 @@
 import React, {Component} from 'react';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, NavItem} from "reactstrap";
-import axios from "axios";
-import API_URL from "../index";
+import {addChat, toggleContactModal, toggleGroupModal} from "../actions/chat-actions";
+import {connect} from "react-redux";
 
-export default class ChatNavItems extends Component {
+function mapDispatchToProps(dispatch) {
+    return {
+        addChat: chat => dispatch(addChat(chat)),
+        toggleGroupModal: () => dispatch(toggleGroupModal()),
+        toggleContactModal: () => dispatch(toggleContactModal())
+    }
+}
+
+function mapStateToProps(state) {
+    const {chatState} = state;
+    return {
+        groupModal: chatState.groupModal,
+        contactModal: chatState.contactModal
+    }
+}
+
+class ConnectedChatNavItems extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            modalGroup: false,
-            modalContact: false,
+            chatName: ''
         };
-        // this.toggleGroup = this.toggleGroup.bind(this);
-        this.toggleContact = this.toggleContact.bind(this);
-        // this.toggleGroupSubmit = this.toggleGroupSubmit.bind(this);
-        this.toggleContactSubmit = this.toggleContactSubmit.bind(this);
     }
 
     toggleGroup = () => {
-        // Hides/displays "New Group" modal
-        this.setState(prevState => ({
-            modalGroup: !prevState.modalGroup
-        }));
-    }
+        this.props.toggleGroupModal();
+    };
 
-    toggleContact() {
-        // Hides/display "New Contact" modal
-        this.setState(prevState => ({
-            modalContact: !prevState.modalContact
-        }));
-    }
+    toggleContact = () => {
+        this.props.toggleContactModal();
+    };
 
     toggleGroupSubmit = () => {
-        // Dummy post to API to simulate adding a new group chat
-        axios.post(API_URL + "/chats").then(response => {
-            this.toggleGroup();
-            this.props.onNewChat(response.data.chat);
-        });
-    }
+        const {chatName} = this.state;
+        this.props.addChat(chatName);
+        this.toggleGroup();
+    };
 
-    toggleContactSubmit() {
-        // Dummy post to API to simulate adding a new contact
-        axios.post(API_URL + "/chats").then(response => {
-            this.toggleContact();
-            this.setState({chats: [...this.state.chats, response.data.chat]})
-        });
-    }
+    toggleContactSubmit = () => {
+        const {chatName} = this.state;
+        this.props.addChat(chatName);
+        this.toggleContact();
+    };
 
     handleChatNameChange = event => {
         this.setState({chatName: event.target.value})
@@ -56,7 +57,7 @@ export default class ChatNavItems extends Component {
             <React.Fragment>
                 <NavItem>
                     <Button color="link" onClick={this.toggleGroup}>New group</Button>
-                    <Modal isOpen={this.state.modalGroup} toggle={this.toggleGroup}
+                    <Modal isOpen={this.props.groupModal} toggle={this.toggleGroup}
                            className={this.props.className}>
                         <ModalHeader toggle={this.toggleGroup}>Create New Group</ModalHeader>
                         <ModalBody>
@@ -78,7 +79,7 @@ export default class ChatNavItems extends Component {
                 </NavItem>
                 <NavItem>
                     <Button color="link" onClick={this.toggleContact}>New contact</Button>
-                    <Modal isOpen={this.state.modalContact} toggle={this.toggleContact}
+                    <Modal isOpen={this.props.contactModal} toggle={this.toggleContact}
                            className={this.props.className}>
                         <ModalHeader toggle={this.toggleContact}>Create new contact</ModalHeader>
                         <ModalBody>
@@ -102,3 +103,6 @@ export default class ChatNavItems extends Component {
         )
     }
 }
+
+const ChatNavItems = connect(mapStateToProps, mapDispatchToProps)(ConnectedChatNavItems);
+export default ChatNavItems;

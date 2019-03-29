@@ -22,17 +22,20 @@
 }
 
 .chat-box, .chat-box > .row {
-    height: 91vh;
+    height: 93vh;
+    /*height: available;*/
+    /*height: 100%;*/
 }
 
 div.chat-inbox {
     background: #f8f8f8 none repeat scroll 0 0;
     padding: inherit;
+    height: inherit;
 }
 
 .chat-groups.list-group {
     border-right: 1px solid #c4c4c4;
-    height: 550px;
+    height: inherit;
     overflow-y: scroll;
 }
 
