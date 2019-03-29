@@ -11,7 +11,6 @@ import {
     TOGGLE_NAVBAR
 } from "../constants/action-types";
 import axios from "axios";
-import API_URL from "../../index";
 
 export function toggleNavBar(payload) {
     return {type: TOGGLE_NAVBAR, payload}
@@ -25,7 +24,7 @@ export function getChats() {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         // TODO: Must get all chats for current user after phase 2.
-        axios.get(API_URL + '/chat/7', {
+        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/7', {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -44,7 +43,7 @@ export function addChat(payload) {
         data.append('chat_name', payload);
 
         // Dummy post to API to simulate adding a new group chat
-        axios.post(API_URL + "/chats", data, {
+        axios.post(`${process.env.REACT_APP_API_URL}` + "/chats", data, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -66,7 +65,7 @@ export function toggleContactModal(payload) {
 export function getChatMessages(payload) {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(API_URL + '/chat/' + payload + '/messages', {
+        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/' + payload + '/messages', {
                 headers: {
                     'Authorization': `Bearer ${access_token}`
                 }
@@ -81,7 +80,7 @@ export function likeMessage(payload) {
     // TODO: Revert after Phase 2
     // const {messageID} = payload;
     // return function(dispatch){
-    //     axios.get(API_URL + '/messages/' + messageID + '/like')
+    //     axios.get(`${process.env.REACT_APP_API_URL}` + '/messages/' + messageID + '/like')
     //         .then(response =>
     //             dispatch({type: LIKE_MESSAGE, payload, data: response.data}))
     // }
@@ -92,7 +91,7 @@ export function dislikeMessage(payload) {
     // TODO: Revert after Phase 2
     // const {messageID} = payload;
     // return function(dispatch){
-    //     axios.get(API_URL + '/messages/' + messageID + '/dislike')
+    //     axios.get(`${process.env.REACT_APP_API_URL}` + '/messages/' + messageID + '/dislike')
     //         .then(response =>
     //             dispatch({type: DISLIKE_MESSAGE, payload, data: response.data}))
     // }

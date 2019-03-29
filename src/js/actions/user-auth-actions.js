@@ -1,6 +1,5 @@
 import {LOG_IN_USER, REGISTER_USER, TOGGLE_USER_AUTH_TAB} from "../constants/action-types";
 import axios from "axios";
-import API_URL from "../../index";
 
 export function logInUser(payload) {
     return function (dispatch) {
@@ -10,7 +9,7 @@ export function logInUser(payload) {
         data.append('password', payload.password);
 
         // Contacting API to validate user password
-        axios.post(API_URL + `/login`, data, {
+        axios.post(`${process.env.API_URL}` + `/login`, data, {
             headers: {'Content-Type': 'application/json',}
         })
             .then(response => {
@@ -28,7 +27,7 @@ export function registerUser(payload) {
         data.append('password', payload.password);
 
         // Contacting api to add new user
-        axios.post(API_URL + `/register`, data, {
+        axios.post(`${process.env.REACT_APP_API_URL}` + `/register`, data, {
             headers: {'Content-Type': 'application/json',}
         })
             .then(response => {
