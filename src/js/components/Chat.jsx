@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../../css/Chat.css';
-import {Badge, Button, Card, CardBody, CardText, Input, InputGroup, InputGroupAddon} from "reactstrap";
+import {Badge, Button, Card, CardBody, CardImg, CardText, Input, InputGroup, InputGroupAddon} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {dislikeMessage, getChatMessages, likeMessage, postMessage} from "../actions/chat-actions";
 import {connect} from "react-redux";
@@ -18,7 +18,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     const {chatState} = state;
     return {
-        chatMessages: chatState.chatMessages
+        chatMessages: chatState.chatMessages,
+        chatID: chatState.chatID
     }
 }
 
@@ -55,14 +56,14 @@ class ConnectedChat extends Component {
     };
 
     renderMessage = m => {
-        const {message_id, created_on, message, user_id, likes, dislikes, img} = m;
-        console.log(img);
+        const {mid, created_on, message, uid, likes, dislikes, image} = m;
         let date = new Date(created_on);
-        const currentUser = JSON.parse(localStorage.getItem('user')).uid;
-        const messageFromMe = user_id === currentUser;
+        const currentUser = localStorage.getItem('uid');
+        const messageFromMe = uid === currentUser;
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
+        const hasImage = image != null;
         return (
-            <React.Fragment key={message_id}>
+            <React.Fragment key={mid}>
                 {!messageFromMe ? (
                     <div className={"incoming-msg"}>
                         <div className={"incoming-msg-img"}>
@@ -70,17 +71,18 @@ class ConnectedChat extends Component {
                         </div>
                         <div className={"received-msg"}>
                             <Card>
-                                {/*TODO: Detect if message has image to display in chat.*/}
-                                {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
+                                {hasImage ? <CardImg top width="100%" src={`data:image/jpeg;base64,${image}`}
+                                                     alt="Card image cap"/>
+                                    : <br/>}
                                 <CardBody>
                                     <CardText>{message}</CardText>
-                                    <Button onClick={() => this.toggleLike(user_id, message_id)}>
+                                    <Button onClick={() => this.toggleLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
-                                        <Badge color="secondary">{likes.length}</Badge>
+                                        <Badge color="secondary">{likes}</Badge>
                                     </Button>
-                                    <Button onClick={() => this.toggleDisLike(user_id, message_id)}>
+                                    <Button onClick={() => this.toggleDisLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-down"}/>
-                                        <Badge color="secondary">{dislikes.length}</Badge>
+                                        <Badge color="secondary">{dislikes}</Badge>
                                     </Button>
                                     {msgContentDate}
                                 </CardBody>
@@ -95,11 +97,11 @@ class ConnectedChat extends Component {
                                 {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
                                 <CardBody>
                                     <CardText>{message}</CardText>
-                                    <Button onClick={() => this.toggleLike(user_id, message_id)}>
+                                    <Button onClick={() => this.toggleLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
                                         <Badge color="secondary">{likes.length}</Badge>
                                     </Button>
-                                    <Button onClick={() => this.toggleDisLike(user_id, message_id)}>
+                                    <Button onClick={() => this.toggleDisLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-down"}/>
                                         <Badge color="secondary">{dislikes.length}</Badge>
                                     </Button>

@@ -104,6 +104,9 @@ div.chat-img {
     font-size: 14px;
     color: #989898;
     margin: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chat-date {
