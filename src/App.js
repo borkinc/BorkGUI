@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import UserAuth from './js/components/UserAuth.jsx';
 import {Route} from "react-router";
 import ChatNavBar from "./js/components/ChatNavBar.jsx";
 import {library} from '@fortawesome/fontawesome-svg-core';
@@ -12,8 +11,9 @@ const App = () => {
 
     return (
         <div className="App">
-            <Route exact path="/" component={UserAuth}/>
-            <Route exact path="/chats" component={ChatNavBar}/>
+            {/*TODO: Revert back for phase 3*/}
+            {/*<Route exact path="/" component={UserAuth}/>*/}
+            <Route path="/" component={ChatNavBar}/>
         </div>
     );
 };

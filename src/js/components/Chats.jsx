@@ -75,9 +75,9 @@ class ConnectedChats extends Component {
                                                         </div>
                                                         <div className={"chat-ib"}>
                                                             <h5>{chat.name}
-                                                                <span className={"chat-date"}>25 Dec</span>
+                                                                <span className={"chat-date"}>{chat.created_on}</span>
                                                             </h5>
-                                                            <p>This is a test message!</p>
+                                                            <p>{chat.message}</p>
                                                         </div>
                                                     </div>
                                                     {/*<Badge pill>0</Badge>*/}

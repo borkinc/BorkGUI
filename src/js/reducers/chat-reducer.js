@@ -11,6 +11,8 @@ import {
     TOGGLE_NAVBAR
 } from "../constants/action-types";
 
+import uuidv4 from "uuid/v4";
+
 const initialState = {
     collapsed: true,
     isChatting: false,
@@ -48,9 +50,14 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case GET_CHATS: {
+            // TODO: Remove this line after Phase 2. Only setting user for convenience.
+            localStorage.setItem('uid', action.payload.chat[0].uid);
+            const chat = action.payload.chat[0];
+            const date = new Date(chat.created_on);
+            chat.created_on = date.toDateString().substring(4, 10);
             return Object.assign({}, state, {
                 // TODO: Show all chats after finishing Phase 2. Dummy placeholder for testing purposes.
-                chats: [action.payload.chats[0]],
+                chats: [action.payload.chat[0]],
                 isLoading: false
             })
         }
@@ -66,29 +73,34 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case LIKE_MESSAGE: {
+            // TODO: Revert after phase 2.
+            // let currentUser = localStorage.getItem('uid');
+            // let messages = state.chatMessages.slice();
+            // let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
+            // let isLikedByMe = action.data.likers.findIndex(liker => liker.uid === currentUser) > -1;
+            // if(!isLikedByMe){
+            //     messages[chatIndex].likes += 1;
+            // }
             let messages = state.chatMessages.slice();
-            let chatIndex = messages.findIndex(message => message.message_id === action.payload.messageID);
-            if (!(messages[chatIndex].likes.indexOf(action.payload.userID) > -1)) {
-                let dislikesIndex = messages[chatIndex].dislikes.indexOf(action.payload.userID);
-                if (dislikesIndex > -1) {
-                    messages[chatIndex].dislikes.splice(dislikesIndex, 1);
-                }
-                messages[chatIndex].likes = [...messages[chatIndex].likes, action.payload.userID];
-            }
+            let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
+            messages[chatIndex].likes += 1;
             return Object.assign({}, state, {
                 chatMessages: messages
             })
         }
         case DISLIKE_MESSAGE: {
+            // TODO: Revert after phase 2.
+            // console.log(action.data);
+            // let currentUser = localStorage.getItem('uid');
+            // let messages = state.chatMessages.slice();
+            // let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
+            // let isDislikedByMe = action.data.dislikers.findIndex(disliker => disliker.uid === currentUser) > -1;
+            // if(!isDislikedByMe){
+            //     messages[chatIndex].dislikes += 1;
+            // }
             let messages = state.chatMessages.slice();
-            let chatIndex = messages.findIndex(message => message.message_id === action.payload.messageID);
-            if (!(messages[chatIndex].dislikes.indexOf(action.payload.userID) > -1)) {
-                let likesIndex = messages[chatIndex].likes.indexOf(action.payload.userID);
-                if (likesIndex > -1) {
-                    messages[chatIndex].likes.splice(likesIndex, 1);
-                }
-                messages[chatIndex].dislikes = [...messages[chatIndex].dislikes, action.payload.userID]
-            }
+            let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
+            messages[chatIndex].dislikes += 1;
             return Object.assign({}, state, {
                 chatMessages: messages
             })
@@ -96,8 +108,11 @@ export default function ChatReducer(state = initialState, action) {
         case POST_MESSAGE: {
             let date = new Date();
             let message = {
-                message_id: parseInt(state.chatMessages[state.chatMessages.length - 1].message_id + 1),
-                user_id: JSON.parse(localStorage.getItem('user')).uid,
+                // TODO: After phase 2, must get id from DB
+                mid: uuidv4(),
+                // TODO: Revert after Phase 2
+                // uid: JSON.parse(localStorage.getItem('user')).uid,
+                uid: localStorage.getItem('uid'),
                 message: action.payload,
                 created_on: date.toISOString(),
                 likes: [],
