@@ -27,7 +27,7 @@ export function registerUser(payload) {
         data.append('password', payload.password);
 
         // Contacting api to add new user
-        axios.post(`${process.env.REACT_APP_API_URL}` + `/register`, data, {
+        axios.post(`${process.env.REACT_APP_API_URL}` + `api/register`, data, {
             headers: {'Content-Type': 'application/json',}
         })
             .then(response => {

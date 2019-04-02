@@ -24,7 +24,7 @@ export function getChats() {
     return function (dispatch) {
         // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         // TODO: Must get all chats for current user after phase 2.
-        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/7'
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chat/7'
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
@@ -44,7 +44,7 @@ export function addChat(payload) {
         data.append('chat_name', payload);
 
         // Dummy post to API to simulate adding a new group chat
-        axios.post(`${process.env.REACT_APP_API_URL}` + "/chats", data
+        axios.post(`${process.env.REACT_APP_API_URL}` + "api/chats", data
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
@@ -67,7 +67,7 @@ export function toggleContactModal(payload) {
 export function getChatMessages(payload) {
     return function (dispatch) {
         // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(`${process.env.REACT_APP_API_URL}` + '/chat/' + payload + '/messages'
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chat/' + payload + '/messages'
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
