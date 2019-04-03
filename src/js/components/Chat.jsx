@@ -5,6 +5,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {dislikeMessage, getChatMessages, likeMessage, postMessage} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
+import TimerMixin from "react-timer-mixin"
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -33,7 +35,14 @@ class ConnectedChat extends Component {
     }
 
     componentDidMount() {
-        this.props.getChatMessages(this.props.chatID)
+        this.timer = TimerMixin.setInterval(
+            () => {
+                this.props.getChatMessages(this.props.chatID)
+            }, 500)
+    }
+
+    componentWillUnmount() {
+        TimerMixin.clearTimeout(this.timer);
     }
 
     toggleLike = (userID, messageID) => {
@@ -71,7 +80,8 @@ class ConnectedChat extends Component {
                         </div>
                         <div className={"received-msg"}>
                             <Card>
-                                {hasImage ? <CardImg top width="100%" src={`${process.env.REACT_APP_API_URL}static/img/${image}`}
+                                {hasImage ? <CardImg top width="100%"
+                                                     src={`${process.env.REACT_APP_API_URL}static/img/${image}`}
                                                      alt="Card image cap"/>
                                     : <br/>}
                                 <CardBody>
