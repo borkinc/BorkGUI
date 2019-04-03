@@ -120,7 +120,7 @@ export default function ChatReducer(state = initialState, action) {
                 img: null
             };
             return Object.assign({}, state, {
-                chatMessages: [...state.chatMessages, message]
+                chatMessages: [message, ...state.chatMessages]
             })
         }
         default: {
