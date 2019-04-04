@@ -5,6 +5,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {dislikeMessage, getChatMessages, likeMessage, postMessage} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
+import ImageUploader from 'react-images-upload';
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -28,8 +30,11 @@ class ConnectedChat extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            message: ''
+            message: '',
+            picture: []
         }
+        this.state = { pictures: [] };
+        this.onDrop = this.onDrop.bind(this);
     }
 
     componentDidMount() {
@@ -51,17 +56,25 @@ class ConnectedChat extends Component {
     postMessage = (event) => {
         event.preventDefault();
         const message = this.state.message;
-        this.props.postMessage(message);
+        this.props.postMessage({message: message, picture: this.state.picture[0]});
         this.setState({message: ''});
+
     };
 
+    onDrop(picture) {
+        this.setState({
+            picture: this.state.pictures.concat(picture),
+        });
+    }
+
     renderMessage = m => {
-        const {mid, created_on, message, uid, likes, dislikes, image} = m;
+        const {mid, created_on, message, uid, likes, dislikes, image, img} = m;
         let date = new Date(created_on);
         const currentUser = localStorage.getItem('uid');
         const messageFromMe = uid === currentUser;
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         const hasImage = image != null;
+        const recentImage = img != null;
         return (
             <React.Fragment key={mid}>
                 {!messageFromMe ? (
@@ -74,6 +87,8 @@ class ConnectedChat extends Component {
                                 {hasImage ? <CardImg top width="100%" src={`${process.env.REACT_APP_API_URL}static/img/${image}`}
                                                      alt="Card image cap"/>
                                     : <br/>}
+                                {recentImage ? <CardImg top width="100%" src={img.name}
+                                                        alt="Card image cap"/> : <br/>}
                                 <CardBody>
                                     <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(uid, mid)}>
@@ -128,6 +143,14 @@ class ConnectedChat extends Component {
                         <Input value={this.state.message} onChange={this.handleMessage}/>
                         <InputGroupAddon addonType="append">
                             <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon icon={"paper-plane"}/></Button>
+                            <ImageUploader
+                                withIcon={true}
+                                buttonText='Choose images'
+                                onChange={this.onDrop}
+                                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                maxFileSize={5242880}
+                                withPreview={true}
+                            />
                         </InputGroupAddon>
                     </InputGroup>
                     <br/>
