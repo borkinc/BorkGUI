@@ -81,7 +81,7 @@ class ConnectedChat extends Component {
                         <div className={"received-msg"}>
                             <Card>
                                 {hasImage ? <CardImg top width="100%"
-                                                     src={`${process.env.REACT_APP_API_URL}static/img/${image}`}
+                                                     src={`${process.env.REACT_APP_API_URL}${image}`}
                                                      alt="Card image cap"/>
                                     : <br/>}
                                 <CardBody>
