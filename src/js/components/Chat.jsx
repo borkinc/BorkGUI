@@ -60,14 +60,22 @@ class ConnectedChat extends Component {
     postMessage = (event) => {
         event.preventDefault();
         const message = this.state.message;
-        this.props.postMessage(message);
+        const userID = localStorage.getItem('uid');
+        let date = new Date();
+        this.props.postMessage(
+            {
+                message: message, chatID: this.props.chatID,
+                userID: userID,
+                datePosted: date
+            });
         this.setState({message: ''});
     };
 
     renderMessage = m => {
         const {mid, created_on, message, uid, likes, dislikes, image} = m;
-        let date = new Date(created_on);
-        const currentUser = localStorage.getItem('uid');
+        const date = new Date(created_on);
+        console.log(image);
+        const currentUser = parseInt(localStorage.getItem('uid'));
         const messageFromMe = uid === currentUser;
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         const hasImage = image != null;

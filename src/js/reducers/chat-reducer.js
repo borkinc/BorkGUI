@@ -11,8 +11,6 @@ import {
     TOGGLE_NAVBAR
 } from "../constants/action-types";
 
-import uuidv4 from "uuid/v4";
-
 const initialState = {
     collapsed: true,
     isChatting: false,
@@ -106,17 +104,19 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case POST_MESSAGE: {
-            let date = new Date();
+            console.log(action.payload);
+            console.log(action.data);
+            // let date = new Date();
             let message = {
                 // TODO: After phase 2, must get id from DB
-                mid: uuidv4(),
+                mid: action.data.message,
                 // TODO: Revert after Phase 2
                 // uid: JSON.parse(localStorage.getItem('user')).uid,
-                uid: localStorage.getItem('uid'),
-                message: action.payload,
-                created_on: date.toISOString(),
-                likes: [],
-                dislikes: [],
+                uid: action.payload.userID,
+                message: action.payload.message,
+                created_on: action.payload.created_on,
+                likes: 0,
+                dislikes: 0,
                 img: null
             };
             return Object.assign({}, state, {
