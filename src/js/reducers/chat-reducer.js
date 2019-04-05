@@ -114,7 +114,7 @@ export default function ChatReducer(state = initialState, action) {
                 // uid: JSON.parse(localStorage.getItem('user')).uid,
                 uid: action.payload.userID,
                 message: action.payload.message,
-                created_on: action.payload.created_on,
+                created_on: action.payload.datePosted,
                 likes: 0,
                 dislikes: 0,
                 img: null

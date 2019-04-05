@@ -5,6 +5,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {dislikeMessage, getChatMessages, likeMessage, postMessage} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
+import jstz from "jstimezonedetect";
+import 'moment-timezone';
 import TimerMixin from "react-timer-mixin"
 
 
@@ -60,7 +62,7 @@ class ConnectedChat extends Component {
     postMessage = (event) => {
         event.preventDefault();
         const message = this.state.message;
-        const userID = localStorage.getItem('uid');
+        const userID = parseInt(localStorage.getItem('uid'));
         let date = new Date();
         this.props.postMessage(
             {
@@ -74,10 +76,10 @@ class ConnectedChat extends Component {
     renderMessage = m => {
         const {mid, created_on, message, uid, likes, dislikes, image} = m;
         const date = new Date(created_on);
-        console.log(image);
+        const tz = jstz.determine().name();
         const currentUser = parseInt(localStorage.getItem('uid'));
         const messageFromMe = uid === currentUser;
-        let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
+        const msgContentDate = <span className={"msg-content-date"}><Moment tz={tz} fromNow>{date}</Moment></span>;
         const hasImage = image != null;
         return (
             <React.Fragment key={mid}>
