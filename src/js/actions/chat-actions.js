@@ -102,5 +102,15 @@ export function dislikeMessage(payload) {
 }
 
 export function postMessage(payload) {
-    return {type: POST_MESSAGE, payload}
+    return function (dispatch) {
+        const data = new FormData();
+        data.append('uid', payload.userID);
+        data.append('message', payload.message);
+        data.append('created_on', payload.datePosted);
+
+        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/chat/' + payload.chatID + '/messages', data)
+            .then(response =>
+                dispatch({type: POST_MESSAGE, payload, data: response.data}))
+    }
+    // return {type: POST_MESSAGE, payload}
 }
