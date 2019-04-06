@@ -5,6 +5,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {dislikeMessage, getChatMessages, likeMessage, postMessage} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
+import ImageUploader from 'react-images-upload';
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -28,7 +30,8 @@ class ConnectedChat extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            message: ''
+            message: '',
+            picture: []
         }
     }
 
@@ -51,17 +54,28 @@ class ConnectedChat extends Component {
     postMessage = (event) => {
         event.preventDefault();
         const message = this.state.message;
-        this.props.postMessage(message);
+        this.props.postMessage({message: message, picture: this.state.picture[0]});
         this.setState({message: ''});
+
     };
 
+    onDrop(picture) {
+        this.setState({
+            picture: this.state.pictures.concat(picture),
+        });
+    }
+
     renderMessage = m => {
-        const {mid, created_on, message, uid, likes, dislikes, image} = m;
+        const {mid, created_on, message, uid, likes, dislikes, image, uploaded_image} = m;
         let date = new Date(created_on);
         const currentUser = localStorage.getItem('uid');
         const messageFromMe = uid === currentUser;
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         const hasImage = image != null;
+        let imgSource;
+        if (recentImage){
+            imgSource = URL.createObjectURL(uploaded_image);
+        }
         return (
             <React.Fragment key={mid}>
                 {!messageFromMe ? (
@@ -96,6 +110,8 @@ class ConnectedChat extends Component {
                                 {/*TODO: Detect if message has image to display in chat.*/}
                                 {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
                                 <CardBody>
+                                    {recentImage ? <CardImg top height="100%" width="100%" src={imgSource}
+                                                            alt="Card image cap"/> : <br/>}
                                     <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
@@ -128,6 +144,14 @@ class ConnectedChat extends Component {
                         <Input value={this.state.message} onChange={this.handleMessage}/>
                         <InputGroupAddon addonType="append">
                             <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon icon={"paper-plane"}/></Button>
+                            <ImageUploader
+                                withIcon={true}
+                                buttonText='Choose images'
+                                onChange={this.onDrop}
+                                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                maxFileSize={5242880}
+                                withPreview={true}
+                            />
                         </InputGroupAddon>
                     </InputGroup>
                     <br/>

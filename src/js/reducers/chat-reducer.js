@@ -113,11 +113,11 @@ export default function ChatReducer(state = initialState, action) {
                 // TODO: Revert after Phase 2
                 // uid: JSON.parse(localStorage.getItem('user')).uid,
                 uid: localStorage.getItem('uid'),
-                message: action.payload,
+                message: action.payload.message,
                 created_on: date.toISOString(),
                 likes: [],
                 dislikes: [],
-                img: null
+                uploaded_image: action.payload.picture
             };
             return Object.assign({}, state, {
                 chatMessages: [...state.chatMessages, message]
