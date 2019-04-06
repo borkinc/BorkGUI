@@ -33,8 +33,6 @@ class ConnectedChat extends Component {
             message: '',
             picture: []
         }
-        this.state = { pictures: [] };
-        this.onDrop = this.onDrop.bind(this);
     }
 
     componentDidMount() {
@@ -68,16 +66,16 @@ class ConnectedChat extends Component {
     }
 
     renderMessage = m => {
-        const {mid, created_on, message, uid, likes, dislikes, image, img} = m;
+        const {mid, created_on, message, uid, likes, dislikes, image, uploaded_image} = m;
         let date = new Date(created_on);
         const currentUser = localStorage.getItem('uid');
         const messageFromMe = uid === currentUser;
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         const hasImage = image != null;
-        const recentImage = img != null;
+        const recentImage = uploaded_image != null;
         let imgSource;
         if (recentImage){
-            imgSource = URL.createObjectURL(img);
+            imgSource = URL.createObjectURL(uploaded_image);
         }
         return (
             <React.Fragment key={mid}>

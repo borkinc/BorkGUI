@@ -117,7 +117,7 @@ export default function ChatReducer(state = initialState, action) {
                 created_on: date.toISOString(),
                 likes: [],
                 dislikes: [],
-                img: action.payload.picture
+                uploaded_image: action.payload.picture
             };
             return Object.assign({}, state, {
                 chatMessages: [...state.chatMessages, message]
