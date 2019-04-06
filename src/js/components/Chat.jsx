@@ -75,6 +75,10 @@ class ConnectedChat extends Component {
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         const hasImage = image != null;
         const recentImage = img != null;
+        let imgSource;
+        if (recentImage){
+            imgSource = URL.createObjectURL(img);
+        }
         return (
             <React.Fragment key={mid}>
                 {!messageFromMe ? (
@@ -87,10 +91,8 @@ class ConnectedChat extends Component {
                                 {hasImage ? <CardImg top width="100%" src={`${process.env.REACT_APP_API_URL}static/img/${image}`}
                                                      alt="Card image cap"/>
                                     : <br/>}
-                                {recentImage ? <CardImg top width="100%" src={img.name}
-                                                        alt="Card image cap"/> : <br/>}
                                 <CardBody>
-                                    <CardText>{message}</CardText>
+                                    <CardText>{message}</CardText>s
                                     <Button onClick={() => this.toggleLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
                                         <Badge color="secondary">{likes}</Badge>
@@ -111,6 +113,8 @@ class ConnectedChat extends Component {
                                 {/*TODO: Detect if message has image to display in chat.*/}
                                 {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
                                 <CardBody>
+                                    {recentImage ? <CardImg top height="100%" width="100%" src={imgSource}
+                                                            alt="Card image cap"/> : <br/>}
                                     <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
