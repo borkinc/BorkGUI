@@ -72,7 +72,6 @@ class ConnectedChat extends Component {
         const messageFromMe = uid === currentUser;
         let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
         const hasImage = image != null;
-        const recentImage = uploaded_image != null;
         let imgSource;
         if (recentImage){
             imgSource = URL.createObjectURL(uploaded_image);
@@ -90,7 +89,7 @@ class ConnectedChat extends Component {
                                                      alt="Card image cap"/>
                                     : <br/>}
                                 <CardBody>
-                                    <CardText>{message}</CardText>s
+                                    <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
                                         <Badge color="secondary">{likes}</Badge>
