@@ -9,7 +9,6 @@ import store from "./js/store";
 import {Router} from "react-router";
 import history from "./js/history"
 
-console.log(process.env.REACT_APP_API_URL);
 
 ReactDOM.render(
     <Provider store={store}>

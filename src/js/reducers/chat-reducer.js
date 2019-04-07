@@ -5,6 +5,7 @@ import {
     GET_CHATS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
@@ -20,6 +21,7 @@ const initialState = {
     isLoading: true,
     groupModal: false,
     contactModal: false,
+    attachmentModal: false,
     chatMessages: []
 };
 
@@ -45,6 +47,11 @@ export default function ChatReducer(state = initialState, action) {
         case TOGGLE_CONTACT_MODAL: {
             return Object.assign({}, state, {
                 contactModal: !state.contactModal
+            })
+        }
+        case TOGGLE_ATTACHMENT: {
+            return Object.assign({}, state, {
+                attachmentModal: !state.attachmentModal
             })
         }
         case GET_CHATS: {
