@@ -5,11 +5,13 @@ import {
     GET_CHATS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    POST_MESSAGE_REPLY,
     TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR
+    TOGGLE_NAVBAR,
+    TOGGLE_REPLY
 } from "../constants/action-types";
 
 const initialState = {
@@ -22,6 +24,7 @@ const initialState = {
     groupModal: false,
     contactModal: false,
     attachmentModal: false,
+    replyModal: false,
     chatMessages: []
 };
 
@@ -52,6 +55,11 @@ export default function ChatReducer(state = initialState, action) {
         case TOGGLE_ATTACHMENT: {
             return Object.assign({}, state, {
                 attachmentModal: !state.attachmentModal
+            })
+        }
+        case TOGGLE_REPLY: {
+            return Object.assign({}, state, {
+                replyModal: !state.replyModal
             })
         }
         case GET_CHATS: {
@@ -111,9 +119,23 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case POST_MESSAGE: {
-            console.log(action.payload);
-            console.log(action.data);
-            // let date = new Date();
+            let message = {
+                // TODO: After phase 2, must get id from DB
+                mid: action.data.message,
+                // TODO: Revert after Phase 2
+                // uid: JSON.parse(localStorage.getItem('user')).uid,
+                uid: action.payload.userID,
+                message: action.payload.message,
+                created_on: action.payload.datePosted,
+                likes: 0,
+                dislikes: 0,
+                img: action.payload.picture
+            };
+            return Object.assign({}, state, {
+                chatMessages: [message, ...state.chatMessages]
+            })
+        }
+        case POST_MESSAGE_REPLY: {
             let message = {
                 // TODO: After phase 2, must get id from DB
                 mid: action.data.message,

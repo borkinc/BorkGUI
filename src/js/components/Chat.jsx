@@ -12,14 +12,21 @@ import {
     Input,
     InputGroup,
     InputGroupAddon,
+    Label,
     Modal,
     ModalBody,
     ModalFooter,
-    ModalHeader,
-    NavItem
+    ModalHeader
 } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {dislikeMessage, getChatMessages, likeMessage, postMessage, toggleAttachment} from "../actions/chat-actions";
+import {
+    dislikeMessage,
+    getChatMessages,
+    likeMessage,
+    postMessage,
+    toggleAttachment,
+    toggleReply
+} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
 import jstz from "jstimezonedetect";
@@ -35,7 +42,8 @@ function mapDispatchToProps(dispatch) {
         likeMessage: userMessageID => dispatch(likeMessage(userMessageID)),
         dislikeMessage: userMessageID => dispatch(dislikeMessage(userMessageID)),
         postMessage: message => dispatch(postMessage(message)),
-        toggleAttachment: () => dispatch(toggleAttachment())
+        toggleAttachment: () => dispatch(toggleAttachment()),
+        toggleReply: () => dispatch(toggleReply())
     }
 }
 
@@ -44,7 +52,8 @@ function mapStateToProps(state) {
     return {
         chatMessages: chatState.chatMessages,
         chatID: chatState.chatID,
-        attachmentModal: chatState.attachmentModal
+        attachmentModal: chatState.attachmentModal,
+        replyModal: chatState.replyModal
     }
 }
 
@@ -75,6 +84,15 @@ class ConnectedChat extends Component {
 
     toggleDisLike = (userID, messageID) => {
         this.props.dislikeMessage({userID, messageID})
+    };
+
+    toggleReply = () => {
+        this.props.toggleReply();
+    };
+
+    toggleReplySubmit = (event) => {
+        event.preventDefault();
+
     };
 
     handleMessage = (event) => {
@@ -144,6 +162,43 @@ class ConnectedChat extends Component {
                                    alt="Card image cap"/>
             }
         }
+        const cardHTML = <Card>
+            {hasImage ? imgHTML : <br/>}
+            <CardBody>
+                <CardText>{message}</CardText>
+                <Button onClick={() => this.toggleLike(uid, mid)}>
+                    <FontAwesomeIcon icon={"thumbs-up"}/>
+                    <Badge color="secondary">{likes}</Badge>
+                </Button>
+                <Button onClick={() => this.toggleDisLike(uid, mid)}>
+                    <FontAwesomeIcon icon={"thumbs-down"}/>
+                    <Badge color="secondary">{dislikes}</Badge>
+                </Button>
+                {/*<NavItem>*/}
+                <Button color="secondary" onClick={this.toggleReply}>Reply</Button>
+                <Modal isOpen={this.props.replyModal} toggle={this.toggleReply}
+                       className={this.props.className}>
+                    <ModalHeader toggle={this.toggleReply}>Reply to message</ModalHeader>
+                    <ModalBody>
+                        <Form>
+                            <FormGroup>
+                                <Label for="reply-message">Reply</Label>
+                                <Input type="text" name="reply_message" id="reply-message"
+                                       placeholder="Enter reply..."
+                                       onChange={this.handleMessage}/>
+                            </FormGroup>
+                        </Form>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.toggleReplySubmit} value={mid}>Reply</Button>{' '}
+                        <Button color="secondary" onClick={this.toggleReply}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+                {/*</NavItem>*/}
+                {/*<Button onClick={() => this.toggleReply(mid)}>Reply</Button>*/}
+                {msgContentDate}
+            </CardBody>
+        </Card>;
         return (
             <React.Fragment key={mid}>
                 {!messageFromMe ? (
@@ -152,43 +207,12 @@ class ConnectedChat extends Component {
                             <FontAwesomeIcon icon="user-circle"/>
                         </div>
                         <div className={"received-msg"}>
-                            <Card>
-                                {hasImage ? imgHTML : <br/>}
-                                <CardBody>
-                                    <CardText>{message}</CardText>
-                                    <Button onClick={() => this.toggleLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-up"}/>
-                                        <Badge color="secondary">{likes}</Badge>
-                                    </Button>
-                                    <Button onClick={() => this.toggleDisLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-down"}/>
-                                        <Badge color="secondary">{dislikes}</Badge>
-                                    </Button>
-                                    {msgContentDate}
-                                </CardBody>
-                            </Card>
+                            {cardHTML}
                         </div>
-
                     </div>) : (
                     <div className={"outgoing-msg"}>
                         <div className={"sent-msg"}>
-                            <Card>
-                                {hasImage ? imgHTML : <br/>}
-                                <CardBody>
-                                    {/*{recentImage ? <CardImg top height="100%" width="100%" src={imgSource}*/}
-                                    {/*                        alt="Card image cap"/> : <br/>}*/}
-                                    <CardText>{message}</CardText>
-                                    <Button onClick={() => this.toggleLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-up"}/>
-                                        <Badge color="secondary">{likes}</Badge>
-                                    </Button>
-                                    <Button onClick={() => this.toggleDisLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-down"}/>
-                                        <Badge color="secondary">{dislikes}</Badge>
-                                    </Button>
-                                    {msgContentDate}
-                                </CardBody>
-                            </Card>
+                            {cardHTML}
                         </div>
                     </div>)}
             </React.Fragment>
@@ -208,7 +232,7 @@ class ConnectedChat extends Component {
                     <InputGroup>
                         <Input value={this.state.message} onChange={this.handleMessage}/>
                         <InputGroupAddon addonType="append">
-                            <NavItem>
+                            {/*<NavItem>*/}
                                 <Button color="secondary" onClick={this.toggleAttachment}><FontAwesomeIcon
                                     icon={"paperclip"}/></Button>
                                 <Modal isOpen={this.props.attachmentModal} toggle={this.toggleAttachment}
@@ -234,7 +258,7 @@ class ConnectedChat extends Component {
                                         <Button color="secondary" onClick={this.toggleAttachmentCancel}>Cancel</Button>
                                     </ModalFooter>
                                 </Modal>
-                            </NavItem>
+                            {/*</NavItem>*/}
                             <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon icon={"paper-plane"}/></Button>
                         </InputGroupAddon>
                     </InputGroup>

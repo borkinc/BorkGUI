@@ -5,11 +5,13 @@ import {
     GET_CHATS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    POST_MESSAGE_REPLY,
     TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR
+    TOGGLE_NAVBAR,
+    TOGGLE_REPLY
 } from "../constants/action-types";
 import axios from "axios";
 
@@ -29,7 +31,7 @@ export function getChats() {
     return function (dispatch) {
         // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         // TODO: Must get all chats for current user after phase 2.
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chat/7'
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chats/7'
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
@@ -72,7 +74,7 @@ export function toggleContactModal(payload) {
 export function getChatMessages(payload) {
     return function (dispatch) {
         // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chat/' + payload + '/messages'
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chats/' + payload + '/messages'
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
@@ -114,8 +116,27 @@ export function postMessage(payload) {
         data.append('created_on', payload.datePosted);
         data.append('img', payload.picture);
 
-        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/chat/' + payload.chatID + '/messages', data,)
+        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/chats/' + payload.chatID + '/messages', data,)
             .then(response =>
                 dispatch({type: POST_MESSAGE, payload, data: response.data}))
     }
+}
+
+export function postMessageReply(payload) {
+    return function (dispatch) {
+        const data = new FormData();
+        data.append('uid', payload.userID);
+        data.append('mid', payload.messageID);
+        data.append('message', payload.message);
+
+        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/messages/' + payload.messageID + '/replies', data,)
+            .then(response =>
+                dispatch({type: POST_MESSAGE_REPLY, payload, data: response.data}))
+    }
+}
+
+
+export function toggleReply(payload) {
+    return {type: TOGGLE_REPLY, payload}
+
 }

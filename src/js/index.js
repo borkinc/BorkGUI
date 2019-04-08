@@ -6,11 +6,13 @@ import {
     getChats,
     likeMessage,
     postMessage,
+    postMessageReply,
     toggleAttachment,
     toggleChat,
     toggleContactModal,
     toggleGroupModal,
-    toggleNavBar
+    toggleNavBar,
+    toggleReply
 } from "./actions/chat-actions";
 
 window.store = store;
@@ -27,3 +29,5 @@ window.likeMessage = likeMessage;
 window.dislikeMessage = dislikeMessage;
 window.postMessage = postMessage;
 window.toggleAttachment = toggleAttachment;
+window.toggleReply = toggleReply;
+window.postMessageReply = postMessageReply;

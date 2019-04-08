@@ -9,6 +9,8 @@ export const POST_MESSAGE = 'POST_MESSAGE';
 export const LIKE_MESSAGE = 'LIKE_MESSAGE';
 export const DISLIKE_MESSAGE = 'DISLIKE_MESSAGE';
 export const TOGGLE_ATTACHMENT = 'TOGGLE_ATTACHMENT';
+export const TOGGLE_REPLY = 'TOGGLE_REPLY';
+export const POST_MESSAGE_REPLY = 'POST_MESSAGE_REPLY';
 
 // ChatNavBar actions
 export const TOGGLE_NAVBAR = 'TOGGLE_NAVBAR';
