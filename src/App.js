@@ -3,9 +3,16 @@ import './App.css';
 import {Route} from "react-router";
 import ChatNavBar from "./js/components/ChatNavBar.jsx";
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faPaperPlane, faSearch, faThumbsDown, faThumbsUp, faUserCircle} from '@fortawesome/free-solid-svg-icons';
+import {
+    faPaperclip,
+    faPaperPlane,
+    faSearch,
+    faThumbsDown,
+    faThumbsUp,
+    faUserCircle
+} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faSearch, faUserCircle, faThumbsUp, faThumbsDown, faPaperPlane);
+library.add(faSearch, faUserCircle, faThumbsUp, faThumbsDown, faPaperPlane, faPaperclip);
 
 const App = () => {
 

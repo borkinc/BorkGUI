@@ -1,10 +1,31 @@
 import React, {Component} from 'react';
 import '../../css/Chat.css';
-import {Badge, Button, Card, CardBody, CardImg, CardText, Input, InputGroup, InputGroupAddon} from "reactstrap";
+import {
+    Badge,
+    Button,
+    Card,
+    CardBody,
+    CardImg,
+    CardText,
+    Form,
+    FormGroup,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    NavItem
+} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {dislikeMessage, getChatMessages, likeMessage, postMessage} from "../actions/chat-actions";
+import {dislikeMessage, getChatMessages, likeMessage, postMessage, toggleAttachment} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
+import jstz from "jstimezonedetect";
+import 'moment-timezone';
+import TimerMixin from "react-timer-mixin"
+
 import ImageUploader from 'react-images-upload';
 
 
@@ -13,7 +34,8 @@ function mapDispatchToProps(dispatch) {
         getChatMessages: chatID => dispatch(getChatMessages(chatID)),
         likeMessage: userMessageID => dispatch(likeMessage(userMessageID)),
         dislikeMessage: userMessageID => dispatch(dislikeMessage(userMessageID)),
-        postMessage: message => dispatch(postMessage(message))
+        postMessage: message => dispatch(postMessage(message)),
+        toggleAttachment: () => dispatch(toggleAttachment())
     }
 }
 
@@ -21,7 +43,8 @@ function mapStateToProps(state) {
     const {chatState} = state;
     return {
         chatMessages: chatState.chatMessages,
-        chatID: chatState.chatID
+        chatID: chatState.chatID,
+        attachmentModal: chatState.attachmentModal
     }
 }
 
@@ -31,12 +54,19 @@ class ConnectedChat extends Component {
         super(props);
         this.state = {
             message: '',
-            picture: []
+            picture: null
         }
     }
 
     componentDidMount() {
-        this.props.getChatMessages(this.props.chatID)
+        this.timer = TimerMixin.setInterval(
+            () => {
+                this.props.getChatMessages(this.props.chatID)
+            }, 500)
+    }
+
+    componentWillUnmount() {
+        TimerMixin.clearTimeout(this.timer);
     }
 
     toggleLike = (userID, messageID) => {
@@ -54,27 +84,65 @@ class ConnectedChat extends Component {
     postMessage = (event) => {
         event.preventDefault();
         const message = this.state.message;
-        this.props.postMessage({message: message, picture: this.state.picture[0]});
-        this.setState({message: ''});
-
+        const userID = parseInt(localStorage.getItem('uid'));
+        let date = new Date();
+        if (message) {
+            if (message.replace(/\s/g, '').length) {
+                this.props.postMessage(
+                    {
+                        message: message,
+                        chatID: this.props.chatID,
+                        userID: userID,
+                        datePosted: date,
+                        picture: this.state.picture
+                    });
+            }
+        }
+        this.setState({message: '', picture: null});
     };
 
-    onDrop(picture) {
+    onDrop = (picture) => {
         this.setState({
-            picture: this.state.pictures.concat(picture),
+            picture: picture[0],
         });
-    }
+    };
+
+    toggleAttachment = () => {
+        this.props.toggleAttachment();
+    };
+
+    toggleAttachmentSubmit = (event) => {
+        event.preventDefault();
+        this.toggleAttachment();
+    };
+
+    toggleAttachmentCancel = (event) => {
+        event.preventDefault();
+        this.setState({
+            picture: null
+        });
+        this.toggleAttachment();
+    };
 
     renderMessage = m => {
-        const {mid, created_on, message, uid, likes, dislikes, image, uploaded_image} = m;
-        let date = new Date(created_on);
-        const currentUser = localStorage.getItem('uid');
+        const {mid, created_on, message, uid, likes, dislikes, image} = m;
+        const date = new Date(created_on);
+        const tz = jstz.determine().name();
+        const currentUser = parseInt(localStorage.getItem('uid'));
         const messageFromMe = uid === currentUser;
-        let msgContentDate = <span className={"msg-content-date"}><Moment fromNow>{date}</Moment></span>;
+        const msgContentDate = <span className={"msg-content-date"}><Moment tz={tz} fromNow>{date}</Moment></span>;
         const hasImage = image != null;
-        let imgSource;
-        if (recentImage){
-            imgSource = URL.createObjectURL(uploaded_image);
+        let imgSource = null;
+        let imgHTML = null;
+        if (hasImage) {
+            if (typeof image.name == 'string') {
+                imgHTML =
+                    <CardImg top height="100%" width="100%" src={URL.createObjectURL(image)} alt="Card image cap"/>
+            } else {
+                imgHTML = <CardImg top height="100%" width="100%"
+                                   src={`${process.env.REACT_APP_API_URL}${image}`}
+                                   alt="Card image cap"/>
+            }
         }
         return (
             <React.Fragment key={mid}>
@@ -85,9 +153,7 @@ class ConnectedChat extends Component {
                         </div>
                         <div className={"received-msg"}>
                             <Card>
-                                {hasImage ? <CardImg top width="100%" src={`${process.env.REACT_APP_API_URL}static/img/${image}`}
-                                                     alt="Card image cap"/>
-                                    : <br/>}
+                                {hasImage ? imgHTML : <br/>}
                                 <CardBody>
                                     <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(uid, mid)}>
@@ -107,19 +173,18 @@ class ConnectedChat extends Component {
                     <div className={"outgoing-msg"}>
                         <div className={"sent-msg"}>
                             <Card>
-                                {/*TODO: Detect if message has image to display in chat.*/}
-                                {/*<CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />*/}
+                                {hasImage ? imgHTML : <br/>}
                                 <CardBody>
-                                    {recentImage ? <CardImg top height="100%" width="100%" src={imgSource}
-                                                            alt="Card image cap"/> : <br/>}
+                                    {/*{recentImage ? <CardImg top height="100%" width="100%" src={imgSource}*/}
+                                    {/*                        alt="Card image cap"/> : <br/>}*/}
                                     <CardText>{message}</CardText>
                                     <Button onClick={() => this.toggleLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-up"}/>
-                                        <Badge color="secondary">{likes.length}</Badge>
+                                        <Badge color="secondary">{likes}</Badge>
                                     </Button>
                                     <Button onClick={() => this.toggleDisLike(uid, mid)}>
                                         <FontAwesomeIcon icon={"thumbs-down"}/>
-                                        <Badge color="secondary">{dislikes.length}</Badge>
+                                        <Badge color="secondary">{dislikes}</Badge>
                                     </Button>
                                     {msgContentDate}
                                 </CardBody>
@@ -143,15 +208,34 @@ class ConnectedChat extends Component {
                     <InputGroup>
                         <Input value={this.state.message} onChange={this.handleMessage}/>
                         <InputGroupAddon addonType="append">
+                            <NavItem>
+                                <Button color="secondary" onClick={this.toggleAttachment}><FontAwesomeIcon
+                                    icon={"paperclip"}/></Button>
+                                <Modal isOpen={this.props.attachmentModal} toggle={this.toggleAttachment}
+                                       className={this.props.className}>
+                                    <ModalHeader toggle={this.toggleAttachment}>Add image/video</ModalHeader>
+                                    <ModalBody>
+                                        <Form>
+                                            <FormGroup>
+                                                <ImageUploader
+                                                    withIcon={true}
+                                                    buttonText='Choose images'
+                                                    onChange={this.onDrop}
+                                                    imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                                    maxFileSize={5242880}
+                                                    withPreview={true}
+                                                />
+                                            </FormGroup>
+                                        </Form>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="primary" onClick={this.toggleAttachmentSubmit}>Add
+                                            Attachment</Button>
+                                        <Button color="secondary" onClick={this.toggleAttachmentCancel}>Cancel</Button>
+                                    </ModalFooter>
+                                </Modal>
+                            </NavItem>
                             <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon icon={"paper-plane"}/></Button>
-                            <ImageUploader
-                                withIcon={true}
-                                buttonText='Choose images'
-                                onChange={this.onDrop}
-                                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                                maxFileSize={5242880}
-                                withPreview={true}
-                            />
                         </InputGroupAddon>
                     </InputGroup>
                     <br/>

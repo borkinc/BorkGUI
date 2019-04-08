@@ -5,6 +5,7 @@ import {
     GET_CHATS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
@@ -18,6 +19,10 @@ export function toggleNavBar(payload) {
 
 export function toggleChat(payload) {
     return {type: TOGGLE_CHAT, payload}
+}
+
+export function toggleAttachment(payload) {
+    return {type: TOGGLE_ATTACHMENT, payload}
 }
 
 export function getChats() {
@@ -102,5 +107,15 @@ export function dislikeMessage(payload) {
 }
 
 export function postMessage(payload) {
-    return {type: POST_MESSAGE, payload}
+    return function (dispatch) {
+        const data = new FormData();
+        data.append('uid', payload.userID);
+        data.append('message', payload.message);
+        data.append('created_on', payload.datePosted);
+        data.append('img', payload.picture);
+
+        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/chat/' + payload.chatID + '/messages', data,)
+            .then(response =>
+                dispatch({type: POST_MESSAGE, payload, data: response.data}))
+    }
 }

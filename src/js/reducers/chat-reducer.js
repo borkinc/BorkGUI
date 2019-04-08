@@ -5,13 +5,12 @@ import {
     GET_CHATS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
     TOGGLE_NAVBAR
 } from "../constants/action-types";
-
-import uuidv4 from "uuid/v4";
 
 const initialState = {
     collapsed: true,
@@ -22,6 +21,7 @@ const initialState = {
     isLoading: true,
     groupModal: false,
     contactModal: false,
+    attachmentModal: false,
     chatMessages: []
 };
 
@@ -47,6 +47,11 @@ export default function ChatReducer(state = initialState, action) {
         case TOGGLE_CONTACT_MODAL: {
             return Object.assign({}, state, {
                 contactModal: !state.contactModal
+            })
+        }
+        case TOGGLE_ATTACHMENT: {
+            return Object.assign({}, state, {
+                attachmentModal: !state.attachmentModal
             })
         }
         case GET_CHATS: {
@@ -106,21 +111,23 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case POST_MESSAGE: {
-            let date = new Date();
+            console.log(action.payload);
+            console.log(action.data);
+            // let date = new Date();
             let message = {
                 // TODO: After phase 2, must get id from DB
-                mid: uuidv4(),
+                mid: action.data.message,
                 // TODO: Revert after Phase 2
                 // uid: JSON.parse(localStorage.getItem('user')).uid,
-                uid: localStorage.getItem('uid'),
+                uid: action.payload.userID,
                 message: action.payload.message,
-                created_on: date.toISOString(),
-                likes: [],
-                dislikes: [],
-                uploaded_image: action.payload.picture
+                created_on: action.payload.datePosted,
+                likes: 0,
+                dislikes: 0,
+                img: action.payload.picture
             };
             return Object.assign({}, state, {
-                chatMessages: [...state.chatMessages, message]
+                chatMessages: [message, ...state.chatMessages]
             })
         }
         default: {
