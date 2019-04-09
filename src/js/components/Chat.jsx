@@ -15,8 +15,7 @@ import {
     Modal,
     ModalBody,
     ModalFooter,
-    ModalHeader,
-    NavItem
+    ModalHeader
 } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {dislikeMessage, getChatMessages, likeMessage, postMessage, toggleAttachment} from "../actions/chat-actions";
@@ -208,33 +207,31 @@ class ConnectedChat extends Component {
                     <InputGroup>
                         <Input value={this.state.message} onChange={this.handleMessage}/>
                         <InputGroupAddon addonType="append">
-                            <NavItem>
-                                <Button color="secondary" onClick={this.toggleAttachment}><FontAwesomeIcon
-                                    icon={"paperclip"}/></Button>
-                                <Modal isOpen={this.props.attachmentModal} toggle={this.toggleAttachment}
-                                       className={this.props.className}>
-                                    <ModalHeader toggle={this.toggleAttachment}>Add image/video</ModalHeader>
-                                    <ModalBody>
-                                        <Form>
-                                            <FormGroup>
-                                                <ImageUploader
-                                                    withIcon={true}
-                                                    buttonText='Choose images'
-                                                    onChange={this.onDrop}
-                                                    imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                                                    maxFileSize={5242880}
-                                                    withPreview={true}
-                                                />
-                                            </FormGroup>
-                                        </Form>
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        <Button color="primary" onClick={this.toggleAttachmentSubmit}>Add
-                                            Attachment</Button>
-                                        <Button color="secondary" onClick={this.toggleAttachmentCancel}>Cancel</Button>
-                                    </ModalFooter>
-                                </Modal>
-                            </NavItem>
+                            <Button color="secondary" onClick={this.toggleAttachment}><FontAwesomeIcon
+                                icon={"paperclip"}/></Button>
+                            <Modal isOpen={this.props.attachmentModal} toggle={this.toggleAttachment}
+                                   className={this.props.className}>
+                                <ModalHeader toggle={this.toggleAttachment}>Add image/video</ModalHeader>
+                                <ModalBody>
+                                    <Form>
+                                        <FormGroup>
+                                            <ImageUploader
+                                                withIcon={true}
+                                                buttonText='Choose images'
+                                                onChange={this.onDrop}
+                                                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                                maxFileSize={5242880}
+                                                withPreview={true}
+                                            />
+                                        </FormGroup>
+                                    </Form>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="primary" onClick={this.toggleAttachmentSubmit}>Add
+                                        Attachment</Button>
+                                    <Button color="secondary" onClick={this.toggleAttachmentCancel}>Cancel</Button>
+                                </ModalFooter>
+                            </Modal>
                             <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon icon={"paper-plane"}/></Button>
                         </InputGroupAddon>
                     </InputGroup>
