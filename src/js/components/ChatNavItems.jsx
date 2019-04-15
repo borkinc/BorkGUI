@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, NavItem} from "reactstrap";
-import {addChat, toggleContactModal, toggleGroupModal} from "../actions/chat-actions";
+import {addChat, toggleContactModal, toggleGroupModal, addContact} from "../actions/chat-actions";
 import {connect} from "react-redux";
 
 function mapDispatchToProps(dispatch) {
     return {
         addChat: chat => dispatch(addChat(chat)),
+        addContact: contact => dispatch(addContact(contact)),
         toggleGroupModal: () => dispatch(toggleGroupModal()),
         toggleContactModal: () => dispatch(toggleContactModal())
     }
@@ -24,7 +25,11 @@ class ConnectedChatNavItems extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            chatName: ''
+            chatName: '',
+            first_name: '',
+            last_name: '',
+            phone: '',
+            email: ''
         };
     }
 
@@ -43,13 +48,29 @@ class ConnectedChatNavItems extends Component {
     };
 
     toggleContactSubmit = () => {
-        const {chatName} = this.state;
-        this.props.addChat(chatName);
+        const {first_name, last_name, phone, email} = this.state;
+        this.props.addContact({first_name, last_name, phone, email});
         this.toggleContact();
     };
 
     handleChatNameChange = event => {
         this.setState({chatName: event.target.value})
+    };
+
+    handleContactFirstNameChange = event => {
+        this.setState({contactFirstName: event.target.value})
+    };
+
+    handleContactLastNameChange = event => {
+        this.setState({contactLastName: event.target.value})
+    };
+
+    handleContactEmailChange = event => {
+        this.setState({contactEmail: event.target.value})
+    };
+
+    handleContactPhoneNumberChange = event => {
+        this.setState({contactPhoneNumberName: event.target.value})
     };
 
     render() {
@@ -85,10 +106,22 @@ class ConnectedChatNavItems extends Component {
                         <ModalBody>
                             <Form>
                                 <FormGroup>
-                                    <Label for="new-chat-group">Contact name</Label>
-                                    <Input type="text" name="chat-contact" id="new-chat-contact"
-                                           placeholder="Enter contact name..."
-                                           onChange={this.handleChatNameChange}/>
+                                    <Label for="new-chat-group">First Name</Label>
+                                    <Input type="text" name="chat-contact" id="id_contact_first_name"
+                                           placeholder="Enter first name..."
+                                           onChange={this.handleContactFirstNameChange}/>
+                                    <Label for="new-chat-group">Last Name</Label>
+                                    <Input type="text" name="chat-contact" id="id_contact_last_name"
+                                           placeholder="Enter last name..."
+                                           onChange={this.handleContactLastNameChange}/>
+                                    <Label for="new-chat-group">Phone Number</Label>
+                                    <Input type="text" name="chat-contact" id="id_contact_phone_number"
+                                           placeholder="Enter phone number..."
+                                           onChange={this.handleContactPhoneNumberChange}/>
+                                    <Label for="new-chat-group">First Name</Label>
+                                    <Input type="text" name="chat-contact" id="id_contact_email"
+                                           placeholder="Enter email..."
+                                           onChange={this.handleContactEmailChange}/>
                                 </FormGroup>
                             </Form>
                         </ModalBody>

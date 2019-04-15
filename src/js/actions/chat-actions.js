@@ -61,6 +61,24 @@ export function addChat(payload) {
     }
 }
 
+export function addContact(payload) {
+    return function (dispatch) {
+        const data = new FormData();
+        data.append('first_name', payload);
+        data.append('last_name', payload);
+        data.append('email', payload);
+        data.append('phone_number', payload);
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.post(`${process.env.REACT_APP_API_URL}` + "api/contacts", data, {headers: {'Authorization':
+                    `Bearer ${access_token}`}}).then( res => {
+
+                console.log(res);
+                console.log('skiribops');
+            }
+        )
+    }
+}
+
 export function toggleGroupModal(payload) {
     return {type: TOGGLE_GROUP_MODAL, payload}
 }
