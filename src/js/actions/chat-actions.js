@@ -87,6 +87,10 @@ export function toggleContactModal(payload) {
     return {type: TOGGLE_CONTACT_MODAL, payload}
 }
 
+export function toggleAdded(payload){
+    return {type: ADD_CONTACT, payload}
+}
+
 export function getChatMessages(payload) {
     return function (dispatch) {
         // const access_token = JSON.parse(localStorage.getItem('user')).access_token;

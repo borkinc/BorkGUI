@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, NavItem} from "reactstrap";
-import {addChat, toggleContactModal, toggleGroupModal, addContact} from "../actions/chat-actions";
+import {addChat, toggleContactModal, toggleGroupModal, addContact, toggleAdded} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import { withSnackbar } from 'notistack';
 
@@ -10,6 +10,7 @@ function mapDispatchToProps(dispatch) {
         addContact: contact => dispatch(addContact(contact)),
         toggleGroupModal: () => dispatch(toggleGroupModal()),
         toggleContactModal: () => dispatch(toggleContactModal()),
+        toggleAdded: () => dispatch(toggleAdded())
     }
 }
 
@@ -18,7 +19,7 @@ function mapStateToProps(state) {
     return {
         groupModal: chatState.groupModal,
         contactModal: chatState.contactModal,
-        added: false
+        added: chatState.added
     }
 }
 
@@ -43,6 +44,10 @@ class ConnectedChatNavItems extends Component {
         this.props.toggleContactModal();
     };
 
+    toggleAddedContact = () => {
+        this.props.toggleAdded();
+    };
+
     toggleGroupSubmit = () => {
         const {chatName} = this.state;
         this.props.addChat(chatName);
@@ -53,10 +58,6 @@ class ConnectedChatNavItems extends Component {
         const {first_name, last_name, phone, email} = this.state;
         this.props.addContact({first_name, last_name, phone, email});
         this.toggleContact();
-    };
-
-    toggleAddedContact = () => {
-        this.setState({added: !this.state.added});
     };
 
     handleChatNameChange = event => {

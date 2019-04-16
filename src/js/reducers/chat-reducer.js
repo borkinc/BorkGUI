@@ -134,7 +134,7 @@ export default function ChatReducer(state = initialState, action) {
         }
         case ADD_CONTACT: {
             return Object.assign({}, state, {
-                added: true
+                added: !state.added
             })
         }
         default: {
