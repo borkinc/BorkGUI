@@ -19,7 +19,8 @@ function mapStateToProps(state) {
     return {
         groupModal: chatState.groupModal,
         contactModal: chatState.contactModal,
-        added: chatState.added
+        added: chatState.added,
+        add_msg: chatState.add_msg
     }
 }
 
@@ -29,10 +30,10 @@ class ConnectedChatNavItems extends Component {
         super(props);
         this.state = {
             chatName: '',
-            first_name: '',
-            last_name: '',
-            phone: '',
-            email: '',
+            contactFirstName: '',
+            contactLastName: '',
+            contactPhoneNumber: '',
+            contactEmail: '',
         };
     }
 
@@ -77,7 +78,7 @@ class ConnectedChatNavItems extends Component {
     };
 
     handleContactPhoneNumberChange = event => {
-        this.setState({contactPhoneNumberName: event.target.value})
+        this.setState({contactPhoneNumber: event.target.value})
     };
 
     render() {
@@ -148,7 +149,7 @@ class ConnectedChatNavItems extends Component {
                         </ModalFooter>
                     </Modal>
                     <Modal isOpen={this.props.added} className={this.props.className}>
-                        <ModalHeader>Added contact</ModalHeader>
+                        <ModalHeader>{this.props.add_msg}</ModalHeader>
                         <ModalFooter>
                             <Button color="primary" onClick={this.toggleAddedContact}>Ok</Button>
                         </ModalFooter>

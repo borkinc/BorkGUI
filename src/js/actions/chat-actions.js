@@ -65,17 +65,19 @@ export function addChat(payload) {
 export function addContact(payload) {
     return function (dispatch) {
         const data = new FormData();
-        data.append('first_name', payload);
-        data.append('last_name', payload);
-        data.append('email', payload);
-        data.append('phone_number', payload);
+        data.append('first_name', payload.contactFirstName);
+        data.append('last_name', payload.contactLastName);
+        data.append('email', payload.contactEmail);
+        data.append('phone_number', payload.contactPhoneNumber);
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         axios.post(`${process.env.REACT_APP_API_URL}` + "api/contacts", data, {headers: {'Authorization':
                     `Bearer ${access_token}`}}).then( response => {
 
                 return dispatch({type: ADD_CONTACT, payload: response.data});
             }
-        )
+        ).catch( error => {
+            return dispatch({type: ADD_CONTACT, payload: error.response.data});
+        })
     }
 }
 
