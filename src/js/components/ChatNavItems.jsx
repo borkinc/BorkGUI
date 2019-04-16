@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, NavItem} from "reactstrap";
 import {addChat, toggleContactModal, toggleGroupModal, addContact, toggleAdded} from "../actions/chat-actions";
 import {connect} from "react-redux";
-import { withSnackbar } from 'notistack';
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -56,8 +55,8 @@ class ConnectedChatNavItems extends Component {
     };
 
     toggleContactSubmit = () => {
-        const {first_name, last_name, phone, email} = this.state;
-        this.props.addContact({first_name, last_name, phone, email});
+        const {contactFirstName, contactLastName, contactPhoneNumber, contactEmail} = this.state;
+        this.props.addContact({contactFirstName, contactLastName, contactPhoneNumber, contactEmail});
         this.toggleContact();
     };
 
@@ -82,15 +81,6 @@ class ConnectedChatNavItems extends Component {
     };
 
     render() {
-        if(this.state.added === true){
-            this.props.enqueueSnackbar('Added Contact');
-            this.state.added = false;
-        }
-        if(this.state.not_added === true){
-            this.props.enqueueSnackbar('Did not add contact');
-            this.state.not_added = false;
-        }
-
         return (
             <React.Fragment>
                 <NavItem>

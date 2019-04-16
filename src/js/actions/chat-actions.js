@@ -1,5 +1,5 @@
 import {
-    ADD_CHAT, ADD_CONTACT,
+    ADD_CHAT,ADD_CONTACT,
     DISLIKE_MESSAGE,
     GET_CHAT_MESSAGES,
     GET_CHATS,
@@ -12,7 +12,6 @@ import {
     TOGGLE_NAVBAR
 } from "../constants/action-types";
 import axios from "axios";
-
 
 export function toggleNavBar(payload) {
     return {type: TOGGLE_NAVBAR, payload}
@@ -74,6 +73,7 @@ export function addContact(payload) {
                     `Bearer ${access_token}`}}).then( response => {
 
                 return dispatch({type: ADD_CONTACT, payload: response.data});
+
             }
         ).catch( error => {
             return dispatch({type: ADD_CONTACT, payload: error.response.data});

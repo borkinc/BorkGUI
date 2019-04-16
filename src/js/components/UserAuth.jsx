@@ -63,18 +63,6 @@ class ConnectedUserAuth extends Component {
         this.setState({phone_number: event.target.value});
     };
 
-    handleFirstNameChange = event => {
-        this.setState({first_name: event.target.value});
-    };
-
-    handleLastNameChange = event => {
-        this.setState({last_name: event.target.value});
-    };
-
-    handlePhoneNumberChange = event => {
-        this.setState({phone_number: event.target.value});
-    };
-
     handleLoginSubmit = event => {
         event.preventDefault();
         const {username, password} = this.state;
@@ -173,36 +161,6 @@ class ConnectedUserAuth extends Component {
                                                         id="UserAuth-email"
                                                         placeholder="Enter email"
                                                         onChange={this.handleEmailChange}
-                                                    />
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label for="firstName">First Name</Label>
-                                                    <Input
-                                                        type="firstname"
-                                                        name="firstname"
-                                                        id="UserAuth-first-name"
-                                                        placeholder="Enter first name"
-                                                        onChange={this.handleFirstNameChange}
-                                                    />
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label for="lastName">Last Name</Label>
-                                                    <Input
-                                                        type="lastname"
-                                                        name="lastname"
-                                                        id="UserAuth-last-name"
-                                                        placeholder="Enter last name"
-                                                        onChange={this.handleLastNameChange}
-                                                    />
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label for="phonenumber">Phone Number</Label>
-                                                    <Input
-                                                        type="phonenumber"
-                                                        name="phonenumber"
-                                                        id="UserAuth-phone-number"
-                                                        placeholder="Enter phone number"
-                                                        onChange={this.handlePhoneNumberChange}
                                                     />
                                                 </FormGroup>
                                                 <FormGroup>
