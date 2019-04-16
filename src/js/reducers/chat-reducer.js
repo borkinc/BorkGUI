@@ -9,7 +9,8 @@ import {
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR
+    TOGGLE_NAVBAR,
+    ADD_CONTACT
 } from "../constants/action-types";
 
 const initialState = {
@@ -128,6 +129,11 @@ export default function ChatReducer(state = initialState, action) {
             };
             return Object.assign({}, state, {
                 chatMessages: [message, ...state.chatMessages]
+            })
+        }
+        case ADD_CONTACT: {
+            return Object.assign({}, state, {
+                added: true
             })
         }
         default: {

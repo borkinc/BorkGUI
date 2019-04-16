@@ -8,12 +8,14 @@ import {Provider} from "react-redux";
 import store from "./js/store";
 import {Router} from "react-router";
 import history from "./js/history"
-
+import { SnackbarProvider } from 'notistack';
 
 ReactDOM.render(
     <Provider store={store}>
         <Router history={history}>
-            <App/>
+            <SnackbarProvider maxSnack={3}>
+                <App/>
+            </SnackbarProvider>
         </Router>
     </Provider>
     , document.getElementById('root'));

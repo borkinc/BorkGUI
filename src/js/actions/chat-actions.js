@@ -1,5 +1,5 @@
 import {
-    ADD_CHAT,
+    ADD_CHAT, ADD_CONTACT,
     DISLIKE_MESSAGE,
     GET_CHAT_MESSAGES,
     GET_CHATS,
@@ -12,6 +12,7 @@ import {
     TOGGLE_NAVBAR
 } from "../constants/action-types";
 import axios from "axios";
+
 
 export function toggleNavBar(payload) {
     return {type: TOGGLE_NAVBAR, payload}
@@ -70,10 +71,9 @@ export function addContact(payload) {
         data.append('phone_number', payload);
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         axios.post(`${process.env.REACT_APP_API_URL}` + "api/contacts", data, {headers: {'Authorization':
-                    `Bearer ${access_token}`}}).then( res => {
+                    `Bearer ${access_token}`}}).then( response => {
 
-                console.log(res);
-                console.log('skiribops');
+                return dispatch({type: ADD_CONTACT, payload: response.data});
             }
         )
     }
