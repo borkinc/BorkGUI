@@ -9,7 +9,9 @@ function mapDispatchToProps(dispatch) {
         addContact: contact => dispatch(addContact(contact)),
         toggleGroupModal: () => dispatch(toggleGroupModal()),
         toggleContactModal: () => dispatch(toggleContactModal()),
-        toggleAdded: () => dispatch(toggleAdded())
+        toggleAdded: () => dispatch(toggleAdded()),
+        toggleContacts: () => dispatch(toggleContacts())
+        getContacts: () => dispatch(getContacts())
     }
 }
 
@@ -19,7 +21,8 @@ function mapStateToProps(state) {
         groupModal: chatState.groupModal,
         contactModal: chatState.contactModal,
         added: chatState.added,
-        add_msg: chatState.add_msg
+        add_msg: chatState.add_msg,
+        contactsModal: chatState.contactsModal
     }
 }
 
@@ -58,6 +61,11 @@ class ConnectedChatNavItems extends Component {
         const {contactFirstName, contactLastName, contactPhoneNumber, contactEmail} = this.state;
         this.props.addContact({contactFirstName, contactLastName, contactPhoneNumber, contactEmail});
         this.toggleContact();
+    };
+
+    toggleContactList = () => {
+        this.props.toggleContacts();
+        this.props.getContacts();
     };
 
     handleChatNameChange = event => {
@@ -143,6 +151,12 @@ class ConnectedChatNavItems extends Component {
                         <ModalFooter>
                             <Button color="primary" onClick={this.toggleAddedContact}>Ok</Button>
                         </ModalFooter>
+                    </Modal>
+                </NavItem>
+                <NavItem>
+                    <Button color="link" onClick={this.toggleContactList}>Contacts</Button>
+                    <Modal isOpen={this.props.contactsModal} className={this.props.className}>
+
                     </Modal>
                 </NavItem>
             </React.Fragment>

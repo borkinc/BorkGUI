@@ -22,4 +22,6 @@ export const TOGGLE_CONTACT_MODAL = 'TOGGLE_CONTACT_MODAL';
 export const GET_CHATS = 'GET_CHATS';
 export const TOGGLE_CHAT = 'TOGGLE_CHAT';
 export const ADD_CONTACT = 'ADD_CONTACT';
+export const TOGGLE_CONTACTS = 'TOGGLE_CONTACTS';
+export const GET_CONTACTS = 'GET_CONTACTS';
 
