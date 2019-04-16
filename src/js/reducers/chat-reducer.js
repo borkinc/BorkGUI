@@ -23,7 +23,8 @@ const initialState = {
     groupModal: false,
     contactModal: false,
     attachmentModal: false,
-    chatMessages: []
+    chatMessages: [],
+    added: false
 };
 
 export default function ChatReducer(state = initialState, action) {

@@ -9,7 +9,7 @@ function mapDispatchToProps(dispatch) {
         addChat: chat => dispatch(addChat(chat)),
         addContact: contact => dispatch(addContact(contact)),
         toggleGroupModal: () => dispatch(toggleGroupModal()),
-        toggleContactModal: () => dispatch(toggleContactModal())
+        toggleContactModal: () => dispatch(toggleContactModal()),
     }
 }
 
@@ -17,7 +17,8 @@ function mapStateToProps(state) {
     const {chatState} = state;
     return {
         groupModal: chatState.groupModal,
-        contactModal: chatState.contactModal
+        contactModal: chatState.contactModal,
+        added: false
     }
 }
 
@@ -31,8 +32,6 @@ class ConnectedChatNavItems extends Component {
             last_name: '',
             phone: '',
             email: '',
-            added: false,
-            not_added: false
         };
     }
 
@@ -54,6 +53,10 @@ class ConnectedChatNavItems extends Component {
         const {first_name, last_name, phone, email} = this.state;
         this.props.addContact({first_name, last_name, phone, email});
         this.toggleContact();
+    };
+
+    toggleAddedContact = () => {
+        this.setState({added: !this.state.added});
     };
 
     handleChatNameChange = event => {
@@ -130,7 +133,7 @@ class ConnectedChatNavItems extends Component {
                                     <Input type="text" name="chat-contact" id="id_contact_phone_number"
                                            placeholder="Enter phone number..."
                                            onChange={this.handleContactPhoneNumberChange}/>
-                                    <Label for="new-chat-group">First Name</Label>
+                                    <Label for="new-chat-group">Email</Label>
                                     <Input type="text" name="chat-contact" id="id_contact_email"
                                            placeholder="Enter email..."
                                            onChange={this.handleContactEmailChange}/>
@@ -141,6 +144,12 @@ class ConnectedChatNavItems extends Component {
                             <Button color="primary" onClick={this.toggleContactSubmit}>Create
                                 Contact</Button>{' '}
                             <Button color="secondary" onClick={this.toggleContact}>Cancel</Button>
+                        </ModalFooter>
+                    </Modal>
+                    <Modal isOpen={this.props.added} className={this.props.className}>
+                        <ModalHeader>Added contact</ModalHeader>
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.toggleAddedContact}>Ok</Button>
                         </ModalFooter>
                     </Modal>
                 </NavItem>
