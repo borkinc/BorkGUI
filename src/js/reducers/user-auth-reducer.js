@@ -16,6 +16,7 @@ export default function UserAuthReducer(state = initialState, action) {
             return state
         }
         case REGISTER_USER: {
+            localStorage.setItem('user', JSON.stringify(action.payload.user));
             history.push("/chats");
             return state
         }

@@ -10,7 +10,8 @@ import {
     toggleChat,
     toggleContactModal,
     toggleGroupModal,
-    toggleNavBar
+    toggleNavBar,
+    addContact
 } from "./actions/chat-actions";
 
 window.store = store;
@@ -27,3 +28,4 @@ window.likeMessage = likeMessage;
 window.dislikeMessage = dislikeMessage;
 window.postMessage = postMessage;
 window.toggleAttachment = toggleAttachment;
+window.addContact = addContact;

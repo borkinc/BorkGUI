@@ -1,5 +1,5 @@
 import {
-    ADD_CHAT,
+    ADD_CHAT,ADD_CONTACT,
     DISLIKE_MESSAGE,
     GET_CHAT_MESSAGES,
     GET_CHATS,
@@ -61,12 +61,36 @@ export function addChat(payload) {
     }
 }
 
+export function addContact(payload) {
+    return function (dispatch) {
+        const data = new FormData();
+        data.append('first_name', payload.contactFirstName);
+        data.append('last_name', payload.contactLastName);
+        data.append('email', payload.contactEmail);
+        data.append('phone_number', payload.contactPhoneNumber);
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.post(`${process.env.REACT_APP_API_URL}` + "api/contacts", data, {headers: {'Authorization':
+                    `Bearer ${access_token}`}}).then( response => {
+
+                return dispatch({type: ADD_CONTACT, payload: response.data});
+
+            }
+        ).catch( error => {
+            return dispatch({type: ADD_CONTACT, payload: error.response.data});
+        })
+    }
+}
+
 export function toggleGroupModal(payload) {
     return {type: TOGGLE_GROUP_MODAL, payload}
 }
 
 export function toggleContactModal(payload) {
     return {type: TOGGLE_CONTACT_MODAL, payload}
+}
+
+export function toggleAdded(payload){
+    return {type: ADD_CONTACT, payload}
 }
 
 export function getChatMessages(payload) {

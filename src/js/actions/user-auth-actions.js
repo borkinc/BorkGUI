@@ -25,6 +25,9 @@ export function registerUser(payload) {
         data.append('username', payload.username);
         data.append('email', payload.email);
         data.append('password', payload.password);
+        data.append('phone_number', payload.phone_number);
+        data.append('first_name', payload.first_name);
+        data.append('last_name', payload.last_name);
 
         // Contacting api to add new user
         axios.post(`${process.env.REACT_APP_API_URL}` + `api/register`, data, {
