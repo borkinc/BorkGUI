@@ -9,11 +9,10 @@ import store from "./js/store";
 import {Router} from "react-router";
 import history from "./js/history"
 
-
 ReactDOM.render(
     <Provider store={store}>
         <Router history={history}>
-            <App/>
+                <App/>
         </Router>
     </Provider>
     , document.getElementById('root'));
