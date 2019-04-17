@@ -20,10 +20,6 @@ function mapStateToProps(state) {
 
 class ConnectedChatNavBar extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     toggleNavBar = () => {
         this.props.toggleNavBar();
     };

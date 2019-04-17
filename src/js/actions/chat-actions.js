@@ -1,17 +1,18 @@
 import {
-    ADD_CHAT,ADD_CONTACT,
+    ADD_CHAT,
+    ADD_CONTACT,
     DISLIKE_MESSAGE,
     GET_CHAT_MESSAGES,
     GET_CHATS,
+    GET_CONTACTS,
     LIKE_MESSAGE,
     POST_MESSAGE,
     TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
-    TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR,
     TOGGLE_CONTACTS,
-    GET_CONTACTS
+    TOGGLE_GROUP_MODAL,
+    TOGGLE_NAVBAR
 } from "../constants/action-types";
 import axios from "axios";
 
@@ -31,7 +32,7 @@ export function getChats() {
     return function (dispatch) {
         // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         // TODO: Must get all chats for current user after phase 2.
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chats/7'
+        axios.get(`${process.env.REACT_APP_API_URL}api/chats/7`
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
@@ -51,7 +52,7 @@ export function addChat(payload) {
         data.append('chat_name', payload);
 
         // Dummy post to API to simulate adding a new group chat
-        axios.post(`${process.env.REACT_APP_API_URL}` + "api/chats", data
+        axios.post(`${process.env.REACT_APP_API_URL}api/chats`, data
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
@@ -71,7 +72,9 @@ export function addContact(payload) {
         data.append('email', payload.contactEmail);
         data.append('phone_number', payload.contactPhoneNumber);
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.post(`${process.env.REACT_APP_API_URL}` + "api/contacts", data, {headers: {'Authorization':
+        axios.post(`${process.env.REACT_APP_API_URL}api/contacts`, data, {
+            headers: {
+                'Authorization':
                     `Bearer ${access_token}`}}).then( response => {
 
                 return dispatch({type: ADD_CONTACT, payload: response.data});
@@ -83,11 +86,13 @@ export function addContact(payload) {
     }
 }
 
-export function getContacts(payload) {
+export function getContacts() {
     return function (dispatch) {
         const uid = JSON.parse(localStorage.getItem('user')).uid;
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(`${process.env.REACT_APP_API_URL}` + "api/contacts/" + `${uid}`, {headers: {'Authorization':
+        axios.get(`${process.env.REACT_APP_API_URL}api/contacts/${uid}`, {
+            headers: {
+                'Authorization':
                     `Bearer ${access_token}`}}).then(response => {
                         return dispatch({type: GET_CONTACTS, payload: response.data})
 
@@ -100,7 +105,9 @@ export function removeContact(payload) {
         const data = new FormData();
         data.append('contact_id', payload);
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.delete(`${process.env.REACT_APP_API_URL}` + "api/contacts", {data: data, headers: {'Authorization':
+        axios.delete(`${process.env.REACT_APP_API_URL}api/contacts`, {
+            data: data, headers: {
+                'Authorization':
                     `Bearer ${access_token}`}}).then(response => {
                         return dispatch({type: GET_CONTACTS, payload: response.data})
         })
@@ -122,10 +129,10 @@ export function toggleContacts(payload) {
     return {type: TOGGLE_CONTACTS, payload}
 }
 
-export function getChatMessages(payload) {
+export function getChatMessages() {
     return function (dispatch) {
         // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/messages'
+        axios.get(`${process.env.REACT_APP_API_URL}api/messages`
             // {
             //         headers: {
             //             'Authorization': `Bearer ${access_token}`
@@ -167,7 +174,7 @@ export function postMessage(payload) {
         data.append('created_on', payload.datePosted);
         data.append('img', payload.picture);
 
-        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/chats/' + payload.chatID + '/messages', data,)
+        axios.post(`${process.env.REACT_APP_API_URL}api/chats/${payload.chatID}/messages`, data,)
             .then(response =>
                 dispatch({type: POST_MESSAGE, payload, data: response.data}))
     }

@@ -131,7 +131,6 @@ class ConnectedChat extends Component {
         const messageFromMe = uid === currentUser;
         const msgContentDate = <span className={"msg-content-date"}><Moment tz={tz} fromNow>{date}</Moment></span>;
         const hasImage = image != null;
-        let imgSource = null;
         let imgHTML = null;
         if (hasImage) {
             if (typeof image.name == 'string') {
@@ -195,51 +194,51 @@ class ConnectedChat extends Component {
     };
 
     render() {
-        return (
-            <React.Fragment>
-                {/*<h2 className={"text-center"}>Chatting with {this.props.name}</h2>*/}
-                <div className={"chat-messages"}>
-                    <div className={"chat-history"}>
-                        {this.props.chatMessages.map(m => this.renderMessage(m))}
-                    </div>
+        const {chatMessages} = this.props.chatMessages;
+        return <React.Fragment>
+            {/*<h2 className={"text-center"}>Chatting with {this.props.name}</h2>*/}
+            <div className={"chat-messages"}>
+                <div className={"chat-history"}>
+                    {chatMessages.map(m => this.renderMessage(m))}
                 </div>
-                <div className={"msg-input"}>
-                    <InputGroup>
-                        <Input value={this.state.message} onChange={this.handleMessage}/>
-                        <InputGroupAddon addonType="append">
-                            <Button color="secondary" onClick={this.toggleAttachment}><FontAwesomeIcon
-                                icon={"paperclip"}/></Button>
-                            <Modal isOpen={this.props.attachmentModal} toggle={this.toggleAttachment}
-                                   className={this.props.className}>
-                                <ModalHeader toggle={this.toggleAttachment}>Add image/video</ModalHeader>
-                                <ModalBody>
-                                    <Form>
-                                        <FormGroup>
-                                            <ImageUploader
-                                                withIcon={true}
-                                                buttonText='Choose images'
-                                                onChange={this.onDrop}
-                                                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                                                maxFileSize={5242880}
-                                                withPreview={true}
-                                            />
-                                        </FormGroup>
-                                    </Form>
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button color="primary" onClick={this.toggleAttachmentSubmit}>Add
-                                        Attachment</Button>
-                                    <Button color="secondary" onClick={this.toggleAttachmentCancel}>Cancel</Button>
-                                </ModalFooter>
-                            </Modal>
-                            <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon icon={"paper-plane"}/></Button>
-                        </InputGroupAddon>
-                    </InputGroup>
-                    <br/>
-                </div>
+            </div>
+            <div className={"msg-input"}>
+                <InputGroup>
+                    <Input value={this.state.message} onChange={this.handleMessage}/>
+                    <InputGroupAddon addonType="append">
+                        <Button color="secondary" onClick={this.toggleAttachment}><FontAwesomeIcon
+                            icon={"paperclip"}/></Button>
+                        <Modal isOpen={this.props.attachmentModal} toggle={this.toggleAttachment}
+                               className={this.props.className}>
+                            <ModalHeader toggle={this.toggleAttachment}>Add image/video</ModalHeader>
+                            <ModalBody>
+                                <Form>
+                                    <FormGroup>
+                                        <ImageUploader
+                                            withIcon={true}
+                                            buttonText='Choose images'
+                                            onChange={this.onDrop}
+                                            imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                            maxFileSize={5242880}
+                                            withPreview={true}
+                                        />
+                                    </FormGroup>
+                                </Form>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="primary" onClick={this.toggleAttachmentSubmit}>Add
+                                    Attachment</Button>
+                                <Button color="secondary" onClick={this.toggleAttachmentCancel}>Cancel</Button>
+                            </ModalFooter>
+                        </Modal>
+                        <Button color="secondary" onClick={this.postMessage}><FontAwesomeIcon
+                            icon={"paper-plane"}/></Button>
+                    </InputGroupAddon>
+                </InputGroup>
+                <br/>
+            </div>
 
-            </React.Fragment>
-        )
+        </React.Fragment>
     }
 }
 
