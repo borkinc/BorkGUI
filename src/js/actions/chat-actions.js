@@ -95,6 +95,17 @@ export function getContacts(payload) {
     }
 }
 
+export function removeContact(payload) {
+    return function (dispatch){
+        const data = new FormData();
+        data.append('contact_id', payload);
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.delete(`${process.env.REACT_APP_API_URL}` + "api/contacts", {data: data, headers: {'Authorization':
+                    `Bearer ${access_token}`}}).then(response => {
+                        return dispatch({type: GET_CONTACTS, payload: response.data})
+        })
+    }
+}
 export function toggleGroupModal(payload) {
     return {type: TOGGLE_GROUP_MODAL, payload}
 }

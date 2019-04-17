@@ -28,7 +28,7 @@ const initialState = {
     chatMessages: [],
     added: false,
     contactsModal: false,
-    contacts = []
+    contacts: []
 };
 
 export default function ChatReducer(state = initialState, action) {
@@ -157,7 +157,8 @@ export default function ChatReducer(state = initialState, action) {
         }
         case GET_CONTACTS: {
             return Object.assign({}, state, {
-                contacts: action.payload.contacts
+                contacts: action.payload.contacts,
+                isLoading: false
             })
         }
 
