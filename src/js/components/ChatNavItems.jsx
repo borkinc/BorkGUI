@@ -1,7 +1,27 @@
 import React, {Component} from 'react';
-import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, NavItem} from "reactstrap";
-import {addChat, toggleContactModal, toggleGroupModal, addContact, toggleAdded} from "../actions/chat-actions";
+import {
+    Button,
+    Form,
+    FormGroup,
+    Input,
+    Label,
+    ListGroup,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    NavItem, Spinner
+} from "reactstrap";
+import {
+    addChat,
+    toggleContactModal,
+    toggleGroupModal,
+    addContact,
+    toggleAdded,
+    toggleContacts, getContacts, removeContact
+} from "../actions/chat-actions";
 import {connect} from "react-redux";
+import ListGroupItem from "reactstrap/es/ListGroupItem";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -9,7 +29,10 @@ function mapDispatchToProps(dispatch) {
         addContact: contact => dispatch(addContact(contact)),
         toggleGroupModal: () => dispatch(toggleGroupModal()),
         toggleContactModal: () => dispatch(toggleContactModal()),
-        toggleAdded: () => dispatch(toggleAdded())
+        toggleAdded: () => dispatch(toggleAdded()),
+        toggleContacts: () => dispatch(toggleContacts()),
+        getContacts: () => dispatch(getContacts()),
+        removeContact: contact_id => dispatch(removeContact(contact_id))
     }
 }
 
@@ -19,7 +42,10 @@ function mapStateToProps(state) {
         groupModal: chatState.groupModal,
         contactModal: chatState.contactModal,
         added: chatState.added,
-        add_msg: chatState.add_msg
+        add_msg: chatState.add_msg,
+        contactsModal: chatState.contactsModal,
+        isLoading: chatState.isLoading,
+        contacts: chatState.contacts
     }
 }
 
@@ -59,6 +85,17 @@ class ConnectedChatNavItems extends Component {
         this.props.addContact({contactFirstName, contactLastName, contactPhoneNumber, contactEmail});
         this.toggleContact();
     };
+
+    toggleContactList = () => {
+        this.props.toggleContacts();
+        this.props.getContacts();
+    };
+
+    removeContact = event => {
+        const contact_id = event.target.value;
+        this.props.removeContact(contact_id);
+    };
+
 
     handleChatNameChange = event => {
         this.setState({chatName: event.target.value})
@@ -145,10 +182,34 @@ class ConnectedChatNavItems extends Component {
                         </ModalFooter>
                     </Modal>
                 </NavItem>
+                <NavItem>
+                    <Button color="link" onClick={this.toggleContactList}>Contacts</Button>
+                    <Modal isOpen={this.props.contactsModal} className={this.props.className}>
+                        <ModalBody>
+                            <ListGroup>
+                                {!this.props.isLoading ? (
+                                    this.props.contacts.map( contact  => {
+                                        return (<ListGroupItem className="justify-content-between"
+                                                               id={"contact-" + contact.contact_id}>
+                                                <h5>{contact.first_name + " " + contact.last_name}</h5>
+                                                <Button color="link" onClick={this.removeContact}
+                                                        value={contact.uid}>Remove me</Button>
+                                                </ListGroupItem>)
+                                     })
+                                ) : (<Spinner color="secondary"/>)}
+                            </ListGroup>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.toggleContactList}>Ok</Button>
+                        </ModalFooter>
+                    </Modal>
+                </NavItem>
             </React.Fragment>
         )
     }
-}
+ }
+
+
 
 const ChatNavItems = connect(mapStateToProps, mapDispatchToProps)(ConnectedChatNavItems);
 export default ChatNavItems;

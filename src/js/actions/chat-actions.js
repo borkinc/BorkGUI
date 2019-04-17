@@ -9,7 +9,9 @@ import {
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
     TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR
+    TOGGLE_NAVBAR,
+    TOGGLE_CONTACTS,
+    GET_CONTACTS
 } from "../constants/action-types";
 import axios from "axios";
 
@@ -81,6 +83,29 @@ export function addContact(payload) {
     }
 }
 
+export function getContacts(payload) {
+    return function (dispatch) {
+        const uid = JSON.parse(localStorage.getItem('user')).uid;
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.get(`${process.env.REACT_APP_API_URL}` + "api/contacts/" + `${uid}`, {headers: {'Authorization':
+                    `Bearer ${access_token}`}}).then(response => {
+                        return dispatch({type: GET_CONTACTS, payload: response.data})
+
+            })
+    }
+}
+
+export function removeContact(payload) {
+    return function (dispatch){
+        const data = new FormData();
+        data.append('contact_id', payload);
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.delete(`${process.env.REACT_APP_API_URL}` + "api/contacts", {data: data, headers: {'Authorization':
+                    `Bearer ${access_token}`}}).then(response => {
+                        return dispatch({type: GET_CONTACTS, payload: response.data})
+        })
+    }
+}
 export function toggleGroupModal(payload) {
     return {type: TOGGLE_GROUP_MODAL, payload}
 }
@@ -91,6 +116,10 @@ export function toggleContactModal(payload) {
 
 export function toggleAdded(payload){
     return {type: ADD_CONTACT, payload}
+}
+
+export function toggleContacts(payload) {
+    return {type: TOGGLE_CONTACTS, payload}
 }
 
 export function getChatMessages(payload) {
