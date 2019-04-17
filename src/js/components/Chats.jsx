@@ -45,6 +45,28 @@ class ConnectedChats extends Component {
         const {isLoading} = this.props.isLoading;
         const {chats} = this.props.chats;
         const {isChatting} = this.props.isChatting;
+        const chatsHTML = chats !== undefined ? <ListGroup className={"chat-groups"}>
+            {!isLoading ? chats.map(chat => {
+                return (
+                    <ListGroupItem className="justify-content-between" tag="button"
+                                   action key={chat.cid} id={"chat-" + chat.cid}
+                                   onClick={() => this.toggleChat(chat.cid, chat.name)}
+                                   value={chat.name}>
+                        <div className={"chat-group"}>
+                            <div className={"chat-img"}>
+                                <FontAwesomeIcon icon="user-circle"/>
+                            </div>
+                            <div className={"chat-ib"}>
+                                <h5>{chat.name}
+                                    <span className={"chat-date"}>{chat.created_on}</span>
+                                </h5>
+                                <p>{chat.message}</p>
+                            </div>
+                        </div>
+                        {/*<Badge pill>0</Badge>*/}
+                    </ListGroupItem>);
+            }) : <Spinner color="secondary"/>}
+        </ListGroup> : <br/>;
         return <React.Fragment>
             <Container className={"chats"}>
                 <div className={"chat-box"}>
@@ -59,28 +81,7 @@ class ConnectedChats extends Component {
                                         icon="search"/></InputGroupText>
                                 </InputGroupAddon>
                             </InputGroup>
-                            <ListGroup className={"chat-groups"}>
-                                {!isLoading ? chats.map(chat => {
-                                    return (
-                                        <ListGroupItem className="justify-content-between" tag="button"
-                                                       action key={chat.cid} id={"chat-" + chat.cid}
-                                                       onClick={() => this.toggleChat(chat.cid, chat.name)}
-                                                       value={chat.name}>
-                                            <div className={"chat-group"}>
-                                                <div className={"chat-img"}>
-                                                    <FontAwesomeIcon icon="user-circle"/>
-                                                </div>
-                                                <div className={"chat-ib"}>
-                                                    <h5>{chat.name}
-                                                        <span className={"chat-date"}>{chat.created_on}</span>
-                                                    </h5>
-                                                    <p>{chat.message}</p>
-                                                </div>
-                                            </div>
-                                            {/*<Badge pill>0</Badge>*/}
-                                        </ListGroupItem>);
-                                }) : <Spinner color="secondary"/>}
-                            </ListGroup>
+                            {chatsHTML}
                         </Col>
                         {/*Edit this part for chat messages*/}
                         <Col className="chats-container">
