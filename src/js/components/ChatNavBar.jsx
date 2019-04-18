@@ -1,36 +1,44 @@
 import React, {Component} from 'react';
-import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler} from "reactstrap";
+import {Alert, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler} from "reactstrap";
 import ChatNavItems from "./ChatNavItems.jsx";
 import Chats from "./Chats.jsx";
 import {connect} from "react-redux";
-import {toggleNavBar} from "../actions/chat-actions";
+import {dismissChatAlert, toggleNavBar} from "../actions/chat-actions";
 
 function mapDispatchToProps(dispatch) {
     return {
-        toggleNavBar: () => dispatch(toggleNavBar())
+        toggleNavBar: () => dispatch(toggleNavBar()),
+        dismissChatAlert: () => dispatch(dismissChatAlert())
     }
 }
 
 function mapStateToProps(state) {
     const {chatState} = state;
     return {
-        collapsed: chatState.collapsed
+        collapsed: chatState.collapsed,
+        chatError: chatState.chatError,
+        chatAlertVisible: chatState.chatAlertVisible
     }
 }
 
 class ConnectedChatNavBar extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     toggleNavBar = () => {
         this.props.toggleNavBar();
     };
 
+    onDismiss = () => {
+        this.props.dismissChatAlert()
+    };
+
     render() {
+        const {chatError, chatAlertVisible} = this.props;
+        const hasError = chatError.length > 0;
         return (
             <React.Fragment>
+                {hasError ? <Alert color="danger" isOpen={chatAlertVisible} toggle={this.onDismiss}>
+                    {chatError}
+                </Alert> : null}
                 <Navbar color="faded" light>
                     <NavbarBrand href="/" className="mr-auto">Bork</NavbarBrand>
                     <NavbarToggler onClick={this.toggleNavBar} className="mr-2"/>

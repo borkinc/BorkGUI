@@ -22,9 +22,7 @@
 }
 
 .chat-box, .chat-box > .row {
-    height: 93vh;
-    /*height: available;*/
-    /*height: 100%;*/
+    height: calc(100vh - 56px);
 }
 
 div.chat-inbox {
@@ -35,7 +33,8 @@ div.chat-inbox {
 
 .chat-groups.list-group {
     border-right: 1px solid #c4c4c4;
-    height: inherit;
+    /*Subtracting navbar and chat header heights*/
+    height: calc(100vh - 115px);
     overflow-y: scroll;
 }
 

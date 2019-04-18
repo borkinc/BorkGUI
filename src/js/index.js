@@ -1,8 +1,10 @@
 import store from "../js/store/index";
-import {logInUser, registerUser, toggleUserAuthTab} from "./actions/user-auth-actions";
+import {dismissUserAlert, logInUser, registerUser, toggleUserAuthTab} from "./actions/user-auth-actions";
 import {
     addChat,
+    addContact,
     dislikeMessage,
+    dismissChatAlert,
     getChats,
     likeMessage,
     postMessage,
@@ -10,8 +12,7 @@ import {
     toggleChat,
     toggleContactModal,
     toggleGroupModal,
-    toggleNavBar,
-    addContact
+    toggleNavBar
 } from "./actions/chat-actions";
 
 window.store = store;
@@ -29,3 +30,5 @@ window.dislikeMessage = dislikeMessage;
 window.postMessage = postMessage;
 window.toggleAttachment = toggleAttachment;
 window.addContact = addContact;
+window.dismissUserAlert = dismissUserAlert;
+window.dismissChatAlert = dismissChatAlert;
