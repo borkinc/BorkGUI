@@ -10,15 +10,18 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-    NavItem, Spinner
+    NavItem,
+    Spinner
 } from "reactstrap";
 import {
     addChat,
-    toggleContactModal,
-    toggleGroupModal,
     addContact,
+    getContacts,
+    removeContact,
     toggleAdded,
-    toggleContacts, getContacts, removeContact
+    toggleContactModal,
+    toggleContacts,
+    toggleGroupModal
 } from "../actions/chat-actions";
 import {connect} from "react-redux";
 import ListGroupItem from "reactstrap/es/ListGroupItem";
@@ -32,7 +35,8 @@ function mapDispatchToProps(dispatch) {
         toggleAdded: () => dispatch(toggleAdded()),
         toggleContacts: () => dispatch(toggleContacts()),
         getContacts: () => dispatch(getContacts()),
-        removeContact: contact_id => dispatch(removeContact(contact_id))
+        removeContact: contact_id => dispatch(removeContact(contact_id)),
+        // dismissChatAlert: () => dispatch(dismissChatAlert())
     }
 }
 
@@ -45,7 +49,9 @@ function mapStateToProps(state) {
         add_msg: chatState.add_msg,
         contactsModal: chatState.contactsModal,
         isLoading: chatState.isLoading,
-        contacts: chatState.contacts
+        contacts: chatState.contacts,
+        // chatError: chatState.chatError,
+        // chatAlertVisible: chatState.chatAlertVisible
     }
 }
 
@@ -118,6 +124,7 @@ class ConnectedChatNavItems extends Component {
     };
 
     render() {
+        const {add_msg, isLoading, contacts} = this.props;
         return (
             <React.Fragment>
                 <NavItem>
@@ -176,7 +183,7 @@ class ConnectedChatNavItems extends Component {
                         </ModalFooter>
                     </Modal>
                     <Modal isOpen={this.props.added} className={this.props.className}>
-                        <ModalHeader>{this.props.add_msg}</ModalHeader>
+                        <ModalHeader>{add_msg}</ModalHeader>
                         <ModalFooter>
                             <Button color="primary" onClick={this.toggleAddedContact}>Ok</Button>
                         </ModalFooter>
@@ -187,15 +194,15 @@ class ConnectedChatNavItems extends Component {
                     <Modal isOpen={this.props.contactsModal} className={this.props.className}>
                         <ModalBody>
                             <ListGroup>
-                                {!this.props.isLoading ? (
-                                    this.props.contacts.map( contact  => {
+                                {!isLoading ? (
+                                    contacts.map(contact => {
                                         return (<ListGroupItem className="justify-content-between"
                                                                id={"contact-" + contact.contact_id}>
-                                                <h5>{contact.first_name + " " + contact.last_name}</h5>
-                                                <Button color="link" onClick={this.removeContact}
-                                                        value={contact.uid}>Remove me</Button>
-                                                </ListGroupItem>)
-                                     })
+                                            <h5>{contact.first_name + " " + contact.last_name}</h5>
+                                            <Button color="link" onClick={this.removeContact}
+                                                    value={contact.uid}>Remove me</Button>
+                                        </ListGroupItem>)
+                                    })
                                 ) : (<Spinner color="secondary"/>)}
                             </ListGroup>
                         </ModalBody>
@@ -207,8 +214,7 @@ class ConnectedChatNavItems extends Component {
             </React.Fragment>
         )
     }
- }
-
+}
 
 
 const ChatNavItems = connect(mapStateToProps, mapDispatchToProps)(ConnectedChatNavItems);

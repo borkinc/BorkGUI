@@ -42,7 +42,6 @@ export function registerUser(payload) {
         }).then(response => {
                 dispatch({type: REGISTER_USER, payload: response.data});
         }).catch(error => {
-            console.log(error.response.data.message);
             dispatch({type: USER_ERROR, payload: error.response.data.message})
         })
     }

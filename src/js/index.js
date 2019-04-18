@@ -4,6 +4,7 @@ import {
     addChat,
     addContact,
     dislikeMessage,
+    dismissChatAlert,
     getChats,
     likeMessage,
     postMessage,
@@ -30,3 +31,4 @@ window.postMessage = postMessage;
 window.toggleAttachment = toggleAttachment;
 window.addContact = addContact;
 window.dismissUserAlert = dismissUserAlert;
+window.dismissChatAlert = dismissChatAlert;

@@ -42,9 +42,7 @@ class ConnectedChats extends Component {
     };
 
     render() {
-        const {isLoading} = this.props.isLoading;
-        const {chats} = this.props.chats;
-        const {isChatting} = this.props.isChatting;
+        const {isLoading, chats, isChatting} = this.props;
         const chatsHTML = chats !== undefined ? <ListGroup className={"chat-groups"}>
             {!isLoading ? chats.map(chat => {
                 return (

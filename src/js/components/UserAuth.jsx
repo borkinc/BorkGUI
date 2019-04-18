@@ -104,7 +104,7 @@ class ConnectedUserAuth extends Component {
             <React.Fragment>
                 {hasError ? <Alert color="danger" isOpen={this.props.userAlertVisible} toggle={this.onDismiss}>
                     {userAuthError}
-                </Alert> : <br/>}
+                </Alert> : null}
                 <div className="UserAuth-logo">
                     <img src={dog} className="UserAuth-logo" alt=""/>
                     <div className="UserAuth-tabs">
