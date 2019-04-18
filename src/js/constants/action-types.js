@@ -19,6 +19,8 @@ export const TOGGLE_NAVBAR = 'TOGGLE_NAVBAR';
 export const ADD_CHAT = 'ADD_CHAT';
 export const TOGGLE_GROUP_MODAL = 'TOGGLE_GROUP_MODAL';
 export const TOGGLE_CONTACT_MODAL = 'TOGGLE_CONTACT_MODAL';
+export const ADD_CHAT_ERROR = 'ADD_CHAT_ERROR';
+export const DISMISS_CHAT_ALERT_ERROR = 'DISMISS_CHAT_ALERT_ERROR';
 
 // Chats actions
 export const GET_CHATS = 'GET_CHATS';

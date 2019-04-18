@@ -58,9 +58,10 @@ class ConnectedChat extends Component {
     }
 
     componentDidMount() {
+        const {chatID} = this.props;
         this.timer = TimerMixin.setInterval(
             () => {
-                this.props.getChatMessages(this.props.chatID)
+                this.props.getChatMessages(chatID)
             }, 500)
     }
 
@@ -194,7 +195,7 @@ class ConnectedChat extends Component {
     };
 
     render() {
-        const {chatMessages} = this.props.chatMessages;
+        const {chatMessages} = this.props;
         return <React.Fragment>
             {/*<h2 className={"text-center"}>Chatting with {this.props.name}</h2>*/}
             <div className={"chat-messages"}>

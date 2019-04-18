@@ -1,7 +1,9 @@
 import {
     ADD_CHAT,
+    ADD_CHAT_ERROR,
     ADD_CONTACT,
     DISLIKE_MESSAGE,
+    DISMISS_CHAT_ALERT_ERROR,
     GET_CHAT_MESSAGES,
     GET_CHATS,
     GET_CONTACTS,
@@ -28,7 +30,9 @@ const initialState = {
     chatMessages: [],
     added: false,
     contactsModal: false,
-    contacts: []
+    contacts: [],
+    chatError: '',
+    chatAlertVisible: false
 };
 
 export default function ChatReducer(state = initialState, action) {
@@ -72,6 +76,17 @@ export default function ChatReducer(state = initialState, action) {
                 chats: [...state.chats, action.payload.chat]
             }
         }
+        case ADD_CHAT_ERROR: {
+            return Object.assign({}, state, {
+                chatError: action.payload,
+                chatAlertVisible: !state.chatAlertVisible
+            })
+        }
+        case DISMISS_CHAT_ALERT_ERROR: {
+            return Object.assign({}, state, {
+                chatAlertVisible: !state.chatAlertVisible
+            })
+        }
         case GET_CHAT_MESSAGES: {
             return Object.assign({}, state, {
                 chatMessages: action.payload.messages
@@ -111,8 +126,6 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case POST_MESSAGE: {
-            console.log(action.payload);
-            console.log(action.data);
             // let date = new Date();
             let message = {
                 // TODO: After phase 2, must get id from DB
