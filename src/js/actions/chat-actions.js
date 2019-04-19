@@ -50,7 +50,9 @@ export function addChat(payload) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         const data = new FormData();
         data.append('chat_name', payload.chatName);
-        data.append('members', payload.group_members);
+        if(payload.group_members.length !== 0){
+            data.append('members', payload.group_members);
+        }
         // Dummy thicc post to API
 
         axios.post(`${process.env.REACT_APP_API_URL}api/chats`, data, {
