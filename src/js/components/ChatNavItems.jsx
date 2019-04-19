@@ -156,7 +156,7 @@ class ConnectedChatNavItems extends Component {
                                     <Input type="select" name="selectMulti" onChange={this.handleMembersSelect} multiple>
                                         {this.props.contacts.map(contact => {
                                             return (
-                                                <option value={contact.uid}>{contact.first_name + " " + contact.last_name}</option>
+                                                <option key={contact.uid} value={contact.uid}>{contact.first_name + " " + contact.last_name}</option>
                                             )
 
                                             })
