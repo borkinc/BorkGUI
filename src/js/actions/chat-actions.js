@@ -1,17 +1,20 @@
 import {
-    ADD_CHAT,ADD_CONTACT,
+    ADD_CHAT,
+    ADD_CHAT_ERROR,
+    ADD_CONTACT,
     DISLIKE_MESSAGE,
+    DISMISS_CHAT_ALERT_ERROR,
     GET_CHAT_MESSAGES,
     GET_CHATS,
+    GET_CONTACTS,
     LIKE_MESSAGE,
     POST_MESSAGE,
     TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
-    TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR,
     TOGGLE_CONTACTS,
-    GET_CONTACTS
+    TOGGLE_GROUP_MODAL,
+    TOGGLE_NAVBAR
 } from "../constants/action-types";
 import axios from "axios";
 
@@ -29,14 +32,12 @@ export function toggleAttachment(payload) {
 
 export function getChats() {
     return function (dispatch) {
-        // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        // TODO: Must get all chats for current user after phase 2.
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/chats/7'
-            // {
-            //         headers: {
-            //             'Authorization': `Bearer ${access_token}`
-            //         }
-            //     }
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.get(`${process.env.REACT_APP_API_URL}api/chats`, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }
         )
             .then(response => {
                 dispatch({type: GET_CHATS, payload: response.data});
@@ -48,19 +49,26 @@ export function addChat(payload) {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         const data = new FormData();
-        data.append('chat_name', payload);
+        data.append('chat_name', payload.chatName);
+        data.append('members', payload.group_members);
+        // Dummy thicc post to API
 
-        // Dummy thicc post to API to simulate adding a new group chat
-        axios.post(`${process.env.REACT_APP_API_URL}` + "api/chats", data,
-            {
-                    headers: {
-                        'Authorization': `Bearer ${access_token}`
-                    }
+        axios.post(`${process.env.REACT_APP_API_URL}api/chats`, data, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`,
+                    'Content-Type': 'application/json'
                 }
+            }
         ).then(response => {
             dispatch({type: ADD_CHAT, payload: response.data});
-        });
+        }).catch(error => {
+            dispatch({type: ADD_CHAT_ERROR, payload: error.response.data.message})
+        })
     }
+}
+
+export function dismissChatAlert() {
+    return {type: DISMISS_CHAT_ALERT_ERROR}
 }
 
 export function addContact(payload) {
@@ -71,41 +79,54 @@ export function addContact(payload) {
         data.append('email', payload.contactEmail);
         data.append('phone_number', payload.contactPhoneNumber);
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.post(`${process.env.REACT_APP_API_URL}` + "api/contacts", data, {headers: {'Authorization':
-                    `Bearer ${access_token}`}}).then( response => {
+        axios.post(`${process.env.REACT_APP_API_URL}api/contacts`, data, {
+            headers: {
+                'Authorization':
+                    `Bearer ${access_token}`
+            }
+        }).then(response => {
 
                 return dispatch({type: ADD_CONTACT, payload: response.data});
 
             }
-        ).catch( error => {
+        ).catch(error => {
             return dispatch({type: ADD_CONTACT, payload: error.response.data});
         })
     }
 }
 
-export function getContacts(payload) {
+export function getContacts() {
     return function (dispatch) {
         const uid = JSON.parse(localStorage.getItem('user')).uid;
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(`${process.env.REACT_APP_API_URL}` + "api/contacts/" + `${uid}`, {headers: {'Authorization':
-                    `Bearer ${access_token}`}}).then(response => {
-                        return dispatch({type: GET_CONTACTS, payload: response.data})
+        axios.get(`${process.env.REACT_APP_API_URL}api/contacts/${uid}`, {
+            headers: {
+                'Authorization':
+                    `Bearer ${access_token}`
+            }
+        }).then(response => {
+            return dispatch({type: GET_CONTACTS, payload: response.data})
 
-            })
+        })
     }
 }
 
 export function removeContact(payload) {
-    return function (dispatch){
+    return function (dispatch) {
         const data = new FormData();
         data.append('contact_id', payload);
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.delete(`${process.env.REACT_APP_API_URL}` + "api/contacts", {data: data, headers: {'Authorization':
-                    `Bearer ${access_token}`}}).then(response => {
-                        return dispatch({type: GET_CONTACTS, payload: response.data})
+        axios.delete(`${process.env.REACT_APP_API_URL}api/contacts`, {
+            data: data, headers: {
+                'Authorization':
+                    `Bearer ${access_token}`
+            }
+        }).then(response => {
+            return dispatch({type: GET_CONTACTS, payload: response.data})
         })
     }
 }
+
 export function toggleGroupModal(payload) {
     return {type: TOGGLE_GROUP_MODAL, payload}
 }
@@ -114,7 +135,7 @@ export function toggleContactModal(payload) {
     return {type: TOGGLE_CONTACT_MODAL, payload}
 }
 
-export function toggleAdded(payload){
+export function toggleAdded(payload) {
     return {type: ADD_CONTACT, payload}
 }
 
@@ -124,13 +145,12 @@ export function toggleContacts(payload) {
 
 export function getChatMessages(payload) {
     return function (dispatch) {
-        // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'api/messages'
-            // {
-            //         headers: {
-            //             'Authorization': `Bearer ${access_token}`
-            //         }
-            //     }
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.get(`${process.env.REACT_APP_API_URL}api/chats/${payload}/messages`, {
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }
         ).then(response => {
             dispatch({type: GET_CHAT_MESSAGES, payload: response.data});
         })
@@ -161,14 +181,18 @@ export function dislikeMessage(payload) {
 
 export function postMessage(payload) {
     return function (dispatch) {
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         const data = new FormData();
         data.append('uid', payload.userID);
         data.append('message', payload.message);
         data.append('created_on', payload.datePosted);
         data.append('img', payload.picture);
 
-        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/chats/' + payload.chatID + '/messages', data,)
-            .then(response =>
+        axios.post(`${process.env.REACT_APP_API_URL}api/chats/${payload.chatID}/messages`, data, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        }).then(response =>
                 dispatch({type: POST_MESSAGE, payload, data: response.data}))
     }
 }

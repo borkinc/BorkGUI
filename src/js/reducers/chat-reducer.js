@@ -1,18 +1,20 @@
 import {
     ADD_CHAT,
+    ADD_CHAT_ERROR,
+    ADD_CONTACT,
     DISLIKE_MESSAGE,
+    DISMISS_CHAT_ALERT_ERROR,
     GET_CHAT_MESSAGES,
     GET_CHATS,
+    GET_CONTACTS,
     LIKE_MESSAGE,
     POST_MESSAGE,
     TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
-    TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR,
-    ADD_CONTACT,
     TOGGLE_CONTACTS,
-    GET_CONTACTS
+    TOGGLE_GROUP_MODAL,
+    TOGGLE_NAVBAR
 } from "../constants/action-types";
 
 const initialState = {
@@ -28,7 +30,9 @@ const initialState = {
     chatMessages: [],
     added: false,
     contactsModal: false,
-    contacts: []
+    contacts: [],
+    chatError: '',
+    chatAlertVisible: false
 };
 
 export default function ChatReducer(state = initialState, action) {
@@ -61,14 +65,8 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case GET_CHATS: {
-            // TODO: Remove this line after Phase 2. Only setting user for convenience.
-            localStorage.setItem('uid', action.payload.chat[0].uid);
-            const chat = action.payload.chat[0];
-            const date = new Date(chat.created_on);
-            chat.created_on = date.toDateString().substring(4, 10);
             return Object.assign({}, state, {
-                // TODO: Show all chats after finishing Phase 2. Dummy placeholder for testing purposes.
-                chats: [action.payload.chat[0]],
+                chats: action.payload.chats,
                 isLoading: false
             })
         }
@@ -77,6 +75,17 @@ export default function ChatReducer(state = initialState, action) {
                 ...state,
                 chats: [...state.chats, action.payload.chat]
             }
+        }
+        case ADD_CHAT_ERROR: {
+            return Object.assign({}, state, {
+                chatError: action.payload,
+                chatAlertVisible: !state.chatAlertVisible
+            })
+        }
+        case DISMISS_CHAT_ALERT_ERROR: {
+            return Object.assign({}, state, {
+                chatAlertVisible: !state.chatAlertVisible
+            })
         }
         case GET_CHAT_MESSAGES: {
             return Object.assign({}, state, {
@@ -93,7 +102,7 @@ export default function ChatReducer(state = initialState, action) {
             //     messages[chatIndex].likes += 1;
             // }
             let messages = state.chatMessages.slice();
-            let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
+            let chatIndex = messages.findIndex(message_ => message_.mid === action.payload.messageID);
             messages[chatIndex].likes += 1;
             return Object.assign({}, state, {
                 chatMessages: messages
@@ -110,15 +119,13 @@ export default function ChatReducer(state = initialState, action) {
             //     messages[chatIndex].dislikes += 1;
             // }
             let messages = state.chatMessages.slice();
-            let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
+            let chatIndex = messages.findIndex(message_ => message_.mid === action.payload.messageID);
             messages[chatIndex].dislikes += 1;
             return Object.assign({}, state, {
                 chatMessages: messages
             })
         }
         case POST_MESSAGE: {
-            console.log(action.payload);
-            console.log(action.data);
             // let date = new Date();
             let message = {
                 // TODO: After phase 2, must get id from DB
