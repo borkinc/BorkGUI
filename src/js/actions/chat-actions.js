@@ -58,7 +58,6 @@ export function addChat(payload) {
         axios.post(`${process.env.REACT_APP_API_URL}api/chats`, data, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`,
-                    'Content-Type': 'application/json'
                 }
             }
         ).then(response => {
