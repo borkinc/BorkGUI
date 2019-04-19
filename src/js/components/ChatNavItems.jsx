@@ -64,6 +64,7 @@ class ConnectedChatNavItems extends Component {
 
     toggleGroup = () => {
         this.props.toggleGroupModal();
+        this.props.getContacts();
     };
 
     toggleContact = () => {
@@ -132,6 +133,17 @@ class ConnectedChatNavItems extends Component {
                                     <Input type="text" name="chat-group" id="new-chat-group"
                                            placeholder="Enter group name..."
                                            onChange={this.handleChatNameChange}/>
+                                    <Label for="users-add-chat">Select users to add</Label>
+                                    <Input type="select" name="selectMulti" multiple>
+                                        {this.props.contacts.map(contact => {
+                                            return (
+                                                <option value={contact.uid}>{contact.first_name + " " + contact.last_name}</option>
+                                            )
+
+                                            })
+                                        }
+                                    </Input>
+
                                 </FormGroup>
                             </Form>
                         </ModalBody>

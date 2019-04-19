@@ -46,17 +46,17 @@ export function getChats() {
 
 export function addChat(payload) {
     return function (dispatch) {
-        // const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         const data = new FormData();
         data.append('chat_name', payload);
 
-        // Dummy post to API to simulate adding a new group chat
-        axios.post(`${process.env.REACT_APP_API_URL}` + "api/chats", data
-            // {
-            //         headers: {
-            //             'Authorization': `Bearer ${access_token}`
-            //         }
-            //     }
+        // Dummy thicc post to API to simulate adding a new group chat
+        axios.post(`${process.env.REACT_APP_API_URL}` + "api/chats", data,
+            {
+                    headers: {
+                        'Authorization': `Bearer ${access_token}`
+                    }
+                }
         ).then(response => {
             dispatch({type: ADD_CHAT, payload: response.data});
         });
