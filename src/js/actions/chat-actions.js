@@ -49,11 +49,15 @@ export function addChat(payload) {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         const data = new FormData();
-        data.append('chat_name', payload);
+        data.append('chat_name', payload.chatName);
+        if(payload.group_members.length !== 0){
+            data.append('members', payload.group_members);
+        }
+        // Dummy thicc post to API
 
         axios.post(`${process.env.REACT_APP_API_URL}api/chats`, data, {
                 headers: {
-                    'Authorization': `Bearer ${access_token}`
+                    'Authorization': `Bearer ${access_token}`,
                 }
             }
         ).then(response => {

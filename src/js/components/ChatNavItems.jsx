@@ -65,11 +65,13 @@ class ConnectedChatNavItems extends Component {
             contactLastName: '',
             contactPhoneNumber: '',
             contactEmail: '',
+            group_members: [],
         };
     }
 
     toggleGroup = () => {
         this.props.toggleGroupModal();
+        this.props.getContacts();
     };
 
     toggleContact = () => {
@@ -81,8 +83,8 @@ class ConnectedChatNavItems extends Component {
     };
 
     toggleGroupSubmit = () => {
-        const {chatName} = this.state;
-        this.props.addChat(chatName);
+        const {chatName, group_members} = this.state;
+        this.props.addChat({chatName, group_members});
         this.toggleGroup();
     };
 
@@ -123,6 +125,17 @@ class ConnectedChatNavItems extends Component {
         this.setState({contactPhoneNumber: event.target.value})
     };
 
+    handleMembersSelect = event => {
+        const options = event.target.options;
+        const values = [];
+        for (var i = 0; i<options.length; i++){
+            if (options[i].selected) {
+                values.push(options[i].value);
+            }
+        }
+        this.setState({group_members: values});
+    };
+
     render() {
         const {add_msg, isLoading, contacts} = this.props;
         return (
@@ -139,6 +152,17 @@ class ConnectedChatNavItems extends Component {
                                     <Input type="text" name="chat-group" id="new-chat-group"
                                            placeholder="Enter group name..."
                                            onChange={this.handleChatNameChange}/>
+                                    <Label for="users-add-chat">Select users to add</Label>
+                                    <Input type="select" name="selectMulti" onChange={this.handleMembersSelect} multiple>
+                                        {this.props.contacts.map(contact => {
+                                            return (
+                                                <option key={contact.uid} value={contact.uid}>{contact.first_name + " " + contact.last_name}</option>
+                                            )
+
+                                            })
+                                        }
+                                    </Input>
+
                                 </FormGroup>
                             </Form>
                         </ModalBody>
