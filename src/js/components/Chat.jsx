@@ -128,7 +128,7 @@ class ConnectedChat extends Component {
         const {mid, created_on, message, uid, likes, dislikes, image} = m;
         const date = new Date(created_on);
         const tz = jstz.determine().name();
-        const currentUser = parseInt(localStorage.getItem('uid'));
+        const currentUser = JSON.parse(localStorage.getItem('user')).uid;
         const messageFromMe = uid === currentUser;
         const msgContentDate = <span className={"msg-content-date"}><Moment tz={tz} fromNow>{date}</Moment></span>;
         const hasImage = image != null;
