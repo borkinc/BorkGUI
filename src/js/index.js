@@ -3,11 +3,14 @@ import {dismissUserAlert, logInUser, registerUser, toggleUserAuthTab} from "./ac
 import {
     addChat,
     addContact,
+    addUserToGroup,
     dislikeMessage,
     dismissChatAlert,
     getChats,
     likeMessage,
     postMessage,
+    removeUserFromGroup,
+    toggleAddUser,
     toggleAttachment,
     toggleChat,
     toggleContactModal,
@@ -32,3 +35,6 @@ window.toggleAttachment = toggleAttachment;
 window.addContact = addContact;
 window.dismissUserAlert = dismissUserAlert;
 window.dismissChatAlert = dismissChatAlert;
+window.toggleAddUser = toggleAddUser;
+window.addUserToGroup = addUserToGroup;
+window.removeUserFromGroup = removeUserFromGroup;

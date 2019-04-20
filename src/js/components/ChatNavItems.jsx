@@ -220,7 +220,8 @@ class ConnectedChatNavItems extends Component {
                             <ListGroup>
                                 {!isLoading ? (
                                     contacts.map(contact => {
-                                        return (<ListGroupItem className="justify-content-between"
+                                        return (<ListGroupItem key={"contact-" + contact.contact_id}
+                                                               className="justify-content-between"
                                                                id={"contact-" + contact.contact_id}>
                                             <h5>{contact.first_name + " " + contact.last_name}</h5>
                                             <Button color="link" onClick={this.removeContact}

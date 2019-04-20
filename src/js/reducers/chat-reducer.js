@@ -9,6 +9,8 @@ import {
     GET_CONTACTS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    REMOVE_USER_FROM_GROUP,
+    TOGGLE_ADD_USER,
     TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
@@ -32,7 +34,8 @@ const initialState = {
     contactsModal: false,
     contacts: [],
     chatError: '',
-    chatAlertVisible: false
+    chatAlertVisible: false,
+    addUserModal: false
 };
 
 export default function ChatReducer(state = initialState, action) {
@@ -62,6 +65,11 @@ export default function ChatReducer(state = initialState, action) {
         case TOGGLE_ATTACHMENT: {
             return Object.assign({}, state, {
                 attachmentModal: !state.attachmentModal
+            })
+        }
+        case TOGGLE_ADD_USER: {
+            return Object.assign({}, state, {
+                addUserModal: !state.addUserModal
             })
         }
         case GET_CHATS: {
@@ -168,7 +176,11 @@ export default function ChatReducer(state = initialState, action) {
                 isLoading: false
             })
         }
-
+        case REMOVE_USER_FROM_GROUP: {
+            return Object.assign({}, state, {
+                contacts: state.contacts
+            })
+        }
         default: {
             return state
         }

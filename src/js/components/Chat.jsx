@@ -7,18 +7,33 @@ import {
     CardBody,
     CardImg,
     CardText,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
     Form,
     FormGroup,
     Input,
     InputGroup,
     InputGroupAddon,
+    ListGroup,
     Modal,
     ModalBody,
     ModalFooter,
-    ModalHeader
+    ModalHeader,
+    UncontrolledButtonDropdown
 } from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {dislikeMessage, getChatMessages, likeMessage, postMessage, toggleAttachment} from "../actions/chat-actions";
+import {
+    addUserToGroup,
+    dislikeMessage,
+    getChatMessages,
+    getContacts,
+    likeMessage,
+    postMessage,
+    removeUserFromGroup,
+    toggleAddUser,
+    toggleAttachment
+} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
 import jstz from "jstimezonedetect";
@@ -26,6 +41,7 @@ import 'moment-timezone';
 import TimerMixin from "react-timer-mixin"
 
 import ImageUploader from 'react-images-upload';
+import ListGroupItem from "reactstrap/es/ListGroupItem";
 
 
 function mapDispatchToProps(dispatch) {
@@ -34,7 +50,11 @@ function mapDispatchToProps(dispatch) {
         likeMessage: userMessageID => dispatch(likeMessage(userMessageID)),
         dislikeMessage: userMessageID => dispatch(dislikeMessage(userMessageID)),
         postMessage: message => dispatch(postMessage(message)),
-        toggleAttachment: () => dispatch(toggleAttachment())
+        toggleAttachment: () => dispatch(toggleAttachment()),
+        getContacts: () => dispatch(getContacts()),
+        toggleAddUser: () => dispatch(toggleAddUser()),
+        addUserToGroup: contactID => dispatch(addUserToGroup(contactID)),
+        removeUserFromGroup: contactID => dispatch(removeUserFromGroup(contactID))
     }
 }
 
@@ -43,7 +63,9 @@ function mapStateToProps(state) {
     return {
         chatMessages: chatState.chatMessages,
         chatID: chatState.chatID,
-        attachmentModal: chatState.attachmentModal
+        attachmentModal: chatState.attachmentModal,
+        addUserModal: chatState.addUserModal,
+        contacts: chatState.contacts
     }
 }
 
@@ -53,7 +75,8 @@ class ConnectedChat extends Component {
         super(props);
         this.state = {
             message: '',
-            picture: null
+            picture: null,
+            username: ''
         }
     }
 
@@ -122,6 +145,28 @@ class ConnectedChat extends Component {
             picture: null
         });
         this.toggleAttachment();
+    };
+
+    toggleAddUser = () => {
+        this.props.toggleAddUser();
+        this.props.getContacts();
+    };
+
+    // toggleUserSubmit = event => {
+    //     event.preventDefault();
+    //     this.toggleAddUser();
+    // };
+
+    addContact = event => {
+        event.preventDefault();
+        const {chatID} = this.props;
+        this.props.addUserToGroup({chatID: chatID, contactID: event.target.value});
+    };
+
+    removeContact = event => {
+        event.preventDefault();
+        const {chatID} = this.props;
+        this.props.removeUserFromGroup({chatID: chatID, contactID: event.target.value});
     };
 
     renderMessage = m => {
@@ -195,9 +240,41 @@ class ConnectedChat extends Component {
     };
 
     render() {
-        const {chatMessages} = this.props;
+        const {chatMessages, contacts} = this.props;
         return <React.Fragment>
-            {/*<h2 className={"text-center"}>Chatting with {this.props.name}</h2>*/}
+            <UncontrolledButtonDropdown className={"float-right"}>
+                <DropdownToggle>
+                    <FontAwesomeIcon icon={"ellipsis-h"}/>
+                </DropdownToggle>
+                <DropdownMenu>
+                    {/*<DropdownItem header>Header</DropdownItem>*/}
+                    {/*<DropdownItem disabled>Action</DropdownItem>*/}
+                    <DropdownItem onClick={this.toggleAddUser}>Add user to group</DropdownItem>
+                    <DropdownItem divider/>
+                    <DropdownItem>Another Action</DropdownItem>
+                </DropdownMenu>
+            </UncontrolledButtonDropdown>
+            <Modal isOpen={this.props.addUserModal} toggle={this.toggleAddUser}
+                   className={this.props.className}>
+                <ModalHeader toggle={this.toggleAddUser}>Add user</ModalHeader>
+                <ModalBody>
+                    <ListGroup>
+                        {contacts.map(contact =>
+                            <ListGroupItem key={"add-contact-" + contact.contact_id} className="justify-content-between"
+                                           id={"contact-" + contact.contact_id}>
+                                <h5>{contact.first_name + " " + contact.last_name}</h5>
+                                <Button color="link" onClick={this.addContact}
+                                        value={contact.uid}>Add to group</Button>
+                                <Button color="link" onClick={this.removeContact}
+                                        value={contact.uid}>Remove from group</Button>
+                            </ListGroupItem>)}
+                    </ListGroup>
+                </ModalBody>
+                <ModalFooter>
+                    {/*<Button color="primary" onClick={this.toggleUserSubmit}>Add user</Button>*/}
+                    {/*<Button color="secondary" onClick={this.toggleAddUser}>Cancel</Button>*/}
+                </ModalFooter>
+            </Modal>
             <div className={"chat-messages"}>
                 <div className={"chat-history"}>
                     {chatMessages.map(m => this.renderMessage(m))}
