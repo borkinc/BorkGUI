@@ -9,6 +9,8 @@ import {
     GET_CONTACTS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    REMOVE_USER_FROM_GROUP,
+    TOGGLE_ADD_USER,
     TOGGLE_ATTACHMENT,
     TOGGLE_CHAT,
     TOGGLE_CONTACT_MODAL,
@@ -140,6 +142,10 @@ export function toggleContacts(payload) {
     return {type: TOGGLE_CONTACTS, payload}
 }
 
+export function toggleAddUser(payload) {
+    return {type: TOGGLE_ADD_USER, payload}
+}
+
 export function getChatMessages(payload) {
     return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
@@ -190,6 +196,38 @@ export function postMessage(payload) {
                 'Authorization': `Bearer ${access_token}`
             }
         }).then(response =>
-                dispatch({type: POST_MESSAGE, payload, data: response.data}))
+            dispatch({type: POST_MESSAGE, payload, data: response.data}))
+    }
+}
+
+export function addUserToGroup(payload) {
+    return function (dispatch) {
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        const data = new FormData();
+        data.append('contact_id', payload.contactID);
+
+        axios.post(`${process.env.REACT_APP_API_URL}api/chats/${payload.chatID}/members`, data, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        }).then(response =>
+            dispatch({type: ADD_CONTACT, payload: response.data}))
+    }
+}
+
+
+export function removeUserFromGroup(payload) {
+    return function (dispatch) {
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        const data = new FormData();
+        data.append('contact_id', payload.contactID);
+
+        axios.delete(`${process.env.REACT_APP_API_URL}api/chats/${payload.chatID}/members`, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            },
+            data: data
+        }).then(response =>
+            dispatch({type: REMOVE_USER_FROM_GROUP, payload: response.data}))
     }
 }

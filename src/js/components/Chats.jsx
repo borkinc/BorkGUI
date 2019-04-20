@@ -83,7 +83,7 @@ class ConnectedChats extends Component {
                         </Col>
                         {/*Edit this part for chat messages*/}
                         <Col className="chats-container">
-                            {isChatting ? <Chat/> : <br/>}
+                            {isChatting ? <Chat/> : null}
                         </Col>
                     </Row></div>
             </Container>

@@ -4,6 +4,7 @@ import {Route} from "react-router";
 import ChatNavBar from "./js/components/ChatNavBar.jsx";
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
+    faEllipsisH,
     faPaperclip,
     faPaperPlane,
     faSearch,
@@ -14,7 +15,7 @@ import {
 import UserAuth from "./js/components/UserAuth";
 
 
-library.add(faSearch, faUserCircle, faThumbsUp, faThumbsDown, faPaperPlane, faPaperclip);
+library.add(faSearch, faUserCircle, faThumbsUp, faThumbsDown, faPaperPlane, faPaperclip, faEllipsisH);
 
 const App = () => {
 
