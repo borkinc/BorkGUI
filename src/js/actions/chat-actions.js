@@ -166,24 +166,35 @@ export function getChatMessages(payload) {
 
 export function likeMessage(payload) {
     // TODO: Revert after Phase 2
-    // const {messageID} = payload;
-    // return function(dispatch){
-    //     axios.get(`${process.env.REACT_APP_API_URL}` + '/messages/' + messageID + '/like')
-    //         .then(response =>
-    //             dispatch({type: LIKE_MESSAGE, payload, data: response.data}))
-    // }
-    return {type: LIKE_MESSAGE, payload}
+    const {messageID} = payload;
+    return function(dispatch){
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+
+        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/messages/' + messageID + '/like',{}, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        }).then(response => {
+            dispatch({type: LIKE_MESSAGE, payload, data: response.data})
+        })
+
+    };
 }
 
 export function dislikeMessage(payload) {
     // TODO: Revert after Phase 2
-    // const {messageID} = payload;
-    // return function(dispatch){
-    //     axios.get(`${process.env.REACT_APP_API_URL}` + '/messages/' + messageID + '/dislike')
-    //         .then(response =>
-    //             dispatch({type: DISLIKE_MESSAGE, payload, data: response.data}))
-    // }
-    return {type: DISLIKE_MESSAGE, payload}
+    const {messageID} = payload;
+    return function(dispatch){
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+
+        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/messages/' + messageID + '/dislike', {}, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        })
+            .then(response =>
+                dispatch({type: DISLIKE_MESSAGE, payload, data: response.data}))
+    }
 }
 
 export function postMessage(payload) {
