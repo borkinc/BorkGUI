@@ -24,6 +24,7 @@ const App = () => {
             {/*TODO: Revert back for phase 3*/}
             <Route exact path="/" component={UserAuth}/>
             <Route path="/chats" component={ChatNavBar}/>
+            <Route path="/stats" component={Stats}/>
         </div>
     );
 };
