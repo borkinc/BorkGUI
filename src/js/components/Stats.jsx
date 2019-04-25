@@ -18,8 +18,7 @@ class Stats extends Component {
     getTrendingHashtags = () => {
         axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/trending').then(
             response => {
-                console.log(response.data);
-                const data = [["Hashtags", "number"]];
+                const data = [["Hashtags", "Position"]];
                 for (var i=0;i<response.data.length;i++){
                     data.push([response.data[i].hashtag, response.data[i].position])
                 }
@@ -29,8 +28,36 @@ class Stats extends Component {
         )
     };
 
+    getNumPosts = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/trending').then(
+            response => {
+                const
+            })
+    };
+
     render() {
         return (
+            <div>
+                <Chart
+                    width={'500px'}
+                    height={'300px'}
+                    chartType="Table"
+                    data={this.state.trending_hashtags}
+                    options={{
+                        title: 'Trending hashtags',
+                        chartArea: { width: '50%' },
+                        hAxis: {
+                            title: 'Hashtags',
+
+                        },
+                        vAxis: {
+                            title: 'Position',
+                            minValue: 0,
+                        },
+                    }}
+                    bars="vertical"
+                    // For tests
+                />
             <Chart
                 width={'500px'}
                 height={'300px'}
@@ -38,20 +65,20 @@ class Stats extends Component {
                 data={this.state.trending_hashtags}
                 options={{
                     title: 'Trending hashtags',
-                    chartArea: { width: '50%' },
+                        chartArea: { width: '50%' },
                     hAxis: {
                         title: 'Hashtags',
 
                     },
                     vAxis: {
                         title: 'Position',
-                        minValue: 0,
+                            minValue: 0,
                     },
                 }}
                 bars="vertical"
-                // For tests
-            />    
-
+                    // For tests
+            />
+            </div>
         )
     }
 }
