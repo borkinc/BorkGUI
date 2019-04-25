@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import {Route} from "react-router";
 import ChatNavBar from "./js/components/ChatNavBar.jsx";
+import Stats from "./js/components/Stats";
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
     faEllipsisH,
@@ -24,6 +25,7 @@ const App = () => {
             {/*TODO: Revert back for phase 3*/}
             <Route exact path="/" component={UserAuth}/>
             <Route path="/chats" component={ChatNavBar}/>
+            <Route path="/stats" component={Stats}/>
         </div>
     );
 };
