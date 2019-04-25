@@ -69,7 +69,7 @@ class Stats extends Component {
                 data={this.state.num_daily_posts}
                 options={{
                     title: 'Number of messages',
-                        chartArea: { width: '50%' , height: '100%'},
+                        chartArea: { width: '50%' , height: '70%'},
                     hAxis: {
                         title: 'Number of messages',
 
