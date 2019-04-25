@@ -13,6 +13,7 @@ class Stats extends Component {
     }
     componentDidMount() {
         this.getTrendingHashtags();
+        this.getNumPosts();
     }
 
     getTrendingHashtags = () => {
@@ -29,9 +30,13 @@ class Stats extends Component {
     };
 
     getNumPosts = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/trending').then(
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/messages').then(
             response => {
-                const
+                const data = [["Day", "Number of Posts"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                this.setState({num_daily_posts: data});
             })
     };
 
@@ -55,24 +60,22 @@ class Stats extends Component {
                             minValue: 0,
                         },
                     }}
-                    bars="vertical"
                     // For tests
                 />
             <Chart
                 width={'500px'}
                 height={'300px'}
-                chartType="Table"
-                data={this.state.trending_hashtags}
+                chartType="BarChart"
+                data={this.state.num_daily_posts}
                 options={{
-                    title: 'Trending hashtags',
-                        chartArea: { width: '50%' },
+                    title: 'Number of messages',
+                        chartArea: { width: '50%' , height: '100%'},
                     hAxis: {
-                        title: 'Hashtags',
+                        title: 'Number of messages',
 
                     },
                     vAxis: {
-                        title: 'Position',
-                            minValue: 0,
+                        title: 'Day',
                     },
                 }}
                 bars="vertical"
