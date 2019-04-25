@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import {Route} from "react-router";
 import ChatNavBar from "./js/components/ChatNavBar.jsx";
+import Stats from "./js/components/Stats";
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
     faEllipsisH,
