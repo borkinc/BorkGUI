@@ -246,3 +246,11 @@ export function removeUserFromGroup(payload) {
             dispatch({type: REMOVE_USER_FROM_GROUP, payload: response.data}))
     }
 }
+
+export function deleteChat(payload) {
+    return function (dispatch) {
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        axios.delete(`${process.env.REACT_APP_API_URL}api/chats/${payload}`, {
+            headers: {'Authorization': `Bearer ${access_token}`}})
+    }
+}

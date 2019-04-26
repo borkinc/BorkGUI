@@ -15,7 +15,8 @@ import {
     toggleChat,
     toggleContactModal,
     toggleGroupModal,
-    toggleNavBar
+    toggleNavBar,
+    deleteChat
 } from "./actions/chat-actions";
 
 window.store = store;
@@ -38,3 +39,4 @@ window.dismissChatAlert = dismissChatAlert;
 window.toggleAddUser = toggleAddUser;
 window.addUserToGroup = addUserToGroup;
 window.removeUserFromGroup = removeUserFromGroup;
+window.deleteChat = deleteChat;

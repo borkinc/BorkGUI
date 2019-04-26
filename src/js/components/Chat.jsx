@@ -32,7 +32,8 @@ import {
     postMessage,
     removeUserFromGroup,
     toggleAddUser,
-    toggleAttachment
+    toggleAttachment,
+    deleteChat
 } from "../actions/chat-actions";
 import {connect} from "react-redux";
 import Moment from "react-moment";
@@ -54,7 +55,8 @@ function mapDispatchToProps(dispatch) {
         getContacts: () => dispatch(getContacts()),
         toggleAddUser: () => dispatch(toggleAddUser()),
         addUserToGroup: contactID => dispatch(addUserToGroup(contactID)),
-        removeUserFromGroup: contactID => dispatch(removeUserFromGroup(contactID))
+        removeUserFromGroup: contactID => dispatch(removeUserFromGroup(contactID)),
+        deleteChat: chatID => dispatch(deleteChat(chatID)),
     }
 }
 
@@ -169,6 +171,11 @@ class ConnectedChat extends Component {
         this.props.removeUserFromGroup({chatID: chatID, contactID: event.target.value});
     };
 
+    deleteChat = () => {
+        const {chatID} = this.props;
+        this.props.deleteChat(chatID);
+    };
+
     renderMessage = m => {
         const {mid, created_on, message, uid, likes, dislikes, image} = m;
         const date = new Date(created_on);
@@ -251,7 +258,7 @@ class ConnectedChat extends Component {
                     {/*<DropdownItem disabled>Action</DropdownItem>*/}
                     <DropdownItem onClick={this.toggleAddUser}>Add user to group</DropdownItem>
                     <DropdownItem divider/>
-                    <DropdownItem>Another Action</DropdownItem>
+                    <DropdownItem onClick={this.deleteChat}>Delete Chat</DropdownItem>
                 </DropdownMenu>
             </UncontrolledButtonDropdown>
             <Modal isOpen={this.props.addUserModal} toggle={this.toggleAddUser}
