@@ -31,4 +31,3 @@ export const TOGGLE_CHAT = 'TOGGLE_CHAT';
 export const ADD_CONTACT = 'ADD_CONTACT';
 export const TOGGLE_CONTACTS = 'TOGGLE_CONTACTS';
 export const GET_CONTACTS = 'GET_CONTACTS';
-

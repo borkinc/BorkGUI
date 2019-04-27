@@ -8,12 +8,19 @@ class Stats extends Component {
         this.state = {
             trending_hashtags: [],
             num_daily_posts: [],
+            num_daily_likes: [],
+            num_daily_replies: [],
+            num_daily_dislikes: [],
+            active_users: [],
         }
 
     }
     componentDidMount() {
         this.getTrendingHashtags();
         this.getNumPosts();
+        this.getNumLikes();
+        this.getNumReplies();
+        this.getNumDislikes();
     }
 
     getTrendingHashtags = () => {
@@ -32,56 +39,178 @@ class Stats extends Component {
     getNumPosts = () => {
         axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/messages').then(
             response => {
-                const data = [["Day", "Number of Posts"]];
+                const data = [["Day", "Number of Messages"]];
                 for (var i=0;i<response.data.length;i++){
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 this.setState({num_daily_posts: data});
             })
     };
+    getNumLikes = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/likes').then(
+            response => {
+                const data = [["Day", "Number of Likes"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                console.log(data);
+                this.setState({num_daily_likes: data});
+            })
+    };
+
+    getNumReplies = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/replies').then(
+            response => {
+                const data = [["Day", "Number of Replies"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                console.log(data);
+                this.setState({num_daily_replies: data});
+            })
+    };
+
+    getNumDislikes = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/dislikes').then(
+            response => {
+                const data = [["Day", "Number of Dislikes"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                console.log(data);
+                this.setState({num_daily_dislikes: data});
+            })
+    };
+
+    getActiveUsers = () => {
+        //this is going to be interesting not actually working right now
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/active').then(
+            response => {
+                const data = [["Users", "Position"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                console.log(data);
+                this.setState({num_daily_likes: data});
+            })
+    };
+
 
     render() {
         return (
-            <div>
-                <Chart
+            <React.Fragment>
+                <h1>Trending hashtags</h1>
+                <div>
+                    <Chart
+                        width={'500px'}
+                        height={'300px'}
+                        chartType="Table"
+                        data={this.state.trending_hashtags}
+                        options={{
+                            title: 'Trending hashtags',
+                            chartArea: { width: '50%' },
+                            hAxis: {
+                                title: 'Hashtags',
+
+                            },
+                            vAxis: {
+                                title: 'Position',
+                                minValue: 0,
+                            },
+                        }}
+                        // For tests
+                    />
+                    <h1>Number of messages per day</h1>
+                    <Chart
                     width={'500px'}
                     height={'300px'}
-                    chartType="Table"
-                    data={this.state.trending_hashtags}
+                    chartType="BarChart"
+                    data={this.state.num_daily_posts}
                     options={{
-                        title: 'Trending hashtags',
-                        chartArea: { width: '50%' },
+
+                        chart: {
+                            title: 'Number of daily messages',
+                        },
+                            chartArea: { width: '50%' , height: '70%'},
                         hAxis: {
-                            title: 'Hashtags',
+                            title: 'Number of messages',
 
                         },
                         vAxis: {
-                            title: 'Position',
-                            minValue: 0,
+                            title: 'Day',
                         },
                     }}
-                    // For tests
+                    bars="vertical"
                 />
-            <Chart
-                width={'500px'}
-                height={'300px'}
-                chartType="BarChart"
-                data={this.state.num_daily_posts}
-                options={{
-                    title: 'Number of messages',
-                        chartArea: { width: '50%' , height: '70%'},
-                    hAxis: {
-                        title: 'Number of messages',
+                    <h1>Number of likes per day</h1>
+                    <Chart
+                        width={'500px'}
+                        height={'300px'}
+                        chartType="BarChart"
+                        data={this.state.num_daily_likes}
+                        options={{
 
-                    },
-                    vAxis: {
-                        title: 'Day',
-                    },
-                }}
-                bars="vertical"
-                    // For tests
-            />
-            </div>
+                            chart: {
+                                title: 'Number of daily likes',
+                            },
+                            chartArea: { width: '50%' , height: '70%'},
+                            hAxis: {
+                                title: 'Number of likes',
+
+                            },
+                            vAxis: {
+                                title: 'Day',
+                            },
+                        }}
+                        bars="vertical"
+                    />
+                    <h1>Number of dislikes per day</h1>
+                    <Chart
+                        width={'500px'}
+                        height={'300px'}
+                        chartType="BarChart"
+                        data={this.state.num_daily_dislikes}
+                        options={{
+
+                            chart: {
+                                title: 'Number of daily dislikes',
+                            },
+                            chartArea: { width: '50%' , height: '70%'},
+                            hAxis: {
+                                title: 'Number of dislikes',
+
+                            },
+                            vAxis: {
+                                title: 'Day',
+                            },
+                        }}
+                        bars="vertical"
+                    />
+                    <h1>Number of replies per day</h1>
+                    <Chart
+                        width={'500px'}
+                        height={'300px'}
+                        chartType="BarChart"
+                        data={this.state.num_daily_replies}
+                        options={{
+
+                            chart: {
+                                title: 'Number of daily replies',
+                            },
+                            chartArea: { width: '50%' , height: '70%'},
+                            hAxis: {
+                                title: 'Number of replies',
+
+                            },
+                            vAxis: {
+                                title: 'Day',
+                            },
+                        }}
+                        bars="vertical"
+                    />
+
+                </div>
+            </React.Fragment>
         )
     }
 }
