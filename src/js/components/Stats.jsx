@@ -208,7 +208,16 @@ class Stats extends Component {
                         }}
                         bars="vertical"
                     />
-
+                    <h1>Active users per day</h1>
+                    {this.state.active_users.map(users_per_day =>
+                        <h2>users_per_day.day</h2>
+                        <Chart
+                            width={'500px'}
+                            height={'300px'}
+                            chartType="Table"
+                            data={users_per_day.users}
+                        />
+                    )}
                 </div>
             </React.Fragment>
         )
