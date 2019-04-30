@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import {Chart} from "react-google-charts";
+import Input from "reactstrap/es/Input";
+import Button from "reactstrap/es/Button";
 
 class Stats extends Component {
     constructor(props){
@@ -12,6 +14,15 @@ class Stats extends Component {
             num_daily_replies: [],
             num_daily_dislikes: [],
             active_users: [],
+            uid_messages: '',
+            num_user_messages: [],
+            username_messages: '',
+            pid_replies: '',
+            num_pid_replies: [],
+            pid_likes: '',
+            num_pid_likes: [],
+            pid_dislikes: '',
+            num_pid_dislikes: []
         }
 
     }
@@ -21,6 +32,7 @@ class Stats extends Component {
         this.getNumLikes();
         this.getNumReplies();
         this.getNumDislikes();
+        this.getActiveUsers();
     }
 
     getTrendingHashtags = () => {
@@ -86,15 +98,83 @@ class Stats extends Component {
         //this is going to be interesting not actually working right now
         axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/active').then(
             response => {
-                const data = [["Users", "Position"]];
+                const active_users = [];
                 for (var i=0;i<response.data.length;i++){
-                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                    const data = [["Users", "Position"]];
+                    for (var j=0;j<response.data[i].users.length;j++){
+                        data.push([j+1, response.data[i].users[j].username]);
+                    }
+                    active_users.push({data: data, day: response.data[i].day});
                 }
-                console.log(data);
-                this.setState({num_daily_likes: data});
+                this.setState({active_users: active_users});
+                console.log(active_users);
+
             })
     };
 
+    getUserNumMessages = () => {
+      axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/users/' + `${this.state.uid_messages}` + '/messages').then(
+          response => {
+              const data = [["Day", "Number of Messages"]];
+              for (var i=0;i<response.data.length;i++){
+                  data.push([response.data[i].day, parseInt(response.data[i].total)])
+              }
+              this.setState({num_user_messages: data, username_messages: response.data[0].username});
+          }
+      )
+    };
+
+    getPhotoNumReplies = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/photos/' + `${this.state.pid_replies}` + '/replies').then(
+            response => {
+                const data = [["Day", "Number of replies"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                this.setState({num_pid_replies: data});
+            }
+        )
+    };
+
+    getPhotoNumLikes = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/photos/' + `${this.state.pid_likes}` + '/likes').then(
+            response => {
+                const data = [["Day", "Number of Likes"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                this.setState({num_pid_likes: data});
+            }
+        )
+    };
+
+    getPhotoNumDislikes = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/photos/' + `${this.state.pid_dislikes}` + '/dislikes').then(
+            response => {
+                const data = [["Day", "Number of Dislikes"]];
+                for (var i=0;i<response.data.length;i++){
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                this.setState({num_pid_dislikes: data});
+            }
+        )
+    };
+
+    handleUserMessageChange = event => {
+        this.setState({uid_messages: event.target.value})
+    };
+
+    handlePhotoRepliesChange = event => {
+        this.setState({pid_replies: event.target.value})
+    };
+
+    handlePhotoLikesChange = event =>{
+        this.setState({pid_likes: event.target.value})
+    };
+
+    handlePhotoDislikesChange = event =>{
+        this.setState({pid_dislikes: event.target.value})
+    };
 
     render() {
         return (
@@ -208,8 +288,56 @@ class Stats extends Component {
                         }}
                         bars="vertical"
                     />
+                    <h1>Active users per day</h1>
+                    {this.state.active_users.map((users_per_day) => {
+                        return (
+                            <React.Fragment>
+                            <h4>{users_per_day.day}</h4>
+                            <Chart
+                            width={'500px'}
+                            height={'300px'}
+                            chartType="Table"
+                            data={users_per_day.data}
+                            options={{
+                                title: 'Active Users',
+                                chartArea: { width: '50%' },
+                                hAxis: {
+                                    title: 'Username',
 
+                                },
+                                vAxis: {
+                                    title: 'Position',
+                                    minValue: 0,
+                                },
+                            }}
+                            // For tests
+                            /> </React.Fragment>)
+                    })}
                 </div>
+                <h1>Total messages per user</h1>
+                <Input type="text" onChange={this.handleUserMessageChange}/>
+                <Button onClick={this.getUserNumMessages}>Get data</Button>
+                {this.state.username_messages !== '' ? (
+                    <Chart chartType="Table" data={this.state.num_user_messages}/>
+                ) : (<p>Enter uid</p>)}
+                <h1>Total replies per photo</h1>
+                <Input type="text" onChange={this.handlePhotoRepliesChange}/>
+                <Button onClick={this.getPhotoNumReplies}>Get data</Button>
+                {this.state.num_pid_replies !== [] ? (
+                    <Chart chartType="Table" data={this.state.num_pid_replies}/>
+                ) : (<p>Enter pid</p>)}
+                <h1>Total likes per photo</h1>
+                <Input type="text" onChange={this.handlePhotoLikesChange}/>
+                <Button onClick={this.getPhotoNumLikes}>Get data</Button>
+                {this.state.num_pid_likes !== [] ? (
+                    <Chart chartType="Table" data={this.state.num_pid_likes}/>
+                ) : (<p>Enter pid</p>)}
+                <h1>Total dislikes per photo</h1>
+                <Input type="text" onChange={this.handlePhotoDislikesChange}/>
+                <Button onClick={this.getPhotoNumDislikes}>Get data</Button>
+                {this.state.num_pid_dislikes !== [] ? (
+                    <Chart chartType="Table" data={this.state.num_pid_dislikes}/>
+                ) : (<p>Enter pid</p>)}
             </React.Fragment>
         )
     }
