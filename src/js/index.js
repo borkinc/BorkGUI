@@ -1,12 +1,18 @@
 import store from "../js/store/index";
-import {logInUser, registerUser, toggleUserAuthTab} from "./actions/user-auth-actions";
+import {dismissUserAlert, logInUser, registerUser, toggleUserAuthTab} from "./actions/user-auth-actions";
 import {
     addChat,
+    addContact,
+    addUserToGroup,
+    deleteChat,
     dislikeMessage,
+    dismissChatAlert,
     getChats,
     likeMessage,
     postMessage,
     postMessageReply,
+    removeUserFromGroup,
+    toggleAddUser,
     toggleAttachment,
     toggleChat,
     toggleContactModal,
@@ -29,5 +35,12 @@ window.likeMessage = likeMessage;
 window.dislikeMessage = dislikeMessage;
 window.postMessage = postMessage;
 window.toggleAttachment = toggleAttachment;
+window.addContact = addContact;
+window.dismissUserAlert = dismissUserAlert;
+window.dismissChatAlert = dismissChatAlert;
+window.toggleAddUser = toggleAddUser;
+window.addUserToGroup = addUserToGroup;
+window.removeUserFromGroup = removeUserFromGroup;
+window.deleteChat = deleteChat;
 window.toggleReply = toggleReply;
 window.postMessageReply = postMessageReply;

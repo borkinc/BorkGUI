@@ -26,10 +26,6 @@ function mapStateToProps(state) {
 
 class ConnectedChats extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.props.getChats()
     }
@@ -46,56 +42,53 @@ class ConnectedChats extends Component {
     };
 
     render() {
-        return (
-            <React.Fragment>
-                <Container className={"chats"}>
-                    <div className={"chat-box"}>
-                        <Row>
-                            <Col xs="6" sm="4" className={"chat-inbox"}>
-                                <InputGroup className={"chat-header"}>
-                                    <h4 className={"chat-heading"}>Recent</h4>
-                                    <Input className={"chat-searchbar"} placeholder={"Search"}
-                                           style={{"boxShadow": "none"}}/>
-                                    <InputGroupAddon addonType="append">
-                                        <InputGroupText className={"search-icon"}><FontAwesomeIcon
-                                            icon="search"/></InputGroupText>
-                                    </InputGroupAddon>
-                                </InputGroup>
-                                <ListGroup className={"chat-groups"}>
-                                    {!this.props.isLoading ? (
-                                        this.props.chats.map(chat => {
-                                            return (
-                                                <ListGroupItem className="justify-content-between" tag="button"
-                                                               action key={chat.cid} id={"chat-" + chat.cid}
-                                                               onClick={() => this.toggleChat(chat.cid, chat.name)}
-                                                               value={chat.name}>
-                                                    <div className={"chat-group"}>
-                                                        <div className={"chat-img"}>
-                                                            <FontAwesomeIcon icon="user-circle"/>
-                                                        </div>
-                                                        <div className={"chat-ib"}>
-                                                            <h5>{chat.name}
-                                                                <span className={"chat-date"}>{chat.created_on}</span>
-                                                            </h5>
-                                                            <p>{chat.message}</p>
-                                                        </div>
-                                                    </div>
-                                                    {/*<Badge pill>0</Badge>*/}
-                                                </ListGroupItem>);
-                                        })
-                                    ) : (<Spinner color="secondary"/>)}
-                                </ListGroup>
-                            </Col>
-                            {/*Edit this part for chat messages*/}
-                            <Col className="chats-container">
-                                {this.props.isChatting ? (<Chat/>) : (
-                                    <br/>)
-                                }
-                            </Col>
-                        </Row></div>
-                </Container>
-            </React.Fragment>
-        )
+        const {isLoading, chats, isChatting} = this.props;
+        const chatsHTML = chats !== undefined ? <ListGroup className={"chat-groups"}>
+            {!isLoading ? chats.map(chat => {
+                const chatDate = new Date(chat.created_on).toDateString();
+                return (
+                    <ListGroupItem className="justify-content-between" tag="button"
+                                   action key={chat.cid} id={"chat-" + chat.cid}
+                                   onClick={() => this.toggleChat(chat.cid, chat.name)}
+                                   value={chat.name}>
+                        <div className={"chat-group"}>
+                            <div className={"chat-img"}>
+                                <FontAwesomeIcon icon="user-circle"/>
+                            </div>
+                            <div className={"chat-ib"}>
+                                <h5>{chat.name}
+                                    <span className={"chat-date"}>{chatDate}</span>
+                                </h5>
+                                <p>{chat.message}</p>
+                            </div>
+                        </div>
+                        {/*<Badge pill>0</Badge>*/}
+                    </ListGroupItem>);
+            }) : <Spinner color="secondary"/>}
+        </ListGroup> : <br/>;
+        return <React.Fragment>
+            <Container className={"chats"}>
+                <div className={"chat-box"}>
+                    <Row>
+                        <Col xs="6" sm="4" className={"chat-inbox"}>
+                            <InputGroup className={"chat-header"}>
+                                <h4 className={"chat-heading"}>Recent</h4>
+                                <Input className={"chat-searchbar"} placeholder={"Search"}
+                                       style={{"boxShadow": "none"}}/>
+                                <InputGroupAddon addonType="append">
+                                    <InputGroupText className={"search-icon"}><FontAwesomeIcon
+                                        icon="search"/></InputGroupText>
+                                </InputGroupAddon>
+                            </InputGroup>
+                            {chatsHTML}
+                        </Col>
+                        {/*Edit this part for chat messages*/}
+                        <Col className="chats-container">
+                            {isChatting ? <Chat/> : null}
+                        </Col>
+                    </Row></div>
+            </Container>
+        </React.Fragment>
             ;
     }
 }
