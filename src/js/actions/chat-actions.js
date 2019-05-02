@@ -9,6 +9,7 @@ import {
     GET_CONTACTS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    POST_MESSAGE_REPLY,
     REMOVE_USER_FROM_GROUP,
     TOGGLE_ADD_USER,
     TOGGLE_ATTACHMENT,
@@ -16,7 +17,8 @@ import {
     TOGGLE_CONTACT_MODAL,
     TOGGLE_CONTACTS,
     TOGGLE_GROUP_MODAL,
-    TOGGLE_NAVBAR
+    TOGGLE_NAVBAR,
+    TOGGLE_REPLY
 } from "../constants/action-types";
 import axios from "axios";
 
@@ -52,7 +54,7 @@ export function addChat(payload) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         const data = new FormData();
         data.append('chat_name', payload.chatName);
-        if(payload.group_members.length !== 0){
+        if (payload.group_members.length !== 0) {
             data.append('members', payload.group_members);
         }
         // Dummy thicc post to API
@@ -167,10 +169,10 @@ export function getChatMessages(payload) {
 export function likeMessage(payload) {
     // TODO: Revert after Phase 2
     const {messageID} = payload;
-    return function(dispatch){
+    return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
 
-        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/messages/' + messageID + '/like',{}, {
+        axios.post(`${process.env.REACT_APP_API_URL}api/messages/${messageID}/like`, {}, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -184,10 +186,10 @@ export function likeMessage(payload) {
 export function dislikeMessage(payload) {
     // TODO: Revert after Phase 2
     const {messageID} = payload;
-    return function(dispatch){
+    return function (dispatch) {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
 
-        axios.post(`${process.env.REACT_APP_API_URL}` + 'api/messages/' + messageID + '/dislike', {}, {
+        axios.post(`${process.env.REACT_APP_API_URL}api/messages/${messageID}/dislike`, {}, {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
@@ -248,9 +250,36 @@ export function removeUserFromGroup(payload) {
 }
 
 export function deleteChat(payload) {
-    return function (dispatch) {
+    return function () {
         const access_token = JSON.parse(localStorage.getItem('user')).access_token;
         axios.delete(`${process.env.REACT_APP_API_URL}api/chats/${payload}`, {
-            headers: {'Authorization': `Bearer ${access_token}`}})
+            headers: {'Authorization': `Bearer ${access_token}`}
+        })
     }
+}
+
+export function postMessageReply(payload) {
+    return function (dispatch) {
+        const access_token = JSON.parse(localStorage.getItem('user')).access_token;
+        const data = new FormData();
+        data.append('uid', payload.userID);
+        data.append('mid', payload.replyToID);
+        data.append('message', payload.message);
+        data.append("cid", payload.chatID);
+        data.append('img', payload.image);
+
+        axios.post(`${process.env.REACT_APP_API_URL}api/messages/${payload.replyToID}/replies`, data, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        })
+            .then(response =>
+                dispatch({type: POST_MESSAGE_REPLY, payload, data: response.data}))
+    }
+}
+
+
+export function toggleReply(payload) {
+    return {type: TOGGLE_REPLY, payload}
+
 }

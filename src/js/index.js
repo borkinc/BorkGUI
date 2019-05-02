@@ -4,11 +4,13 @@ import {
     addChat,
     addContact,
     addUserToGroup,
+    deleteChat,
     dislikeMessage,
     dismissChatAlert,
     getChats,
     likeMessage,
     postMessage,
+    postMessageReply,
     removeUserFromGroup,
     toggleAddUser,
     toggleAttachment,
@@ -16,7 +18,7 @@ import {
     toggleContactModal,
     toggleGroupModal,
     toggleNavBar,
-    deleteChat
+    toggleReply
 } from "./actions/chat-actions";
 
 window.store = store;
@@ -40,3 +42,5 @@ window.toggleAddUser = toggleAddUser;
 window.addUserToGroup = addUserToGroup;
 window.removeUserFromGroup = removeUserFromGroup;
 window.deleteChat = deleteChat;
+window.toggleReply = toggleReply;
+window.postMessageReply = postMessageReply;

@@ -45,6 +45,7 @@ class ConnectedChats extends Component {
         const {isLoading, chats, isChatting} = this.props;
         const chatsHTML = chats !== undefined ? <ListGroup className={"chat-groups"}>
             {!isLoading ? chats.map(chat => {
+                const chatDate = new Date(chat.created_on).toDateString();
                 return (
                     <ListGroupItem className="justify-content-between" tag="button"
                                    action key={chat.cid} id={"chat-" + chat.cid}
@@ -56,7 +57,7 @@ class ConnectedChats extends Component {
                             </div>
                             <div className={"chat-ib"}>
                                 <h5>{chat.name}
-                                    <span className={"chat-date"}>{chat.created_on}</span>
+                                    <span className={"chat-date"}>{chatDate}</span>
                                 </h5>
                                 <p>{chat.message}</p>
                             </div>

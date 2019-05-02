@@ -5,7 +5,7 @@ import Input from "reactstrap/es/Input";
 import Button from "reactstrap/es/Button";
 
 class Stats extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             trending_hashtags: [],
@@ -26,6 +26,7 @@ class Stats extends Component {
         }
 
     }
+
     componentDidMount() {
         this.getTrendingHashtags();
         this.getNumPosts();
@@ -36,10 +37,10 @@ class Stats extends Component {
     }
 
     getTrendingHashtags = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/trending').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/trending`).then(
             response => {
                 const data = [["Hashtags", "Position"]];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].hashtag, response.data[i].position])
                 }
                 this.setState({trending_hashtags: data});
@@ -49,20 +50,20 @@ class Stats extends Component {
     };
 
     getNumPosts = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/messages').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/messages`).then(
             response => {
                 const data = [["Day", "Number of Messages"]];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 this.setState({num_daily_posts: data});
             })
     };
     getNumLikes = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/likes').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/likes`).then(
             response => {
                 const data = [["Day", "Number of Likes"]];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 console.log(data);
@@ -71,10 +72,10 @@ class Stats extends Component {
     };
 
     getNumReplies = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/replies').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/replies`).then(
             response => {
                 const data = [["Day", "Number of Replies"]];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 console.log(data);
@@ -83,10 +84,10 @@ class Stats extends Component {
     };
 
     getNumDislikes = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/dislikes').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/dislikes`).then(
             response => {
                 const data = [["Day", "Number of Dislikes"]];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 console.log(data);
@@ -96,13 +97,13 @@ class Stats extends Component {
 
     getActiveUsers = () => {
         //this is going to be interesting not actually working right now
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/active').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/active`).then(
             response => {
                 const active_users = [];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     const data = [["Users", "Position"]];
-                    for (var j=0;j<response.data[i].users.length;j++){
-                        data.push([j+1, response.data[i].users[j].username]);
+                    for (var j = 0; j < response.data[i].users.length; j++) {
+                        data.push([j + 1, response.data[i].users[j].username]);
                     }
                     active_users.push({data: data, day: response.data[i].day});
                 }
@@ -113,22 +114,22 @@ class Stats extends Component {
     };
 
     getUserNumMessages = () => {
-      axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/users/' + `${this.state.uid_messages}` + '/messages').then(
-          response => {
-              const data = [["Day", "Number of Messages"]];
-              for (var i=0;i<response.data.length;i++){
-                  data.push([response.data[i].day, parseInt(response.data[i].total)])
-              }
-              this.setState({num_user_messages: data, username_messages: response.data[0].username});
-          }
-      )
+        axios.get(`${process.env.REACT_APP_API_URL}stats/users/${this.state.uid_messages}/messages`).then(
+            response => {
+                const data = [["Day", "Number of Messages"]];
+                for (var i = 0; i < response.data.length; i++) {
+                    data.push([response.data[i].day, parseInt(response.data[i].total)])
+                }
+                this.setState({num_user_messages: data, username_messages: response.data[0].username});
+            }
+        )
     };
 
     getPhotoNumReplies = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/photos/' + `${this.state.pid_replies}` + '/replies').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/photos/${this.state.pid_replies}/replies`).then(
             response => {
                 const data = [["Day", "Number of replies"]];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 this.setState({num_pid_replies: data});
@@ -137,10 +138,10 @@ class Stats extends Component {
     };
 
     getPhotoNumLikes = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/photos/' + `${this.state.pid_likes}` + '/likes').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/photos/${this.state.pid_likes}/likes`).then(
             response => {
                 const data = [["Day", "Number of Likes"]];
-                for (var i=0;i<response.data.length;i++){
+                for (let i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 this.setState({num_pid_likes: data});
@@ -149,10 +150,10 @@ class Stats extends Component {
     };
 
     getPhotoNumDislikes = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}` + 'stats/photos/' + `${this.state.pid_dislikes}` + '/dislikes').then(
+        axios.get(`${process.env.REACT_APP_API_URL}stats/photos/${this.state.pid_dislikes}/dislikes`).then(
             response => {
                 const data = [["Day", "Number of Dislikes"]];
-                for (var i=0;i<response.data.length;i++){
+                for (var i = 0; i < response.data.length; i++) {
                     data.push([response.data[i].day, parseInt(response.data[i].total)])
                 }
                 this.setState({num_pid_dislikes: data});
@@ -168,15 +169,16 @@ class Stats extends Component {
         this.setState({pid_replies: event.target.value})
     };
 
-    handlePhotoLikesChange = event =>{
+    handlePhotoLikesChange = event => {
         this.setState({pid_likes: event.target.value})
     };
 
-    handlePhotoDislikesChange = event =>{
+    handlePhotoDislikesChange = event => {
         this.setState({pid_dislikes: event.target.value})
     };
 
     render() {
+        const {active_users, username_messages, num_pid_replies, num_pid_likes, num_pid_dislikes} = this.state;
         return (
             <React.Fragment>
                 <h1>Trending hashtags</h1>
@@ -188,7 +190,7 @@ class Stats extends Component {
                         data={this.state.trending_hashtags}
                         options={{
                             title: 'Trending hashtags',
-                            chartArea: { width: '50%' },
+                            chartArea: {width: '50%'},
                             hAxis: {
                                 title: 'Hashtags',
 
@@ -202,26 +204,26 @@ class Stats extends Component {
                     />
                     <h1>Number of messages per day</h1>
                     <Chart
-                    width={'500px'}
-                    height={'300px'}
-                    chartType="BarChart"
-                    data={this.state.num_daily_posts}
-                    options={{
+                        width={'500px'}
+                        height={'300px'}
+                        chartType="BarChart"
+                        data={this.state.num_daily_posts}
+                        options={{
 
-                        chart: {
-                            title: 'Number of daily messages',
-                        },
-                            chartArea: { width: '50%' , height: '70%'},
-                        hAxis: {
-                            title: 'Number of messages',
+                            chart: {
+                                title: 'Number of daily messages',
+                            },
+                            chartArea: {width: '50%', height: '70%'},
+                            hAxis: {
+                                title: 'Number of messages',
 
-                        },
-                        vAxis: {
-                            title: 'Day',
-                        },
-                    }}
-                    bars="vertical"
-                />
+                            },
+                            vAxis: {
+                                title: 'Day',
+                            },
+                        }}
+                        bars="vertical"
+                    />
                     <h1>Number of likes per day</h1>
                     <Chart
                         width={'500px'}
@@ -233,7 +235,7 @@ class Stats extends Component {
                             chart: {
                                 title: 'Number of daily likes',
                             },
-                            chartArea: { width: '50%' , height: '70%'},
+                            chartArea: {width: '50%', height: '70%'},
                             hAxis: {
                                 title: 'Number of likes',
 
@@ -255,7 +257,7 @@ class Stats extends Component {
                             chart: {
                                 title: 'Number of daily dislikes',
                             },
-                            chartArea: { width: '50%' , height: '70%'},
+                            chartArea: {width: '50%', height: '70%'},
                             hAxis: {
                                 title: 'Number of dislikes',
 
@@ -277,7 +279,7 @@ class Stats extends Component {
                             chart: {
                                 title: 'Number of daily replies',
                             },
-                            chartArea: { width: '50%' , height: '70%'},
+                            chartArea: {width: '50%', height: '70%'},
                             hAxis: {
                                 title: 'Number of replies',
 
@@ -289,53 +291,53 @@ class Stats extends Component {
                         bars="vertical"
                     />
                     <h1>Active users per day</h1>
-                    {this.state.active_users.map((users_per_day) => {
+                    {active_users.map((users_per_day) => {
                         return (
                             <React.Fragment>
-                            <h4>{users_per_day.day}</h4>
-                            <Chart
-                            width={'500px'}
-                            height={'300px'}
-                            chartType="Table"
-                            data={users_per_day.data}
-                            options={{
-                                title: 'Active Users',
-                                chartArea: { width: '50%' },
-                                hAxis: {
-                                    title: 'Username',
+                                <h4>{users_per_day.day}</h4>
+                                <Chart
+                                    width={'500px'}
+                                    height={'300px'}
+                                    chartType="Table"
+                                    data={users_per_day.data}
+                                    options={{
+                                        title: 'Active Users',
+                                        chartArea: {width: '50%'},
+                                        hAxis: {
+                                            title: 'Username',
 
-                                },
-                                vAxis: {
-                                    title: 'Position',
-                                    minValue: 0,
-                                },
-                            }}
-                            // For tests
-                            /> </React.Fragment>)
+                                        },
+                                        vAxis: {
+                                            title: 'Position',
+                                            minValue: 0,
+                                        },
+                                    }}
+                                    // For tests
+                                /> </React.Fragment>)
                     })}
                 </div>
                 <h1>Total messages per user</h1>
                 <Input type="text" onChange={this.handleUserMessageChange}/>
                 <Button onClick={this.getUserNumMessages}>Get data</Button>
-                {this.state.username_messages !== '' ? (
+                {username_messages !== '' ? (
                     <Chart chartType="Table" data={this.state.num_user_messages}/>
                 ) : (<p>Enter uid</p>)}
                 <h1>Total replies per photo</h1>
                 <Input type="text" onChange={this.handlePhotoRepliesChange}/>
                 <Button onClick={this.getPhotoNumReplies}>Get data</Button>
-                {this.state.num_pid_replies !== [] ? (
+                {num_pid_replies !== [] ? (
                     <Chart chartType="Table" data={this.state.num_pid_replies}/>
                 ) : (<p>Enter pid</p>)}
                 <h1>Total likes per photo</h1>
                 <Input type="text" onChange={this.handlePhotoLikesChange}/>
                 <Button onClick={this.getPhotoNumLikes}>Get data</Button>
-                {this.state.num_pid_likes !== [] ? (
+                {num_pid_likes !== [] ? (
                     <Chart chartType="Table" data={this.state.num_pid_likes}/>
                 ) : (<p>Enter pid</p>)}
                 <h1>Total dislikes per photo</h1>
                 <Input type="text" onChange={this.handlePhotoDislikesChange}/>
                 <Button onClick={this.getPhotoNumDislikes}>Get data</Button>
-                {this.state.num_pid_dislikes !== [] ? (
+                {num_pid_dislikes !== [] ? (
                     <Chart chartType="Table" data={this.state.num_pid_dislikes}/>
                 ) : (<p>Enter pid</p>)}
             </React.Fragment>

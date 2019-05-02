@@ -128,7 +128,7 @@ class ConnectedChatNavItems extends Component {
     handleMembersSelect = event => {
         const options = event.target.options;
         const values = [];
-        for (var i = 0; i<options.length; i++){
+        for (var i = 0; i < options.length; i++) {
             if (options[i].selected) {
                 values.push(options[i].value);
             }
@@ -153,16 +153,16 @@ class ConnectedChatNavItems extends Component {
                                            placeholder="Enter group name..."
                                            onChange={this.handleChatNameChange}/>
                                     <Label for="users-add-chat">Select users to add</Label>
-                                    <Input type="select" name="selectMulti" onChange={this.handleMembersSelect} multiple>
-                                        {this.props.contacts.map(contact => {
+                                    <Input type="select" name="selectMulti" onChange={this.handleMembersSelect}
+                                           multiple>
+                                        {contacts.map(contact => {
                                             return (
-                                                <option key={contact.uid} value={contact.uid}>{contact.first_name + " " + contact.last_name}</option>
+                                                <option key={contact.uid} value={contact.uid}>
+                                                    {contact.first_name + " " + contact.last_name}
+                                                </option>
                                             )
-
-                                            })
-                                        }
+                                        })}
                                     </Input>
-
                                 </FormGroup>
                             </Form>
                         </ModalBody>

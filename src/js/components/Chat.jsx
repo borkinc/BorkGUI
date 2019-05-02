@@ -1,5 +1,27 @@
 import React, {Component} from 'react';
 import '../../css/Chat.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+    addUserToGroup,
+    deleteChat,
+    dislikeMessage,
+    getChatMessages,
+    getContacts,
+    likeMessage,
+    postMessage,
+    postMessageReply,
+    removeUserFromGroup,
+    toggleAddUser,
+    toggleAttachment,
+    toggleReply
+} from "../actions/chat-actions";
+import {connect} from "react-redux";
+import Moment from "react-moment";
+import jstz from "jstimezonedetect";
+import 'moment-timezone';
+import TimerMixin from "react-timer-mixin"
+
+import ImageUploader from 'react-images-upload';
 import {
     Badge,
     Button,
@@ -15,33 +37,16 @@ import {
     Input,
     InputGroup,
     InputGroupAddon,
+    Label,
     ListGroup,
     Modal,
     ModalBody,
     ModalFooter,
     ModalHeader,
+    Toast,
+    ToastBody,
     UncontrolledButtonDropdown
 } from "reactstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    addUserToGroup,
-    dislikeMessage,
-    getChatMessages,
-    getContacts,
-    likeMessage,
-    postMessage,
-    removeUserFromGroup,
-    toggleAddUser,
-    toggleAttachment,
-    deleteChat
-} from "../actions/chat-actions";
-import {connect} from "react-redux";
-import Moment from "react-moment";
-import jstz from "jstimezonedetect";
-import 'moment-timezone';
-import TimerMixin from "react-timer-mixin"
-
-import ImageUploader from 'react-images-upload';
 import ListGroupItem from "reactstrap/es/ListGroupItem";
 
 
@@ -57,6 +62,8 @@ function mapDispatchToProps(dispatch) {
         addUserToGroup: contactID => dispatch(addUserToGroup(contactID)),
         removeUserFromGroup: contactID => dispatch(removeUserFromGroup(contactID)),
         deleteChat: chatID => dispatch(deleteChat(chatID)),
+        toggleReply: (replyToID) => dispatch(toggleReply(replyToID)),
+        postMessageReply: (reply) => dispatch(postMessageReply(reply))
     }
 }
 
@@ -67,7 +74,9 @@ function mapStateToProps(state) {
         chatID: chatState.chatID,
         attachmentModal: chatState.attachmentModal,
         addUserModal: chatState.addUserModal,
-        contacts: chatState.contacts
+        contacts: chatState.contacts,
+        replyModal: chatState.replyModal,
+        replyToID: chatState.replyToID
     }
 }
 
@@ -100,6 +109,29 @@ class ConnectedChat extends Component {
 
     toggleDisLike = (userID, messageID) => {
         this.props.dislikeMessage({userID, messageID})
+    };
+
+    toggleReply = (event) => {
+        event.preventDefault();
+        this.props.toggleReply(event.target.value);
+    };
+
+    toggleReplySubmit = (event) => {
+        event.preventDefault();
+        const {message, picture} = this.state;
+        const {chatID, replyToID} = this.props;
+        const userID = parseInt(localStorage.getItem('uid'));
+        this.props.postMessageReply(
+            {
+                replyToID: replyToID,
+                message: message,
+                userID: userID,
+                chatID: chatID,
+                image: picture
+            });
+        this.setState({message: ''});
+        this.props.toggleReply();
+        // this.props.postMessageReply()
     };
 
     handleMessage = (event) => {
@@ -177,7 +209,7 @@ class ConnectedChat extends Component {
     };
 
     renderMessage = m => {
-        const {mid, created_on, message, uid, likes, dislikes, image} = m;
+        const {mid, created_on, message, uid, likes, dislikes, image, replies} = m;
         const date = new Date(created_on);
         const tz = jstz.determine().name();
         const currentUser = JSON.parse(localStorage.getItem('user')).uid;
@@ -195,6 +227,64 @@ class ConnectedChat extends Component {
                                    alt="Card image cap"/>
             }
         }
+        let replyHTML = null;
+        if (replies) {
+            replyHTML = <div className="p-3 my-2 rounded" style={{background: '#6c757d'}}>
+                <Toast>
+                    <ToastBody>
+                        <blockquote>{replies}</blockquote>
+                    </ToastBody>
+                </Toast>
+            </div>
+        }
+        const cardHTML = <Card>
+            {hasImage ? imgHTML : <br/>}
+            <CardBody>
+                {replyHTML}
+                <CardText>{message}</CardText>
+                <Button onClick={() => this.toggleLike(uid, mid)}>
+                    <FontAwesomeIcon icon={"thumbs-up"}/>
+                    <Badge color="secondary">{likes}</Badge>
+                </Button>
+                <Button onClick={() => this.toggleDisLike(uid, mid)}>
+                    <FontAwesomeIcon icon={"thumbs-down"}/>
+                    <Badge color="secondary">{dislikes}</Badge>
+                </Button>
+                {/*<NavItem>*/}
+                <Button color="secondary" onClick={this.toggleReply} value={mid}>Reply</Button>
+                <Modal isOpen={this.props.replyModal} toggle={this.toggleReply}
+                       className={this.props.className}>
+                    <ModalHeader toggle={this.toggleReply}>Reply to message</ModalHeader>
+                    <ModalBody>
+                        <Form>
+                            <FormGroup>
+                                <ImageUploader
+                                    withIcon={true}
+                                    buttonText='Choose images'
+                                    onChange={this.onDrop}
+                                    imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                    maxFileSize={5242880}
+                                    withPreview={true}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="reply-message">Reply</Label>
+                                <Input type="text" name="reply_message" id="reply-message"
+                                       placeholder="Enter reply..."
+                                       onChange={this.handleMessage}/>
+                            </FormGroup>
+                        </Form>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.toggleReplySubmit}>Reply</Button>{' '}
+                        <Button color="secondary" onClick={this.toggleReply}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+                {/*</NavItem>*/}
+                {/*<Button onClick={() => this.toggleReply(mid)}>Reply</Button>*/}
+                {msgContentDate}
+            </CardBody>
+        </Card>;
         return (
             <React.Fragment key={mid}>
                 {!messageFromMe ? (
@@ -203,43 +293,12 @@ class ConnectedChat extends Component {
                             <FontAwesomeIcon icon="user-circle"/>
                         </div>
                         <div className={"received-msg"}>
-                            <Card>
-                                {hasImage ? imgHTML : <br/>}
-                                <CardBody>
-                                    <CardText>{message}</CardText>
-                                    <Button onClick={() => this.toggleLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-up"}/>
-                                        <Badge color="secondary">{likes}</Badge>
-                                    </Button>
-                                    <Button onClick={() => this.toggleDisLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-down"}/>
-                                        <Badge color="secondary">{dislikes}</Badge>
-                                    </Button>
-                                    {msgContentDate}
-                                </CardBody>
-                            </Card>
+                            {cardHTML}
                         </div>
-
                     </div>) : (
                     <div className={"outgoing-msg"}>
                         <div className={"sent-msg"}>
-                            <Card>
-                                {hasImage ? imgHTML : <br/>}
-                                <CardBody>
-                                    {/*{recentImage ? <CardImg top height="100%" width="100%" src={imgSource}*/}
-                                    {/*                        alt="Card image cap"/> : <br/>}*/}
-                                    <CardText>{message}</CardText>
-                                    <Button onClick={() => this.toggleLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-up"}/>
-                                        <Badge color="secondary">{likes}</Badge>
-                                    </Button>
-                                    <Button onClick={() => this.toggleDisLike(uid, mid)}>
-                                        <FontAwesomeIcon icon={"thumbs-down"}/>
-                                        <Badge color="secondary">{dislikes}</Badge>
-                                    </Button>
-                                    {msgContentDate}
-                                </CardBody>
-                            </Card>
+                            {cardHTML}
                         </div>
                     </div>)}
             </React.Fragment>
