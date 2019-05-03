@@ -19,6 +19,7 @@ import classnames from 'classnames';
 import dog from '../../img/dog.svg';
 import {dismissUserAlert, logInUser, registerUser, toggleUserAuthTab} from "../actions/user-auth-actions";
 import {connect} from "react-redux";
+import Container from "reactstrap/es/Container";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -34,7 +35,8 @@ function mapStateToProps(state) {
     return {
         activeTab: userState.activeTab,
         userAuthError: userState.userAuthError,
-        userAlertVisible: userState.userAlertVisible
+        userAlertVisible: userState.userAlertVisible,
+        invalidFields: userState.invalidFields
     }
 }
 
@@ -98,15 +100,124 @@ class ConnectedUserAuth extends Component {
 
 
     render() {
-        const {userAuthError} = this.props;
-        const hasError = userAuthError.length > 0;
+        const {userAuthError, invalidFields} = this.props;
+        let loginFormFields = <Row>
+            <Col sm="12">
+                <div className="bork-logo">
+                    <div className="UserAuth">
+                        <Form onSubmit={this.handleLoginSubmit} className="login">
+                            <FormGroup>
+                                <Label for="username">Username</Label>
+                                <Input
+                                    type="username"
+                                    name="username"
+                                    id="UserAuth-username"
+                                    placeholder="Enter username"
+                                    onChange={this.handleUsernameChange}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="examplePassword">Password</Label>
+                                <Input
+                                    type="password"
+                                    name="password"
+                                    id="UserAuth-password"
+                                    placeholder="Enter password"
+                                    onChange={this.handlePasswordChange}
+                                />
+                            </FormGroup>
+                            <Button>Login</Button>
+                        </Form>
+                    </div>
+                </div>
+            </Col>
+        </Row>;
+        if (invalidFields) {
+            if (invalidFields === "all") {
+                loginFormFields = <Row>
+                    <Col sm="12">
+                        <div className="bork-logo">
+                            <div className="UserAuth">
+                                <Form onSubmit={this.handleLoginSubmit} className="login">
+                                    <FormGroup>
+                                        <Label for="username">Username</Label>
+                                        <Input
+                                            invalid
+                                            type="username"
+                                            name="username"
+                                            id="UserAuth-username"
+                                            placeholder="Enter username"
+                                            onChange={this.handleUsernameChange}
+                                        />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="examplePassword">Password</Label>
+                                        <Input
+                                            invalid
+                                            type="password"
+                                            name="password"
+                                            id="UserAuth-password"
+                                            placeholder="Enter password"
+                                            onChange={this.handlePasswordChange}
+                                        />
+                                    </FormGroup>
+                                    <Button>Login</Button>
+                                </Form>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+            } else if (invalidFields === "username") {
+                loginFormFields = <Row>
+                    <Col sm="12">
+                        <div className="bork-logo">
+                            <div className="UserAuth">
+                                <Form onSubmit={this.handleLoginSubmit} className="login">
+                                    <FormGroup>
+                                        <Label for="username">Username</Label>
+                                        <Input
+                                            invalid
+                                            type="username"
+                                            name="username"
+                                            id="UserAuth-username"
+                                            placeholder="Enter username"
+                                            onChange={this.handleUsernameChange}
+                                        />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="examplePassword">Password</Label>
+                                        <Input
+                                            type="password"
+                                            name="password"
+                                            id="UserAuth-password"
+                                            placeholder="Enter password"
+                                            onChange={this.handlePasswordChange}
+                                        />
+                                    </FormGroup>
+                                    <Button>Login</Button>
+                                </Form>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>;
+            }
+        }
+        const userErrorMessage = userAuthError.length > 0 ?
+            <Alert color="danger" className={"user-alert"} isOpen={this.props.userAlertVisible}
+                   toggle={this.onDismiss}>
+                {userAuthError}
+            </Alert> : null;
         return (
             <React.Fragment>
-                {hasError ? <Alert color="danger" isOpen={this.props.userAlertVisible} toggle={this.onDismiss}>
-                    {userAuthError}
-                </Alert> : null}
-                <div className="UserAuth-logo">
-                    <img src={dog} className="UserAuth-logo" alt=""/>
+                {userErrorMessage}
+                <Container>
+                    <Row sm="12" md={{size: 6, offset: 3}}>
+                        <img src={dog} className="UserAuth-logo" alt=""/>
+                        {/*<div className="UserAuth-logo">*/}
+                        {/*    */}
+
+                        {/*</div>*/}
+                    </Row>
                     <div className="UserAuth-tabs">
                         <Nav tabs>
                             <NavItem>
@@ -132,105 +243,82 @@ class ConnectedUserAuth extends Component {
                         </Nav>
                         <TabContent activeTab={this.props.activeTab}>
                             <TabPane tabId="1">
-                                <Row>
-                                    <Col sm="12">
-                                        <div className="bork-logo">
-                                            <div className="UserAuth">
-                                                <Form onSubmit={this.handleLoginSubmit} className="login">
-                                                    <FormGroup>
-                                                        <Label for="username">Username</Label>
-                                                        <Input
-                                                            type="username"
-                                                            name="username"
-                                                            id="UserAuth-username"
-                                                            placeholder="Enter username"
-                                                            onChange={this.handleUsernameChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <FormGroup>
-                                                        <Label for="examplePassword">Password</Label>
-                                                        <Input
-                                                            type="password"
-                                                            name="password"
-                                                            id="UserAuth-password"
-                                                            placeholder="Enter password"
-                                                            onChange={this.handlePasswordChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <Button>Login</Button>
-                                                </Form>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                </Row>
+                                {loginFormFields}
                             </TabPane>
                             <TabPane tabId="2">
                                 <Row>
-                                    <Col sm="12">
+                                    <Col>
                                         <div className="bork-logo">
                                             <div className="UserAuth">
                                                 <Form onSubmit={this.handleSignUpSubmit} className="sign-up">
-                                                    <FormGroup>
-                                                        <Label for="username">Username</Label>
-                                                        <Input
-                                                            type="username"
-                                                            name="username"
-                                                            id="UserAuth-username"
-                                                            placeholder="Enter username"
-                                                            onChange={this.handleUsernameChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <FormGroup>
-                                                        <Label for="email">Email</Label>
-                                                        <Input
-                                                            type="email"
-                                                            name="email"
-                                                            id="UserAuth-email"
-                                                            placeholder="Enter email"
-                                                            onChange={this.handleEmailChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <FormGroup>
-                                                        <Label for="firstName">First Name</Label>
-                                                        <Input
-                                                            type="firstname"
-                                                            name="firstname"
-                                                            id="UserAuth-first-name"
-                                                            placeholder="Enter first name"
-                                                            onChange={this.handleFirstNameChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <FormGroup>
-                                                        <Label for="lastName">Last Name</Label>
-                                                        <Input
-                                                            type="lastname"
-                                                            name="lastname"
-                                                            id="UserAuth-last-name"
-                                                            placeholder="Enter last name"
-                                                            onChange={this.handleLastNameChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <FormGroup>
-                                                        <Label for="phonenumber">Phone Number</Label>
-                                                        <Input
-                                                            type="phonenumber"
-                                                            name="phonenumber"
-                                                            id="UserAuth-phone-number"
-                                                            placeholder="Enter phone number"
-                                                            onChange={this.handlePhoneNumberChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <FormGroup>
-                                                        <Label for="examplePassword">Password</Label>
-                                                        <Input
-                                                            type="password"
-                                                            name="password"
-                                                            id="UserAuth-password"
-                                                            placeholder="Enter password"
-                                                            onChange={this.handlePasswordChange}
-                                                        />
-                                                    </FormGroup>
-                                                    <Button>Sign-Up</Button>
+                                                    <Row form>
+                                                        <Col xs="6">
+                                                            <FormGroup>
+                                                                <Label for="username">Username</Label>
+                                                                <Input
+                                                                    type="username"
+                                                                    name="username"
+                                                                    id="UserAuth-username"
+                                                                    placeholder="Enter username"
+                                                                    onChange={this.handleUsernameChange}
+                                                                />
+                                                            </FormGroup>
+                                                            <FormGroup>
+                                                                <Label for="email">Email</Label>
+                                                                <Input
+                                                                    type="email"
+                                                                    name="email"
+                                                                    id="UserAuth-email"
+                                                                    placeholder="Enter email"
+                                                                    onChange={this.handleEmailChange}
+                                                                />
+                                                            </FormGroup>
+                                                            <FormGroup>
+                                                                <Label for="examplePassword">Password</Label>
+                                                                <Input
+                                                                    type="password"
+                                                                    name="password"
+                                                                    id="UserAuth-password"
+                                                                    placeholder="Enter password"
+                                                                    onChange={this.handlePasswordChange}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col>
+                                                        <Col xs="6">
+                                                            <FormGroup>
+                                                                <Label for="firstName">First Name</Label>
+                                                                <Input
+                                                                    type="firstname"
+                                                                    name="firstname"
+                                                                    id="UserAuth-first-name"
+                                                                    placeholder="Enter first name"
+                                                                    onChange={this.handleFirstNameChange}
+                                                                />
+                                                            </FormGroup>
+                                                            <FormGroup>
+                                                                <Label for="lastName">Last Name</Label>
+                                                                <Input
+                                                                    type="lastname"
+                                                                    name="lastname"
+                                                                    id="UserAuth-last-name"
+                                                                    placeholder="Enter last name"
+                                                                    onChange={this.handleLastNameChange}
+                                                                />
+                                                            </FormGroup>
+                                                            <FormGroup>
+                                                                <Label for="phonenumber">Phone Number</Label>
+                                                                <Input
+                                                                    type="phonenumber"
+                                                                    name="phonenumber"
+                                                                    id="UserAuth-phone-number"
+                                                                    placeholder="Enter phone number"
+                                                                    onChange={this.handlePhoneNumberChange}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col>
+                                                        <Button>Sign-Up</Button>
+                                                    </Row>
+
                                                 </Form>
                                             </div>
                                         </div>
@@ -239,7 +327,8 @@ class ConnectedUserAuth extends Component {
                             </TabPane>
                         </TabContent>
                     </div>
-                </div>
+                </Container>
+
             </React.Fragment>
         );
     }
