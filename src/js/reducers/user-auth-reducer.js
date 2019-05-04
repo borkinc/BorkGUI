@@ -28,7 +28,7 @@ export default function UserAuthReducer(state = initialState, action) {
         case USER_ERROR: {
             return Object.assign({}, state, {
                 userAuthError: action.payload.message,
-                userAlertVisible: !state.userAlertVisible,
+                userAlertVisible: true,
                 invalidFields: action.payload.fields
             })
         }
@@ -40,7 +40,8 @@ export default function UserAuthReducer(state = initialState, action) {
         case TOGGLE_USER_AUTH_TAB: {
             if (state.activeTab !== action.activeTab) {
                 return Object.assign({}, state, {
-                    activeTab: action.activeTab
+                    activeTab: action.activeTab,
+                    invalidFields: []
                 })
             }
             return state
