@@ -222,9 +222,16 @@ class ConnectedChat extends Component {
                 imgHTML =
                     <CardImg top height="100%" width="100%" src={URL.createObjectURL(image)} alt="Card image cap"/>
             } else {
-                imgHTML = <CardImg top height="100%" width="100%"
-                                   src={`${process.env.REACT_APP_API_URL}${image}`}
-                                   alt="Card image cap"/>
+                if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+                    imgHTML = <CardImg top height="100%" width="100%"
+                                       src={`${process.env.REACT_APP_API_URL}${image}`}
+                                       alt="Card image cap"/>
+                } else {
+                    imgHTML = <CardImg top height="100%" width="100%"
+                                       src={`${image}`}
+                                       alt="Card image cap"/>
+                }
+
             }
         }
         let replyHTML = null;
