@@ -9,7 +9,8 @@ import axios from "axios";
 
 export function logInUser(payload) {
     return function (dispatch) {
-        // Creating form to be sent to API
+
+        // Creating form to be sent to API as JSON
         const data = new FormData();
         data.append('username', payload.username);
         data.append('password', payload.password);
@@ -20,14 +21,15 @@ export function logInUser(payload) {
         }).then(response => {
                 dispatch({type: LOG_IN_USER, payload: response.data})
         }).catch(error => {
-            dispatch({type: USER_ERROR, payload: error.response.data.message})
+            dispatch({type: USER_ERROR, payload: error.response.data})
         })
     }
 }
 
 export function registerUser(payload) {
     return function (dispatch) {
-        // Creating form to be sent to API
+
+        // Creating form to be sent to API as JSON
         const data = new FormData();
         data.append('username', payload.username);
         data.append('email', payload.email);
@@ -36,13 +38,14 @@ export function registerUser(payload) {
         data.append('first_name', payload.first_name);
         data.append('last_name', payload.last_name);
 
-        // Contacting api to add new user
+        // Contacting API to add new user
         axios.post(`${process.env.REACT_APP_API_URL}api/register`, data, {
             headers: {'Content-Type': 'application/json',}
         }).then(response => {
                 dispatch({type: REGISTER_USER, payload: response.data});
         }).catch(error => {
-            dispatch({type: USER_ERROR, payload: error.response.data.message})
+            console.log(error.response);
+            dispatch({type: USER_ERROR, payload: error.response.data})
         })
     }
 }
