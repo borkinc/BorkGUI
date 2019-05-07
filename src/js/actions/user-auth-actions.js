@@ -1,6 +1,7 @@
 import {
     DISMISS_USER_ALERT_ERROR,
     LOG_IN_USER,
+    LOGOUT,
     REGISTER_USER,
     TOGGLE_USER_AUTH_TAB,
     USER_ERROR
@@ -44,7 +45,6 @@ export function registerUser(payload) {
         }).then(response => {
                 dispatch({type: REGISTER_USER, payload: response.data});
         }).catch(error => {
-            console.log(error.response);
             dispatch({type: USER_ERROR, payload: error.response.data})
         })
     }
@@ -56,4 +56,8 @@ export function toggleUserAuthTab(payload) {
 
 export function dismissUserAlert() {
     return {type: DISMISS_USER_ALERT_ERROR}
+}
+
+export function logout() {
+    return {type: LOGOUT}
 }

@@ -109,7 +109,6 @@ class ConnectedUserAuth extends Component {
 
     render() {
         const {userAuthError, invalidFields, activeTab} = this.props;
-        console.log(invalidFields);
         let formFields = null;
         let userNameField = <FormGroup>
             <Label for="username">Username</Label>
@@ -199,19 +198,11 @@ class ConnectedUserAuth extends Component {
                         />
                     </FormGroup>;
                 }
-                formFields = <Row>
-                    <Col sm="12">
-                        <div className="bork-logo">
-                            <div className="UserAuth">
-                                <Form onSubmit={this.handleLoginSubmit} className="login">
-                                    {userNameField}
-                                    {passwordField}
-                                    <Button>Login</Button>
-                                </Form>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
+                formFields = <React.Fragment>
+                    {userNameField}
+                    {passwordField}
+                    <Button>Login</Button>
+                </React.Fragment>;
             }
         } else {
             if (invalidFields) {
@@ -320,10 +311,6 @@ class ConnectedUserAuth extends Component {
                 <Container>
                     <Row sm="12" md={{size: 6, offset: 3}}>
                         <img src={dog} className="UserAuth-logo" alt=""/>
-                        {/*<div className="UserAuth-logo">*/}
-                        {/*    */}
-
-                        {/*</div>*/}
                     </Row>
                     <div className="UserAuth-tabs">
                         <Nav tabs>
@@ -350,7 +337,17 @@ class ConnectedUserAuth extends Component {
                         </Nav>
                         <TabContent activeTab={this.props.activeTab}>
                             <TabPane tabId="1">
-                                {formFields}
+                                <Row>
+                                    <Col sm="12">
+                                        <div className="bork-logo">
+                                            <div className="UserAuth">
+                                                <Form onSubmit={this.handleLoginSubmit} className="login">
+                                                    {formFields}
+                                                </Form>
+                                            </div>
+                                        </div>
+                                    </Col>
+                                </Row>
                             </TabPane>
                             <TabPane tabId="2">
                                 <Row>
