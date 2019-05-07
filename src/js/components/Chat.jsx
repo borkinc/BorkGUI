@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import '../../css/Chat.css';
+import 'simplebar/dist/simplebar.min.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Scrollbars} from 'react-custom-scrollbars';
 import {
     addUserToGroup,
     deleteChat,
@@ -320,8 +322,6 @@ class ConnectedChat extends Component {
                     <FontAwesomeIcon icon={"ellipsis-h"}/>
                 </DropdownToggle>
                 <DropdownMenu>
-                    {/*<DropdownItem header>Header</DropdownItem>*/}
-                    {/*<DropdownItem disabled>Action</DropdownItem>*/}
                     <DropdownItem onClick={this.toggleAddUser}>Add user to group</DropdownItem>
                     <DropdownItem divider/>
                     <DropdownItem onClick={this.deleteChat}>Delete Chat</DropdownItem>
@@ -350,7 +350,9 @@ class ConnectedChat extends Component {
             </Modal>
             <div className={"chat-messages"}>
                 <div className={"chat-history"}>
-                    {chatMessages.map(m => this.renderMessage(m))}
+                    <Scrollbars>
+                        {chatMessages.map(m => this.renderMessage(m))}
+                    </Scrollbars>
                 </div>
             </div>
             <div className={"msg-input"}>

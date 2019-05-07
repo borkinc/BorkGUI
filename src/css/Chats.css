@@ -116,7 +116,6 @@ div.chat-img {
 div.chats-container {
     background: url("../img/dog-footprints.svg") repeat;
     background-size: 30%;
-    width: 100vw;
     padding-left: unset;
     padding-right: unset;
 }
