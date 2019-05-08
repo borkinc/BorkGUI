@@ -7,6 +7,8 @@ import Chat from "./Chat.jsx";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {getChats, toggleChat} from "../actions/chat-actions";
 import {connect} from "react-redux";
+import {Scrollbars} from 'react-custom-scrollbars'
+import 'simplebar/dist/simplebar.min.css';
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -65,7 +67,7 @@ class ConnectedChats extends Component {
                         {/*<Badge pill>0</Badge>*/}
                     </ListGroupItem>);
             }) : <Spinner color="secondary"/>}
-        </ListGroup> : <br/>;
+        </ListGroup> : null;
         return <React.Fragment>
             <Container className={"chats"}>
                 <div className={"chat-box"}>
@@ -80,7 +82,9 @@ class ConnectedChats extends Component {
                                         icon="search"/></InputGroupText>
                                 </InputGroupAddon>
                             </InputGroup>
-                            {chatsHTML}
+                            <Scrollbars style={{height: "calc(100vh - 115px)"}}>
+                                {chatsHTML}
+                            </Scrollbars>
                         </Col>
                         {/*Edit this part for chat messages*/}
                         <Col className="chats-container">
