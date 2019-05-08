@@ -94,10 +94,9 @@ class ConnectedChat extends Component {
     }
 
     componentDidMount() {
-        const {chatID} = this.props;
         this.timer = TimerMixin.setInterval(
             () => {
-                this.props.getChatMessages(chatID)
+                this.props.getChatMessages(this.props.chatID)
             }, 500)
     }
 

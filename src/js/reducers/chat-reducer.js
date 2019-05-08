@@ -52,7 +52,8 @@ export default function ChatReducer(state = initialState, action) {
             return Object.assign({}, state, {
                 isChatting: true,
                 chatName: action.payload.chatName,
-                chatID: action.payload.chatID
+                chatID: action.payload.chatID,
+                chatMessages: []
             })
         }
         case TOGGLE_GROUP_MODAL: {
@@ -105,9 +106,16 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case GET_CHAT_MESSAGES: {
-            return Object.assign({}, state, {
-                chatMessages: action.payload.messages
-            })
+            if (state.chatID === action.chatID) {
+                state = Object.assign({}, state, {
+                    chatMessages: action.payload.messages
+                })
+            } else {
+                state = Object.assign({}, state, {
+                    chatMessages: []
+                })
+            }
+            return state
         }
         case LIKE_MESSAGE: {
             // TODO: Revert after phase 2.

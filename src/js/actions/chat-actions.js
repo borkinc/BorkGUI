@@ -159,7 +159,7 @@ export function getChatMessages(payload) {
                 }
             }
         ).then(response => {
-            dispatch({type: GET_CHAT_MESSAGES, payload: response.data});
+            dispatch({type: GET_CHAT_MESSAGES, payload: response.data, chatID: payload});
         })
     }
 }
