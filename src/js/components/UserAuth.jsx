@@ -109,7 +109,6 @@ class ConnectedUserAuth extends Component {
 
     render() {
         const {userAuthError, invalidFields, activeTab} = this.props;
-        console.log(invalidFields);
         let formFields = null;
         let userNameField = <FormGroup>
             <Label for="username">Username</Label>
