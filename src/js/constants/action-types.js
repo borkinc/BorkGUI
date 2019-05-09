@@ -4,6 +4,7 @@ export const REGISTER_USER = 'REGISTER_USER';
 export const TOGGLE_USER_AUTH_TAB = 'TOGGLE_USER_AUTH_TAB';
 export const USER_ERROR = 'USER_ERROR';
 export const DISMISS_USER_ALERT_ERROR = 'DISMISS_USER_ALERT_ERROR';
+export const LOGOUT = 'LOGOUT';
 
 // Chat actions
 export const GET_CHAT_MESSAGES = 'GET_CHAT_MESSAGES';

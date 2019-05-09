@@ -25,6 +25,7 @@ import {
 } from "../actions/chat-actions";
 import {connect} from "react-redux";
 import ListGroupItem from "reactstrap/es/ListGroupItem";
+import {logout} from "../actions/user-auth-actions";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -36,6 +37,7 @@ function mapDispatchToProps(dispatch) {
         toggleContacts: () => dispatch(toggleContacts()),
         getContacts: () => dispatch(getContacts()),
         removeContact: contact_id => dispatch(removeContact(contact_id)),
+        logout: () => dispatch(logout())
         // dismissChatAlert: () => dispatch(dismissChatAlert())
     }
 }
@@ -50,8 +52,7 @@ function mapStateToProps(state) {
         contactsModal: chatState.contactsModal,
         isLoading: chatState.isLoading,
         contacts: chatState.contacts,
-        // chatError: chatState.chatError,
-        // chatAlertVisible: chatState.chatAlertVisible
+        logoutModal: chatState.logoutModal
     }
 }
 
@@ -99,6 +100,10 @@ class ConnectedChatNavItems extends Component {
         this.props.getContacts();
     };
 
+    Logout = () => {
+        this.props.logout();
+    };
+
     removeContact = event => {
         const contact_id = event.target.value;
         this.props.removeContact(contact_id);
@@ -128,7 +133,7 @@ class ConnectedChatNavItems extends Component {
     handleMembersSelect = event => {
         const options = event.target.options;
         const values = [];
-        for (var i = 0; i < options.length; i++) {
+        for (let i = 0; i < options.length; i++) {
             if (options[i].selected) {
                 values.push(options[i].value);
             }
@@ -235,6 +240,9 @@ class ConnectedChatNavItems extends Component {
                             <Button color="primary" onClick={this.toggleContactList}>Ok</Button>
                         </ModalFooter>
                     </Modal>
+                </NavItem>
+                <NavItem>
+                    <Button color={"link"} onClick={this.Logout}>Logout</Button>
                 </NavItem>
             </React.Fragment>
         )

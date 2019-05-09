@@ -7,6 +7,7 @@ import Chat from "./Chat.jsx";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {filterChats, getChats, toggleChat} from "../actions/chat-actions";
 import {connect} from "react-redux";
+import TimerMixin from "react-timer-mixin";
 import {Scrollbars} from 'react-custom-scrollbars'
 import 'simplebar/dist/simplebar.min.css';
 
@@ -38,7 +39,14 @@ class ConnectedChats extends Component {
     }
 
     componentDidMount() {
-        this.props.getChats()
+        this.timer = TimerMixin.setInterval(
+            () => {
+                this.props.getChats()
+            }, 3000)
+    }
+
+    componentWillUnmount() {
+        TimerMixin.clearTimeout(this.timer);
     }
 
     toggleChat(chatID, chatName) {
