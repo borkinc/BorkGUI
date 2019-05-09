@@ -7,6 +7,7 @@ import {
     deleteChat,
     dislikeMessage,
     dismissChatAlert,
+    filterChats,
     getChats,
     likeMessage,
     postMessage,
@@ -44,3 +45,4 @@ window.removeUserFromGroup = removeUserFromGroup;
 window.deleteChat = deleteChat;
 window.toggleReply = toggleReply;
 window.postMessageReply = postMessageReply;
+window.filterChats = filterChats;

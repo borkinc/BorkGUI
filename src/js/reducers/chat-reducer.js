@@ -4,6 +4,7 @@ import {
     ADD_CONTACT,
     DISLIKE_MESSAGE,
     DISMISS_CHAT_ALERT_ERROR,
+    FILTER_CHATS,
     GET_CHAT_MESSAGES,
     GET_CHATS,
     GET_CONTACTS,
@@ -38,7 +39,8 @@ const initialState = {
     chatAlertVisible: false,
     addUserModal: false,
     replyModal: false,
-    replyToID: null
+    replyToID: null,
+    filteredChats: []
 };
 
 export default function ChatReducer(state = initialState, action) {
@@ -85,6 +87,7 @@ export default function ChatReducer(state = initialState, action) {
         case GET_CHATS: {
             return Object.assign({}, state, {
                 chats: action.payload.chats,
+                filteredChats: action.payload.chats,
                 isLoading: false
             })
         }
@@ -118,14 +121,6 @@ export default function ChatReducer(state = initialState, action) {
             return state
         }
         case LIKE_MESSAGE: {
-            // TODO: Revert after phase 2.
-            // let currentUser = localStorage.getItem('uid');
-            // let messages = state.chatMessages.slice();
-            // let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
-            // let isLikedByMe = action.data.likers.findIndex(liker => liker.uid === currentUser) > -1;
-            // if(!isLikedByMe){
-            //     messages[chatIndex].likes += 1;
-            // }
             let messages = state.chatMessages.slice();
             let chatIndex = messages.findIndex(message_ => message_.mid === action.payload.messageID);
             messages[chatIndex].likes += 1;
@@ -134,15 +129,6 @@ export default function ChatReducer(state = initialState, action) {
             })
         }
         case DISLIKE_MESSAGE: {
-            // TODO: Revert after phase 2.
-            // console.log(action.data);
-            // let currentUser = localStorage.getItem('uid');
-            // let messages = state.chatMessages.slice();
-            // let chatIndex = messages.findIndex(message => message.mid === action.payload.messageID);
-            // let isDislikedByMe = action.data.dislikers.findIndex(disliker => disliker.uid === currentUser) > -1;
-            // if(!isDislikedByMe){
-            //     messages[chatIndex].dislikes += 1;
-            // }
             let messages = state.chatMessages.slice();
             let chatIndex = messages.findIndex(message_ => message_.mid === action.payload.messageID);
             messages[chatIndex].dislikes += 1;
@@ -196,6 +182,17 @@ export default function ChatReducer(state = initialState, action) {
         case REMOVE_USER_FROM_GROUP: {
             return Object.assign({}, state, {
                 contacts: state.contacts
+            })
+        }
+        case FILTER_CHATS: {
+            let filteredChatsList = state.chats.slice();
+            if (action.payload) {
+                filteredChatsList = filteredChatsList.filter(item => {
+                    return item.name.toLowerCase().includes(action.payload.toLowerCase())
+                });
+            }
+            return Object.assign({}, state, {
+                filteredChats: filteredChatsList
             })
         }
         default: {

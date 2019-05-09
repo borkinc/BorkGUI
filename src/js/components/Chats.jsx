@@ -5,7 +5,7 @@ import Container from "reactstrap/es/Container";
 import Row from "reactstrap/es/Row";
 import Chat from "./Chat.jsx";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {getChats, toggleChat} from "../actions/chat-actions";
+import {filterChats, getChats, toggleChat} from "../actions/chat-actions";
 import {connect} from "react-redux";
 import {Scrollbars} from 'react-custom-scrollbars'
 import 'simplebar/dist/simplebar.min.css';
@@ -13,7 +13,8 @@ import 'simplebar/dist/simplebar.min.css';
 function mapDispatchToProps(dispatch) {
     return {
         toggleChat: chat => dispatch(toggleChat(chat)),
-        getChats: () => dispatch(getChats())
+        getChats: () => dispatch(getChats()),
+        filterChats: (search) => dispatch(filterChats(search))
     }
 }
 
@@ -22,11 +23,19 @@ function mapStateToProps(state) {
     return {
         isChatting: chatState.isChatting,
         chats: chatState.chats,    // keys = [cid, name, participants]
-        isLoading: chatState.isLoading
+        isLoading: chatState.isLoading,
+        filteredChats: chatState.filteredChats
     }
 }
 
 class ConnectedChats extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            search: ''
+        }
+    }
 
     componentDidMount() {
         this.props.getChats()
@@ -43,10 +52,14 @@ class ConnectedChats extends Component {
         document.getElementById("chat-" + chatID).classList.add("chat-active");
     };
 
+    handleSearch = (event) => {
+        this.props.filterChats(event.target.value);
+    };
+
     render() {
-        const {isLoading, chats, isChatting} = this.props;
-        const chatsHTML = chats !== undefined ? <ListGroup className={"chat-groups"}>
-            {!isLoading ? chats.map(chat => {
+        const {isLoading, filteredChats, isChatting} = this.props;
+        const chatsHTML = filteredChats !== undefined ? <ListGroup className={"chat-groups"}>
+            {!isLoading ? filteredChats.map(chat => {
                 const chatDate = new Date(chat.created_on).toDateString();
                 return (
                     <ListGroupItem className="justify-content-between" tag="button"
@@ -76,7 +89,7 @@ class ConnectedChats extends Component {
                             <InputGroup className={"chat-header"}>
                                 <h4 className={"chat-heading"}>Recent</h4>
                                 <Input className={"chat-searchbar"} placeholder={"Search"}
-                                       style={{"boxShadow": "none"}}/>
+                                       style={{"boxShadow": "none"}} onChange={this.handleSearch}/>
                                 <InputGroupAddon addonType="append">
                                     <InputGroupText className={"search-icon"}><FontAwesomeIcon
                                         icon="search"/></InputGroupText>

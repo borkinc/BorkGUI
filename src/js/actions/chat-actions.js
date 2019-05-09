@@ -4,6 +4,7 @@ import {
     ADD_CONTACT,
     DISLIKE_MESSAGE,
     DISMISS_CHAT_ALERT_ERROR,
+    FILTER_CHATS,
     GET_CHAT_MESSAGES,
     GET_CHATS,
     GET_CONTACTS,
@@ -279,5 +280,8 @@ export function postMessageReply(payload) {
 
 export function toggleReply(payload) {
     return {type: TOGGLE_REPLY, payload}
+}
 
+export function filterChats(payload) {
+    return {type: FILTER_CHATS, payload}
 }
