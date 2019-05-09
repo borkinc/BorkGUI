@@ -1,6 +1,7 @@
 import {
     DISMISS_USER_ALERT_ERROR,
     LOG_IN_USER,
+    LOGOUT,
     REGISTER_USER,
     TOGGLE_USER_AUTH_TAB,
     USER_ERROR
@@ -51,6 +52,11 @@ export default function UserAuthReducer(state = initialState, action) {
                 userAlertVisible: !state.userAlertVisible,
                 userAuthError: ''
             })
+        }
+        case LOGOUT: {
+            localStorage.clear();
+            history.push('/');
+            return Object.assign({}, state, {})
         }
         default:
             return state

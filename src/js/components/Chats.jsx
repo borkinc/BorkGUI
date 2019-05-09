@@ -7,6 +7,7 @@ import Chat from "./Chat.jsx";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {getChats, toggleChat} from "../actions/chat-actions";
 import {connect} from "react-redux";
+import TimerMixin from "react-timer-mixin";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -27,7 +28,14 @@ function mapStateToProps(state) {
 class ConnectedChats extends Component {
 
     componentDidMount() {
-        this.props.getChats()
+        this.timer = TimerMixin.setInterval(
+            () => {
+                this.props.getChats()
+            }, 3000)
+    }
+
+    componentWillUnmount() {
+        TimerMixin.clearTimeout(this.timer);
     }
 
     toggleChat(chatID, chatName) {

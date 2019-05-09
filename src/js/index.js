@@ -1,5 +1,5 @@
 import store from "../js/store/index";
-import {dismissUserAlert, logInUser, registerUser, toggleUserAuthTab} from "./actions/user-auth-actions";
+import {dismissUserAlert, logInUser, logout, registerUser, toggleUserAuthTab} from "./actions/user-auth-actions";
 import {
     addChat,
     addContact,
@@ -44,3 +44,4 @@ window.removeUserFromGroup = removeUserFromGroup;
 window.deleteChat = deleteChat;
 window.toggleReply = toggleReply;
 window.postMessageReply = postMessageReply;
+window.logout = logout;
