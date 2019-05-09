@@ -4,7 +4,7 @@
 }
 
 .chat-history {
-    height: 88.4vh;
+    height: 85vh;
     width: inherit;
     overflow-y: auto;
 }
@@ -64,9 +64,11 @@
 }
 
 .msg-input {
-    width: -moz-available; /* For Mozzila */
+    width: 100%;
+    width: -moz-available; /* WebKit-based browsers will ignore this. */
+    width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
     border-top: 1px solid #c4c4c4;
-    position: fixed;
+    position: absolute;
     bottom: 0;
 }
 

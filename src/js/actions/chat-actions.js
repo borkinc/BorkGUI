@@ -4,6 +4,7 @@ import {
     ADD_CONTACT,
     DISLIKE_MESSAGE,
     DISMISS_CHAT_ALERT_ERROR,
+    FILTER_CHATS,
     GET_CHAT_MESSAGES,
     GET_CHATS,
     GET_CONTACTS,
@@ -57,8 +58,6 @@ export function addChat(payload) {
         if (payload.group_members.length !== 0) {
             data.append('members', payload.group_members);
         }
-        // Dummy thicc post to API
-
         axios.post(`${process.env.REACT_APP_API_URL}api/chats`, data, {
                 headers: {
                     'Authorization': `Bearer ${access_token}`,
@@ -161,7 +160,7 @@ export function getChatMessages(payload) {
                 }
             }
         ).then(response => {
-            dispatch({type: GET_CHAT_MESSAGES, payload: response.data});
+            dispatch({type: GET_CHAT_MESSAGES, payload: response.data, chatID: payload});
         })
     }
 }
@@ -281,5 +280,8 @@ export function postMessageReply(payload) {
 
 export function toggleReply(payload) {
     return {type: TOGGLE_REPLY, payload}
+}
 
+export function filterChats(payload) {
+    return {type: FILTER_CHATS, payload}
 }

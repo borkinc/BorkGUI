@@ -28,14 +28,11 @@
 div.chat-inbox {
     background: #f8f8f8 none repeat scroll 0 0;
     padding: inherit;
-    height: inherit;
 }
 
 .chat-groups.list-group {
     border-right: 1px solid #c4c4c4;
-    /*Subtracting navbar and chat header heights*/
-    height: calc(100vh - 115px);
-    overflow-y: scroll;
+    padding-right: 10px;
 }
 
 .chat-header {
@@ -116,7 +113,6 @@ div.chat-img {
 div.chats-container {
     background: url("../img/dog-footprints.svg") repeat;
     background-size: 30%;
-    width: 100vw;
     padding-left: unset;
     padding-right: unset;
 }
