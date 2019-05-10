@@ -4,6 +4,7 @@ import ChatNavItems from "./ChatNavItems.jsx";
 import Chats from "./Chats.jsx";
 import {connect} from "react-redux";
 import {dismissChatAlert, toggleNavBar} from "../actions/chat-actions";
+import '../../css/ChatNavBar.css';
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -36,9 +37,10 @@ class ConnectedChatNavBar extends Component {
         const hasError = chatError.length > 0;
         return (
             <React.Fragment>
-                {hasError ? <Alert color="danger" isOpen={chatAlertVisible} toggle={this.onDismiss}>
-                    {chatError}
-                </Alert> : null}
+                {hasError ?
+                    <Alert color="danger" className={"sticky"} isOpen={chatAlertVisible} toggle={this.onDismiss}>
+                        {chatError}
+                    </Alert> : null}
                 <Navbar color="faded" light>
                     <NavbarBrand href="/" className="mr-auto">Bork</NavbarBrand>
                     <NavbarToggler onClick={this.toggleNavBar} className="mr-2"/>
