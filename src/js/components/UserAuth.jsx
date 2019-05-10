@@ -54,7 +54,7 @@ class ConnectedUserAuth extends Component {
         };
     }
 
-    toggle = tab => {
+    resetState = () => {
         this.setState({
             username: '',
             email: '',
@@ -63,6 +63,10 @@ class ConnectedUserAuth extends Component {
             last_name: '',
             phone_number: '',
         });
+    };
+
+    toggle = tab => {
+        this.resetState();
         this.props.toggleUserAuthTab(tab);
     };
 
