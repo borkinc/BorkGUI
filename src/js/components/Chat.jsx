@@ -205,12 +205,12 @@ class ConnectedChat extends Component {
     };
 
     renderMessage = m => {
-        const {mid, created_on, message, uid, likes, dislikes, image, replies} = m;
+        const {mid, created_on, message, uid, likes, dislikes, image, replies, username} = m;
         const date = new Date(created_on);
         const tz = jstz.determine().name();
         const currentUser = JSON.parse(localStorage.getItem('user')).uid;
         const messageFromMe = parseInt(uid) === parseInt(currentUser);
-        const msgContentDate = <span className={"msg-content-date"}><Moment tz={tz} fromNow>{date}</Moment></span>;
+        const msgContentDate = <span className={"msg-content-date"}><Moment tz={tz} fromNow>{date}</Moment>: {username}</span>;
         const hasImage = image != null;
         let imgHTML = null;
         if (hasImage) {
@@ -227,7 +227,6 @@ class ConnectedChat extends Component {
                                        src={`${image}`}
                                        alt="Card image cap"/>
                 }
-
             }
         }
         let replyHTML = null;
@@ -253,7 +252,6 @@ class ConnectedChat extends Component {
                     <FontAwesomeIcon icon={"thumbs-down"}/>
                     <Badge color="secondary">{dislikes}</Badge>
                 </Button>
-                {/*<NavItem>*/}
                 <Button color="secondary" onClick={this.toggleReply} value={mid}>Reply</Button>
                 <Modal isOpen={this.props.replyModal} toggle={this.toggleReply}
                        className={this.props.className}>
@@ -283,8 +281,6 @@ class ConnectedChat extends Component {
                         <Button color="secondary" onClick={this.toggleReply}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
-                {/*</NavItem>*/}
-                {/*<Button onClick={() => this.toggleReply(mid)}>Reply</Button>*/}
                 {msgContentDate}
             </CardBody>
         </Card>;
