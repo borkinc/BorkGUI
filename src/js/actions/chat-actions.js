@@ -10,6 +10,7 @@ import {
     GET_CONTACTS,
     LIKE_MESSAGE,
     POST_MESSAGE,
+    POST_MESSAGE_ERROR,
     POST_MESSAGE_REPLY,
     REMOVE_USER_FROM_GROUP,
     TOGGLE_ADD_USER,
@@ -211,8 +212,11 @@ export function postMessage(payload) {
             headers: {
                 'Authorization': `Bearer ${access_token}`
             }
-        }).then(response =>
-            dispatch({type: POST_MESSAGE, payload, data: response.data}))
+        }).then(response => {
+            dispatch({type: POST_MESSAGE, payload, data: response.data})
+        }).catch(() => {
+            dispatch({type: POST_MESSAGE_ERROR, payload: {message: 'Unable to post message at the moment'}})
+        })
     }
 }
 

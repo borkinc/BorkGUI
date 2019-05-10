@@ -187,11 +187,6 @@ class ConnectedChat extends Component {
         this.props.getContacts();
     };
 
-    // toggleUserSubmit = event => {
-    //     event.preventDefault();
-    //     this.toggleAddUser();
-    // };
-
     addContact = event => {
         event.preventDefault();
         const {chatID} = this.props;
@@ -214,7 +209,7 @@ class ConnectedChat extends Component {
         const date = new Date(created_on);
         const tz = jstz.determine().name();
         const currentUser = JSON.parse(localStorage.getItem('user')).uid;
-        const messageFromMe = uid === currentUser;
+        const messageFromMe = parseInt(uid) === parseInt(currentUser);
         const msgContentDate = <span className={"msg-content-date"}><Moment tz={tz} fromNow>{date}</Moment></span>;
         const hasImage = image != null;
         let imgHTML = null;

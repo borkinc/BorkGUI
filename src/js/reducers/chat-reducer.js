@@ -9,7 +9,7 @@ import {
     GET_CHATS,
     GET_CONTACTS,
     LIKE_MESSAGE,
-    POST_MESSAGE,
+    POST_MESSAGE_ERROR,
     REMOVE_USER_FROM_GROUP,
     TOGGLE_ADD_USER,
     TOGGLE_ATTACHMENT,
@@ -40,7 +40,7 @@ const initialState = {
     addUserModal: false,
     replyModal: false,
     replyToID: null,
-    filteredChats: []
+    filteredChats: [],
 };
 
 export default function ChatReducer(state = initialState, action) {
@@ -136,25 +136,6 @@ export default function ChatReducer(state = initialState, action) {
                 chatMessages: messages
             })
         }
-        case POST_MESSAGE: {
-            // let date = new Date();
-            let message = {
-                // TODO: After phase 2, must get id from DB
-                mid: action.data.message,
-                // TODO: Revert after Phase 2
-                // uid: JSON.parse(localStorage.getItem('user')).uid,
-                uid: action.payload.userID,
-                message: action.payload.message,
-                created_on: action.payload.datePosted,
-                likes: 0,
-                dislikes: 0,
-                replies: [],
-                img: action.payload.picture
-            };
-            return Object.assign({}, state, {
-                chatMessages: [message, ...state.chatMessages]
-            })
-        }
         case ADD_CONTACT: {
             if (action.payload === undefined) {
                 return Object.assign({}, state, {
@@ -166,7 +147,6 @@ export default function ChatReducer(state = initialState, action) {
                     add_msg: action.payload.msg
                 })
             }
-
         }
         case TOGGLE_CONTACTS: {
             return Object.assign({}, state, {
@@ -193,6 +173,12 @@ export default function ChatReducer(state = initialState, action) {
             }
             return Object.assign({}, state, {
                 filteredChats: filteredChatsList
+            })
+        }
+        case POST_MESSAGE_ERROR: {
+            return Object.assign({}, state, {
+                chatError: action.payload.message,
+                chatAlertVisible: true
             })
         }
         default: {
