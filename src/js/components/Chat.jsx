@@ -130,7 +130,10 @@ class ConnectedChat extends Component {
                 chatID: chatID,
                 image: picture
             });
-        this.setState({message: ''});
+        this.setState({
+            message: '',
+            picture: null
+        });
         this.props.toggleReply();
         // this.props.postMessageReply()
     };
@@ -156,7 +159,11 @@ class ConnectedChat extends Component {
                     });
             }
         }
-        this.setState({message: '', picture: null});
+        this.setState(
+            {
+                message: '',
+                picture: null
+            });
     };
 
     onDrop = (picture) => {
