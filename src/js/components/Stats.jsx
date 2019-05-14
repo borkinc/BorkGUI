@@ -5,6 +5,7 @@ import {Card} from "reactstrap";
 import CardBody from "reactstrap/es/CardBody";
 import CardColumns from "reactstrap/es/CardColumns";
 import '../../css/Stats.css';
+import CardTitle from "reactstrap/es/CardTitle";
 
 class Stats extends Component {
     constructor(props) {
@@ -111,76 +112,13 @@ class Stats extends Component {
             })
     };
 
-    getUserNumMessages = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}stats/users/${this.state.uid_messages}/messages`).then(
-            response => {
-                const data = [["Day", "Number of Messages"]];
-                for (let i = 0; i < response.data.length; i++) {
-                    data.push([new Date(response.data[i].day), parseInt(response.data[i].total)])
-                }
-                this.setState({num_user_messages: data, username_messages: response.data[0].username});
-            }
-        )
-    };
-
-    getPhotoNumReplies = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}stats/photos/${this.state.pid_replies}/replies`).then(
-            response => {
-                const data = [["Day", "Number of replies"]];
-                for (let i = 0; i < response.data.length; i++) {
-                    data.push([new Date(response.data[i].day), parseInt(response.data[i].total)])
-                }
-                this.setState({num_pid_replies: data});
-            }
-        )
-    };
-
-    getPhotoNumLikes = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}stats/photos/${this.state.pid_likes}/likes`).then(
-            response => {
-                const data = [["Day", "Number of Likes"]];
-                for (let i = 0; i < response.data.length; i++) {
-                    data.push([new Date(response.data[i].day), parseInt(response.data[i].total)])
-                }
-                this.setState({num_pid_likes: data});
-            }
-        )
-    };
-
-    getPhotoNumDislikes = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}stats/photos/${this.state.pid_dislikes}/dislikes`).then(
-            response => {
-                const data = [["Day", "Number of Dislikes"]];
-                for (let i = 0; i < response.data.length; i++) {
-                    data.push([new Date(response.data[i].day), parseInt(response.data[i].total)])
-                }
-                this.setState({num_pid_dislikes: data});
-            }
-        )
-    };
-
-    handleUserMessageChange = event => {
-        this.setState({uid_messages: event.target.value})
-    };
-
-    handlePhotoRepliesChange = event => {
-        this.setState({pid_replies: event.target.value})
-    };
-
-    handlePhotoLikesChange = event => {
-        this.setState({pid_likes: event.target.value})
-    };
-
-    handlePhotoDislikesChange = event => {
-        this.setState({pid_dislikes: event.target.value})
-    };
-
     render() {
         const {active_users} = this.state;
         return (
             <React.Fragment>
                 <CardColumns>
                     <Card>
+                        <CardTitle>Trending Hashtags</CardTitle>
                         <CardBody>
                             <Chart
                                 className={"bork-table"}
@@ -281,15 +219,14 @@ class Stats extends Component {
                     {active_users.map((users_per_day) => {
                         return (
                             <React.Fragment>
-                                {/*<h4>{users_per_day.day}</h4>*/}
                                 <Card>
+                                    <CardTitle>Active Users: {users_per_day.day.toDateString()}</CardTitle>
                                     <CardBody>
                                         <Chart
                                             width={'100%'}
                                             height={'100%'}
                                             chartType="Table"
                                             data={users_per_day.data}
-                                            // style={'margin: 0 auto'}
                                             options={{
                                                 title: 'Active Users',
                                                 width: '100%',
@@ -300,34 +237,6 @@ class Stats extends Component {
                             </React.Fragment>)
                     })}
                 </CardColumns>
-                {/*<CardGroup>*/}
-                {/*    */}
-                {/*    */}
-                {/*</CardGroup>*/}
-                {/*<h1>Total messages per user</h1>*/}
-                {/*<Input type="text" onChange={this.handleUserMessageChange}/>*/}
-                {/*<Button onClick={this.getUserNumMessages}>Get data</Button>*/}
-                {/*{username_messages !== '' ? (*/}
-                {/*    <Chart chartType="Table" data={this.state.num_user_messages}/>*/}
-                {/*) : (<p>Enter uid</p>)}*/}
-                {/*<h1>Total replies per photo</h1>*/}
-                {/*<Input type="text" onChange={this.handlePhotoRepliesChange}/>*/}
-                {/*<Button onClick={this.getPhotoNumReplies}>Get data</Button>*/}
-                {/*{num_pid_replies !== [] ? (*/}
-                {/*    <Chart chartType="Table" data={this.state.num_pid_replies}/>*/}
-                {/*) : (<p>Enter pid</p>)}*/}
-                {/*<h1>Total likes per photo</h1>*/}
-                {/*<Input type="text" onChange={this.handlePhotoLikesChange}/>*/}
-                {/*<Button onClick={this.getPhotoNumLikes}>Get data</Button>*/}
-                {/*{num_pid_likes !== [] ? (*/}
-                {/*    <Chart chartType="Table" data={this.state.num_pid_likes}/>*/}
-                {/*) : (<p>Enter pid</p>)}*/}
-                {/*<h1>Total dislikes per photo</h1>*/}
-                {/*<Input type="text" onChange={this.handlePhotoDislikesChange}/>*/}
-                {/*<Button onClick={this.getPhotoNumDislikes}>Get data</Button>*/}
-                {/*{num_pid_dislikes !== [] ? (*/}
-                {/*    <Chart chartType="Table" data={this.state.num_pid_dislikes}/>*/}
-                {/*) : (<p>Enter pid</p>)}*/}
             </React.Fragment>
         )
     }

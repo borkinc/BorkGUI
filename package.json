@@ -9,7 +9,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
-    "firebase-tools": "^6.8.0",
+    "firebase-tools": "^6.9.2",
     "history": "latest",
     "jstimezonedetect": "^1.0.6",
     "moment": "^2.24.0",
